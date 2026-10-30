@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Computation: A Complexity Theory View</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg: #fdfdfb;
+      --text: #222;
+      --muted: #666;
+      --accent: #3b4cca;
+      --card: #f3f4f8;
+      --border: #dde0ea;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16171c;
+        --text: #e6e6e6;
+        --muted: #a0a0a8;
+        --accent: #8f9cff;
+        --card: #20222a;
+        --border: #33364a;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 16px 64px;
+    }
+    h1 {
+      font-size: 2.1rem;
+      line-height: 1.2;
+      margin: 0 0 8px;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin: 0 0 32px;
+      font-style: italic;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+    ol.outline {
+      padding-left: 0;
+      list-style: none;
+      counter-reset: section;
+    }
+    ol.outline > li {
+      counter-increment: section;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    ol.outline > li h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+    ol.outline > li h3::before {
+      content: counter(section) ". ";
+    }
+    ol.outline > li p {
+      margin: 0;
+    }
+    .note {
+      background: var(--card);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 4px;
+    }
+    a { color: var(--accent); }
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Quantum Computation: A Complexity Theory View</h1>
+  <p class="subtitle">From qubits to BQP, explained step by step</p>
+
+  <p>
+    Quantum computation shows up in a lot of classes, and every time it has confused me.
+    The goal of this site is to build up the topic slowly, starting from the basic math,
+    and end with where quantum computers fit among the complexity classes we know.
+    Each page builds on the one before it, so it is meant to be read in order.
+  </p>
+
+  <h2>Outline</h2>
+  <ol class="outline">
+    <li>
+      <h3>Introduction</h3>
+      <p>
+        Why quantum computation is worth studying and why it is confusing at first.
+        This page will give a short overview of what the site covers, the background
+        I assume (linear algebra, and basic complexity classes like P, BPP and PSPACE),
+        and the main question we are working toward: how powerful are quantum computers
+        compared to classical ones?
+      </p>
+    </li>
+    <li>
+      <h3>Qubits and Quantum States</h3>
+      <p>
+        A qubit as a unit vector in $\mathbb{C}^2$, written as
+        $\alpha|0\rangle + \beta|1\rangle$ with $|\alpha|^2 + |\beta|^2 = 1$.
+        I will explain Dirac notation and measurement (you see $0$ with probability
+        $|\alpha|^2$ and $1$ with probability $|\beta|^2$). Then multi-qubit states
+        using tensor products, why $n$ qubits need $2^n$ amplitudes, and entanglement,
+        using the Bell state as an example of a state that is not a tensor product of
+        single qubits.
+      </p>
+    </li>
+    <li>
+      <h3>Unitary Gates</h3>
+      <p>
+        Why quantum operations have to be unitary matrices (they are exactly the
+        matrices that keep the length of a state equal to $1$). I will go through the
+        common gates: $X$, $Z$, the Hadamard gate $H$, phase gates, and the two-qubit
+        CNOT gate, with worked examples of each one acting on a state. This page will
+        also show how CNOT and $H$ together create entanglement.
+      </p>
+    </li>
+    <li>
+      <h3>Quantum Circuits vs. Randomized Computation</h3>
+      <p>
+        How quantum circuits are a generalization of randomized computation. A randomized
+        computation can be described by probability vectors and stochastic matrices, while
+        a quantum computation uses amplitude vectors and unitary matrices. The key difference
+        is that amplitudes can be negative or complex, so they can cancel out (interference).
+        I will use the example of applying $H$ twice, which gets back to $|0\rangle$, while
+        flipping a fair coin twice stays random.
+      </p>
+    </li>
+    <li>
+      <h3>Reversible Computation</h3>
+      <p>
+        Unitary gates are always reversible, but gates like AND are not. This page shows
+        how any classical circuit can still be simulated by a quantum circuit: using the
+        Toffoli gate to make AND reversible, keeping extra "garbage" bits, and then
+        uncomputing the garbage. This gives $\mathsf{P} \subseteq \mathsf{BQP}$, and with
+        Hadamard gates used as coin flips, $\mathsf{BPP} \subseteq \mathsf{BQP}$.
+      </p>
+    </li>
+    <li>
+      <h3>BQP and PSPACE</h3>
+      <p>
+        The formal definition of $\mathsf{BQP}$ (problems solved by polynomial size quantum
+        circuits with bounded error), and a proof that $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.
+        The idea is that the final amplitude can be written as a sum over exponentially many
+        paths, and we can add up the paths one at a time while reusing space. I will finish
+        with the known picture
+        $\mathsf{BPP} \subseteq \mathsf{BQP} \subseteq \mathsf{PP} \subseteq \mathsf{PSPACE}$
+        and what is still open.
+      </p>
+    </li>
+    <li>
+      <h3>Conclusion and References</h3>
+      <p>
+        A short summary of what quantum computers can and cannot do from a complexity
+        point of view, and why the question "is quantum computing more powerful?" is
+        still not fully answered. This page will also list all the sources I used.
+      </p>
+    </li>
+  </ol>
+
+  <h2>Changes Since Last Week</h2>
+  <div class="note">
+    <p>
+      The topic is the same. I added measurement to the qubits section and an
+      introduction page, since the later sections need them. I also made the reversible
+      computation section lead into $\mathsf{BPP} \subseteq \mathsf{BQP}$, and changed the
+      last topic from a general "comparison" of BQP and PSPACE to a specific proof that
+      $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.
+    </p>
+  </div>
+
+  <h2>References</h2>
+  <ul>
+    <li>
+      John Watrous, <a href="https://cs.uwaterloo.ca/~watrous/Papers/QuantumComputationalComplexity.pdf">Quantum Computational Complexity</a>
+    </li>
+    <li>
+      Daniel Grier, <a href="https://www.danielgrier.com/courses/CSE291/Fa24/lecture_notes.pdf">CSE 291 Lecture Notes (Fall 2024)</a>
+    </li>
+  </ul>
+
+  <footer>Course project website. Content coming soon.</footer>
+</main>
+</body>
+</html>
