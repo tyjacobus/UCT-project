@@ -6,10 +6,10 @@
   <title>Qubits and Quantum States | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=7">
+  <link rel="stylesheet" href="assets/site.css?v=8">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=7"></script>
+  <script defer src="assets/site.js?v=8"></script>
 </head>
 <body>
 <main><div class="content">
@@ -100,12 +100,24 @@ This connects to single qubits through the tensor product (see <a href="backgrou
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Product states and entanglement)</span></div>
   <p>A two-qubit state $\ket\psi$ is a <strong>product state</strong> if $\ket\psi = \ket a\otimes\ket b$ for some single-qubit states $\ket a$ and $\ket b$. Otherwise it is <strong>entangled</strong>.</p>
 </div>
-<p id="prop-bell">
-The <strong>Bell state</strong> $\ket{\Phi^+} = \tfrac1{\sqrt2}(\ket{00}+\ket{11})$ is entangled. To see this, note that $(a_0\ket0+a_1\ket1)\otimes(b_0\ket0+b_1\ket1) = a_0b_0\ket{00}+a_0b_1\ket{01}+a_1b_0\ket{10}+a_1b_1\ket{11}$.
-To match $\ket{\Phi^+}$ we would need $a_0b_0\ne0$ and $a_1b_1\ne0$, so $a_0\ne 0$ and $b_1\ne 0$, so $a_0b_1\ne0$. But the coefficient of $\ket{01}$ in $\ket{\Phi^+}$ is $0$.
-If we measure both qubits of $\ket{\Phi^+}$, we get $00$ or $11$, each with probability $\tfrac12$. The two bits are random, but always equal.
-We build $\ket{\Phi^+}$ with two gates in <a href="gates.html#ex-bell">the next chapter</a>, and in <a href="interference.html#ex-whichpath">the which-path example</a> we will see why entanglement with leftover &ldquo;garbage&rdquo; is a problem.
-</p>
+<div class="box ex" id="prop-bell">
+  <div class="box-title"><span class="label">Example</span> <span class="name">(The Bell state is entangled)</span></div>
+  <p>The <strong>Bell state</strong> is
+  $$\ket{\Phi^+} = \tfrac1{\sqrt2}\big(\ket{00}+\ket{11}\big).$$</p>
+  <p><em>The idea.</em> In a product state $\ket a\otimes\ket b$, each qubit has a state of its own, so what happens to one qubit has nothing to do with the other. The Bell state is different. If we measure both qubits, we get $00$ or $11$, each with probability $\tfrac12$, and never $01$ or $10$.
+  So each bit on its own is a fair coin flip, but the two bits always agree. Once you know qubit 1, you know qubit 2. Two separate qubits, each with its own state, can&rsquo;t do this, so the Bell state can&rsquo;t be split into a state for qubit 1 and a state for qubit 2.</p>
+  <p><em>The proof.</em> Suppose $\ket{\Phi^+}$ were a product state $(a_0\ket0+a_1\ket1)\otimes(b_0\ket0+b_1\ket1)$. Multiplying this out gives
+  $$a_0b_0\ket{00}+a_0b_1\ket{01}+a_1b_0\ket{10}+a_1b_1\ket{11}.$$
+  For this to equal $\ket{\Phi^+}$, the amplitudes have to match:</p>
+  <ul>
+    <li>The amplitude of $\ket{00}$ is $\tfrac1{\sqrt2}$, so $a_0b_0\ne0$. In particular $a_0\ne0$.</li>
+    <li>The amplitude of $\ket{11}$ is $\tfrac1{\sqrt2}$, so $a_1b_1\ne0$. In particular $b_1\ne0$.</li>
+    <li>The amplitude of $\ket{01}$ is $0$, so $a_0b_1 = 0$.</li>
+  </ul>
+  <p>But the first two bullets say $a_0\ne0$ and $b_1\ne0$, so $a_0b_1\ne 0$. That contradicts the third bullet. So no choice of $a_0,a_1,b_0,b_1$ works, and $\ket{\Phi^+}$ is entangled.</p>
+  <p><em>Compare</em> with $\tfrac1{\sqrt2}\big(\ket{00}+\ket{01}\big)$, which looks similar but is the product state $\ket0\otimes\tfrac1{\sqrt2}(\ket0+\ket1)$. Here qubit 1 is always $0$ and qubit 2 is a fair coin, and the two have nothing to do with each other.</p>
+</div>
+<p>We build $\ket{\Phi^+}$ with two gates in <a href="gates.html#ex-bell">the next chapter</a>. In <a href="interference.html#ex-whichpath">the which-path example</a> we will see that this kind of link between qubits is exactly what stops paths from cancelling, and that is why entanglement with leftover &ldquo;garbage&rdquo; is a problem.</p>
 
 <h2 id="exponential">Exponentially many amplitudes</h2>
 <div class="box rem" id="rem-exp">
