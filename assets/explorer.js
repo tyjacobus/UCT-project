@@ -7,9 +7,9 @@
   "use strict";
   var PRESETS = {
     h:       { name: "H, then measure",                                   m: 1, code: "H 1" },
-    hh:      { name: "H twice: cancellation (Examples 5.4, 8.5)",         m: 1, code: "H 1\nH 1" },
-    bell:    { name: "Bell state (Example 4.9)",                          m: 2, code: "H 1\nCNOT 1 2" },
-    which:   { name: "Which-path information (Example 5.5)",              m: 2, code: "H 1\nCNOT 1 2\nH 1" },
+    hh:      { name: "H twice: cancellation",         m: 1, code: "H 1\nH 1" },
+    bell:    { name: "Bell state",                          m: 2, code: "H 1\nCNOT 1 2" },
+    which:   { name: "Which-path information",              m: 2, code: "H 1\nCNOT 1 2\nH 1" },
     hzh:     { name: "H Z H with Z written as H X H (16 paths)",          m: 1, code: "H 1\nH 1\nX 1\nH 1\nH 1" },
     tof:     { name: "Hadamards around a Toffoli (p = 3/4)",               m: 3, code: "H 1\nH 2\nTOF 1 2 3\nX 3\nH 1\nH 2" }
   };

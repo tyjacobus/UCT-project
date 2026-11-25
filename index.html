@@ -6,10 +6,10 @@
   <title>Quantum Computation: A Complexity Theory View</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=7">
+  <link rel="stylesheet" href="assets/site.css?v=9">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=7"></script>
+  <script defer src="assets/site.js?v=9"></script>
 </head>
 <body>
 <main><div class="content">
@@ -26,8 +26,7 @@ $$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}.$$</p>
   <li>Work with qubits, unitary gates and measurements.</li>
   <li>Explain how a quantum circuit is different from a randomized one.</li>
   <li>State the definition of $\mathsf{BQP}$ and prove $\mathsf{P} \subseteq \mathsf{BPP} \subseteq \mathsf{BQP}$.</li>
-  <li>Prove that amplitudes are signed counts of paths and use that fact to show $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.</li>
-  <li>Prove the Main Theorem $\mathsf{BQP} \subseteq \mathsf{PP}$.</li>
+    <li>Prove that amplitudes are signed counts of paths, and use that fact to prove the Main Theorem $\mathsf{BQP} \subseteq \mathsf{PP}$.</li>
 </ol>
 
 <h2 id="roadmap">Roadmap</h2>
@@ -49,10 +48,8 @@ We start with definitions and background knowledge, then do a warm-up proof, and
     <p>We compare randomized and quantum computation side by side and show that the only real difference is that amplitudes can be negative. This lets computation paths cancel out. We also prove the <a href="interference.html#lem-paths">Sum-over-Paths Lemma</a>.</p></li>
   <li><h4><a href="bqp.html">$\mathsf{BQP}$ and Reversible Computation</a></h4>
     <p>We define $\mathsf{BQP}$. Then we show how to make classical circuits reversible so a quantum computer can run them, which proves $\mathsf{P}\subseteq\mathsf{BQP}$ and $\mathsf{BPP}\subseteq\mathsf{BQP}$.</p></li>
-  <li><h4><a href="pspace.html">$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a></h4>
-    <p>We prove the <a href="pspace.html#lem-pathsum">Path-Sum Lemma</a>, which says every amplitude is a signed count of paths. Then we use it to simulate a quantum computer in polynomial space. This is our warm-up proof.</p></li>
   <li><h4><a href="pp.html">The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PP}$</a></h4>
-    <p>We prove the main theorem. The key idea is to count <em>pairs</em> of paths instead of single paths. The chapter also has a worked example and an interactive explorer.</p></li>
+    <p>We prove the <a href="pp.html#lem-pathsum">Path-Sum Lemma</a>, which says every amplitude is a signed count of paths. Then we prove the main theorem. The key idea is to count <em>pairs</em> of paths instead of single paths. The chapter also has a worked example and an interactive explorer.</p></li>
   <li><h4><a href="conclusion.html">Conclusion and References</a></h4>
     <p>We summarize what we proved, list some open problems, and collect every detail we left out along with where to find it.</p></li>
 </ol>
@@ -89,7 +86,7 @@ We start with definitions and background knowledge, then do a warm-up proof, and
   <tr><td>$\mathcal G$</td><td>our gate set $\{H, X, \mathrm{CNOT}, \mathrm{TOF}\}$</td><td><a href="gates.html#def-gateset">Our gate set</a></td></tr>
   <tr><td>$p_C(x) = \Pr[C(x)\text{ accepts}]$</td><td>probability that circuit $C$ accepts $x$ (the last qubit is measured as $1$)</td><td><a href="bqp.html#def-accept">Acceptance probability</a></td></tr>
   <tr><td>$\mathcal C = (C_0, C_1,\dots)$</td><td>a uniform circuit family</td><td><a href="background.html#def-uniform">Uniform circuit family</a></td></tr>
-  <tr><td>$\mathrm{Follow}(z,b)$</td><td>follows one path; returns its endpoint $w$ and sign bit $\varphi$</td><td><a href="pspace.html#def-follow">Follow</a></td></tr>
+  <tr><td>$\mathrm{Follow}(z,b)$</td><td>follows one path; returns its endpoint $w$ and sign bit $\varphi$</td><td><a href="pp.html#def-follow">Follow</a></td></tr>
 </table></div>
 <p>The full list is in the <a href="glossary.html#notation">notation table</a>.</p>
 

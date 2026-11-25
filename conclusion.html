@@ -6,10 +6,10 @@
   <title>Conclusion and References | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=7">
+  <link rel="stylesheet" href="assets/site.css?v=9">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=7"></script>
+  <script defer src="assets/site.js?v=9"></script>
 </head>
 <body>
 <main><div class="content">
@@ -35,10 +35,9 @@
   <tr><th>Result</th><th>Where</th><th>Key idea</th></tr>
   <tr><td>$\mathsf{P}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-p-bqp">Theorem</a> in <em>BQP and Reversible Computation</em></td><td>Toffoli makes circuits reversible; compute, copy, uncompute</td></tr>
   <tr><td>$\mathsf{BPP}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-bpp-bqp">Theorem</a> in <em>BQP and Reversible Computation</em></td><td>A Hadamard on a fresh qubit is a coin, if its branches never interfere</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td><td><a href="pspace.html#prop-exp">Remark</a> in <em>BQP &sube; PSPACE</em></td><td>Store the state (Schr&ouml;dinger)</td></tr>
-  <tr><td>Path-sum lemma</td><td><a href="pspace.html#lem-pathsum">Lemma</a> in <em>BQP &sube; PSPACE</em></td><td>Amplitude = $2^{-h/2}\times$ (signed count of Hadamard paths)</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td><td><a href="pspace.html#thm-pspace">Theorem</a> in <em>BQP &sube; PSPACE</em></td><td>Add paths one at a time, reusing space (Feynman)</td></tr>
+  <tr><td>Path-sum lemma</td><td><a href="pp.html#lem-pathsum">Lemma</a> in <em>The Main Theorem</em></td><td>Amplitude = $2^{-h/2}\times$ (signed count of Hadamard paths)</td></tr>
   <tr><td>$\mathsf{BQP}\subseteq\mathsf{PP}$ &#9733;</td><td><a href="pp.html#thm-main">Main Theorem</a></td><td>Square = pairs of paths; $\mathsf{PP}$ decides the sign of a signed count</td></tr>
+  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td><td><a href="pp.html#cor-consequences">Corollary</a> in <em>The Main Theorem</em></td><td>Follows from the Main Theorem, since $\mathsf{PP}\subseteq\mathsf{PSPACE}$</td></tr>
   <tr><td>$\mathsf{BPP}\neq\mathsf{BQP}\Rightarrow\mathsf{P}\neq\mathsf{PSPACE}$</td><td><a href="pp.html#cor-consequences">Corollary</a> in <em>The Main Theorem</em></td><td>The sandwich leaves no room</td></tr>
 </table></div>
 
@@ -46,8 +45,8 @@
 <ol>
     <li><strong>Quantum = randomized with signs.</strong> Swap probabilities for amplitudes that can be negative, and stochastic matrices for unitary ones. Everything else stays the same (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>).</li>
     <li><strong>Interference is cancellation of paths, and it needs a shared endpoint.</strong> If anything records which path was taken, like leftover garbage or a measurement, the interference goes away. That is why we uncompute (<a href="interference.html#rem-same-endpoint">the interference principle</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>).</li>
-    <li><strong>Classical gates don't branch; Hadamards do.</strong> So a path is a choice string $b\in\{0,1\}^h$, and following it is a classical polynomial-time computation (see <a href="pspace.html#def-follow">definition</a>).</li>
-    <li><strong>Amplitudes are signed counts, probabilities are signed counts of pairs.</strong> That makes quantum computation a special case of counting (<a href="pspace.html#cor-signed">the Signed Counts Corollary</a>, <a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</li>
+    <li><strong>Classical gates don't branch; Hadamards do.</strong> So a path is a choice string $b\in\{0,1\}^h$, and following it is a classical polynomial-time computation (see <a href="pp.html#def-follow">definition</a>).</li>
+    <li><strong>Amplitudes are signed counts, probabilities are signed counts of pairs.</strong> That makes quantum computation a special case of counting (<a href="pp.html#cor-signed">the Signed Counts Corollary</a>, <a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</li>
     <li><strong>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$.</strong> Quantum computers are at least as strong as randomized ones and at most as strong as counting machines. Proving they are strictly stronger than randomized ones would also prove $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
   </ol>
 
@@ -90,7 +89,7 @@
   <li>[BBBV97] C. H. Bennett, E. Bernstein, G. Brassard and U. Vazirani. Strengths and weaknesses of quantum computing. <em>SIAM Journal on Computing</em> 26(5):1510&ndash;1523, 1997.</li>
   <li>[Ben73] C. H. Bennett. Logical reversibility of computation. <em>IBM Journal of Research and Development</em> 17(6):525&ndash;532, 1973. <span class="muted">Uncomputation, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>.</span></li>
   <li>[BV97] E. Bernstein and U. Vazirani. Quantum complexity theory. <em>SIAM Journal on Computing</em> 26(5):1411&ndash;1473, 1997 (preliminary version STOC 1993). <span class="muted">Definition of BQP; BQP &sube; PSPACE.</span></li>
-  <li>[DHHMNO05] C. M. Dawson, H. L. Haselgrove, A. P. Hines, D. Mortimer, M. A. Nielsen and T. J. Osborne. Quantum computing and polynomial equations over the finite field $\mathbb Z_2$. <em>Quantum Information and Computation</em> 5(2):102&ndash;112, 2005. <span class="muted">Path sums for Hadamard + Toffoli circuits (see <a href="pspace.html#lem-pathsum">lemma</a>).</span></li>
+  <li>[DHHMNO05] C. M. Dawson, H. L. Haselgrove, A. P. Hines, D. Mortimer, M. A. Nielsen and T. J. Osborne. Quantum computing and polynomial equations over the finite field $\mathbb Z_2$. <em>Quantum Information and Computation</em> 5(2):102&ndash;112, 2005. <span class="muted">Path sums for Hadamard + Toffoli circuits (see <a href="pp.html#lem-pathsum">lemma</a>).</span></li>
   <li>[DN06] C. M. Dawson and M. A. Nielsen. The Solovay&ndash;Kitaev algorithm. <em>Quantum Information and Computation</em> 6(1):81&ndash;95, 2006.</li>
   <li>[FFK94] S. Fenner, L. Fortnow and S. Kurtz. Gap-definable counting classes. <em>Journal of Computer and System Sciences</em> 48(1):116&ndash;148, 1994. <span class="muted">GapP (see <a href="pp.html#lem-gap">lemma</a>).</span></li>
   <li>[Fey82] R. P. Feynman. Simulating physics with computers. <em>International Journal of Theoretical Physics</em> 21:467&ndash;488, 1982.</li>

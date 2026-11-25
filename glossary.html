@@ -6,10 +6,10 @@
   <title>Glossary and Notation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=7">
+  <link rel="stylesheet" href="assets/site.css?v=9">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=7"></script>
+  <script defer src="assets/site.js?v=9"></script>
 </head>
 <body>
 <main><div class="content">
@@ -41,9 +41,9 @@
   <tr><td>$H^{\otimes n}$</td><td>Hadamard on each of $n$ qubits</td><td><a href="gates.html#lem-hn">Uniform Superposition Lemma</a></td></tr>
   <tr><td>$z = x0^{m-n}$</td><td>initial basis string when running a circuit on $x$</td><td><a href="bqp.html#def-accept">The definition of acceptance probability</a></td></tr>
   <tr><td>$p_C(x)$</td><td>probability that $C$ accepts $x$ (last qubit reads $1$)</td><td><a href="bqp.html#def-accept">The definition of acceptance probability</a></td></tr>
-  <tr><td>$b\in\{0,1\}^h$</td><td>choice string: which branch each Hadamard takes (a "path")</td><td><a href="pspace.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
-  <tr><td>$\mathrm{Follow}(z,b) = (w,\varphi)$</td><td>endpoint $w(z,b)$ and sign bit $\varphi(z,b)$ of path $b$</td><td><a href="pspace.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
-  <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pspace.html#cor-signed">The Signed Counts Corollary</a></td></tr>
+  <tr><td>$b\in\{0,1\}^h$</td><td>choice string: which branch each Hadamard takes (a "path")</td><td><a href="pp.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
+  <tr><td>$\mathrm{Follow}(z,b) = (w,\varphi)$</td><td>endpoint $w(z,b)$ and sign bit $\varphi(z,b)$ of path $b$</td><td><a href="pp.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
+  <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pp.html#cor-signed">The Signed Counts Corollary</a></td></tr>
   <tr><td>$v(b,b')$</td><td>value of a pair of paths in the two-path formula</td><td><a href="pp.html#lem-twopath">The Two-Path Lemma</a></td></tr>
   <tr><td>$[\,\cdot\,]$</td><td>indicator: $1$ if the condition holds, else $0$</td><td><a href="pp.html#lem-twopath">The Two-Path Lemma</a></td></tr>
 </table></div>
@@ -69,7 +69,7 @@
   <dt id="gl-entangled">Entangled / product state</dt>
   <dd>Product: $\ket a\otimes\ket b$; entangled: not a product. <span class="where"><a href="states.html#def-entangled">the definition of entanglement</a></span></dd>
   <dt id="gl-follow">Follow</dt>
-  <dd>The classical path-following procedure. <span class="where"><a href="pspace.html#def-follow">the definition of $\mathrm{Follow}$</a></span></dd>
+  <dd>The classical path-following procedure. <span class="where"><a href="pp.html#def-follow">the definition of $\mathrm{Follow}$</a></span></dd>
   <dt id="gl-gateset">Gate set $\mathcal G$</dt>
   <dd>$\{H,X,\CNOT,\TOF\}$. <span class="where"><a href="gates.html#def-gateset">the definition of our gate set $\mathcal G$</a>; universality: <a href="gates.html#fact-universal">the universality theorem for Hadamard + Toffoli</a></span></dd>
   <dt id="gl-gate-apply">Gate applied to chosen qubits</dt>
@@ -85,7 +85,7 @@
   <dt id="gl-measure">Measurement (Born rule)</dt>
   <dd>Outcome $z$ with probability $|\braket z\psi|^2$; one qubit: $\sum_{z_j=1}|\braket z\psi|^2$. <span class="where"><a href="states.html#def-measure1">the Born rule</a>, <a href="states.html#def-measure">the measurement rule</a></span></dd>
   <dt id="gl-pathsum">Path-sum lemma</dt>
-  <dd>$C\ket z = 2^{-h/2}\sum_b(-1)^{\varphi(z,b)}\ket{w(z,b)}$. <span class="where"><a href="pspace.html#lem-pathsum">the Path-Sum Lemma</a></span></dd>
+  <dd>$C\ket z = 2^{-h/2}\sum_b(-1)^{\varphi(z,b)}\ket{w(z,b)}$. <span class="where"><a href="pp.html#lem-pathsum">the Path-Sum Lemma</a></span></dd>
   <dt id="gl-pp">PP</dt>
   <dd>Probabilistic polynomial time: accept with probability $>\frac12$ exactly on yes-instances. <span class="where"><a href="background.html#def-pp">the definition of $\mathsf{PP}$</a></span></dd>
   <dt id="gl-qubit">Qubit; $m$-qubit state</dt>
@@ -121,8 +121,8 @@
   <tr><td><a href="interference.html#lem-paths">The Sum-over-Paths Lemma</a></td><td>Sum over paths</td></tr>
   <tr><td><a href="bqp.html#lem-garbage">The Reversible Simulation Lemma</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a></td><td>Reversible simulation; clean computation</td></tr>
   <tr><td><a href="bqp.html#thm-p-bqp">The theorem $\mathsf{P}\subseteq\mathsf{BQP}$</a>, <a href="bqp.html#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a></td><td>$\mathsf{P}\subseteq\mathsf{BQP}$; $\mathsf{BPP}\subseteq\mathsf{BQP}$</td></tr>
-  <tr><td><a href="pspace.html#lem-pathsum">The Path-Sum Lemma</a>, <a href="pspace.html#cor-signed">the Signed Counts Corollary</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
-  <tr><td><a href="pspace.html#thm-pspace">The theorem $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a></td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
+  <tr><td><a href="pp.html#lem-pathsum">The Path-Sum Lemma</a>, <a href="pp.html#cor-signed">the Signed Counts Corollary</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
+  <tr><td><a href="pp.html#cor-consequences">The Consequences Corollary</a></td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
   <tr><td><a href="pp.html#thm-main">The Main Theorem</a> &#9733;</td><td>$\mathsf{BQP}\subseteq\mathsf{PP}$</td></tr>
   <tr><td><a href="pp.html#lem-gap">The Signed Counting Lemma</a>, <a href="pp.html#lem-twopath">the Two-Path Lemma</a></td><td>Signed counting is in $\mathsf{PP}$; two-path formula</td></tr>
   <tr><td><a href="pp.html#cor-consequences">The Consequences Corollary</a></td><td>$\mathsf{BPP}\ne\mathsf{BQP}\Rightarrow\mathsf{P}\ne\mathsf{PSPACE}$</td></tr>

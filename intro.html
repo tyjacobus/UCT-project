@@ -6,10 +6,10 @@
   <title>Why Quantum Complexity? | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=7">
+  <link rel="stylesheet" href="assets/site.css?v=9">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=7"></script>
+  <script defer src="assets/site.js?v=9"></script>
 </head>
 <body>
 <main><div class="content">
@@ -55,7 +55,7 @@ So if large quantum computers can be built and factoring is not in $\mathsf{BPP}
 <p>Like every new class in CS455, we place $\mathsf{BQP}$ by proving inclusions from both sides:</p>
 <ul>
   <li><strong>From below:</strong> $\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$ (in <a href="bqp.html">the <em>BQP and Reversible Computation</em> chapter</a>). This takes some work, because quantum operations have to be reversible.</li>
-  <li><strong>From above:</strong> $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ (in <a href="pspace.html">the <em>BQP &sube; PSPACE</em> chapter</a>), and then the stronger $\mathsf{BQP}\subseteq\mathsf{PP}$ (in <a href="pp.html">the <em>Main Theorem</em> chapter</a>). This means a quantum computer can be simulated by a classical machine that can <em>count</em>.</li>
+  <li><strong>From above:</strong> $\mathsf{BQP}\subseteq\mathsf{PP}$ (in <a href="pp.html">the <em>Main Theorem</em> chapter</a>). Since $\mathsf{PP}\subseteq\mathsf{PSPACE}$, this also gives $\mathsf{BQP}\subseteq\mathsf{PSPACE}$. This means a quantum computer can be simulated by a classical machine that can <em>count</em>.</li>
 </ul>
 <p>
 The upper bound also explains why nobody has proved that quantum computers are more powerful than classical ones. By the Main Theorem, such a proof would show $\mathsf{P}\neq\mathsf{PP}$, and therefore $\mathsf{P}\ne\mathsf{PSPACE}$ (see <a href="pp.html#cor-consequences">the Consequences Corollary</a>).
