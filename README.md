@@ -25,7 +25,7 @@ Shared code lives in `assets/`:
   draws circuit diagrams from `<figure class="circuit" data-wires=... data-gates=...>`, and shows hover previews for links to any
   definition/theorem box (`<div class="box ..." id="...">`), including boxes on other pages.
   **To add or rename a chapter, edit the `PAGES` array at the top of `site.js`; an optional byline for the chapter banners is `SCRIBE` there (currently empty).**
-- `explorer.js` is the interactive path-sum explorer embedded on Pages 8 and 9.
+- `explorer.js` is an interactive path-sum explorer. It is no longer used on any page.
 - `site.css` holds all styles (light and dark mode).
 
 Math is written inline as `$...$` and `$$...$$`. Macros such as `\ket{x}`, `\braket{z}{\psi}`, `\amp{y}{C}{x}` are defined in `site.js`.

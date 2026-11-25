@@ -10,7 +10,6 @@
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
   <script defer src="assets/site.js?v=9"></script>
-  <script defer src="assets/explorer.js?v=9"></script>
 </head>
 <body>
 <main><div class="content">
@@ -118,8 +117,6 @@ The following classical procedure follows one path.
   <p>So $A_0 = 2-0 = 2$ and $A_1 = 1-1 = 0$, which gives $\amp{0}{HH}{0} = 2/2 = 1$ and $\amp{1}{HH}{0} = 0$. These are the same four paths as in <a href="interference.html#ex-hh-paths">the path tree of $HH\ket0$</a>. Each choice string $b$ is one path.</p>
 </div>
 
-<p>You can try this yourself below. For any small circuit, the explorer runs $\mathrm{Follow}$ on every $b$, groups the paths by their endpoint, and checks the answer against a direct simulation of the full state.</p>
-<div class="explorer" data-mode="paths" data-preset="hh"></div>
 
 <h2 id="obstacle">From amplitudes to probabilities: the one obstacle</h2>
 <p>
@@ -233,7 +230,7 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
 <p>The last test says: accept if and only if (sign of $b$) $\times$ (sign of $b'$) $\times$ ($+1$ if $w$ accepts, $-1$ if not) $=+1$.</p>
 <p>In words: <strong>guess two paths of the quantum circuit. If they end in different places, flip a coin. If they end in the same place, multiply their two signs, flip the result if the endpoint rejects, and accept if you get $+1$.</strong></p>
 
-<h2 id="example">A worked example, and an explorer</h2>
+<h2 id="example">A worked example</h2>
 <div class="box ex" id="ex-pp-hh">
   <div class="box-title"><span class="label">Example</span> <span class="name">($M$ for the circuit $H,H$)</span></div>
   <p>Take $C = H,H$ on $m=1$ qubit, run on the empty input ($z = 0$). Then $C\ket0 = \ket0$, so $p = 0$ (the last qubit never reads $1$), and $(\star)$ predicts
@@ -247,8 +244,6 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
   That is $12/32 = 3/8$. &#10003;</p>
 </div>
 
-<p>The explorer below runs $M$ by brute force on all $2\cdot4^h$ coin sequences for any small circuit, and checks the count against $(\star)$. Try "Hadamards around a Toffoli," where $p$ is strictly between $0$ and $1$, or type your own circuit.</p>
-<div class="explorer" data-mode="pairs" data-preset="hh"></div>
 
 <div class="box intu" id="intu-whisper">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(A whisper of a bias, and why this doesn't give $\mathsf{BQP}\subseteq\mathsf{BPP}$)</span></div>
