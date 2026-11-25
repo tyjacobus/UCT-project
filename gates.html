@@ -6,10 +6,10 @@
   <title>Unitary Gates and Circuits | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=6">
+  <link rel="stylesheet" href="assets/site.css?v=7">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=6"></script>
+  <script defer src="assets/site.js?v=7"></script>
 </head>
 <body>
 <main><div class="content">
@@ -73,20 +73,37 @@ In quantum mechanics, a state changes by a <strong>linear</strong> map. That map
 
 <h2 id="registers">Applying a gate to some qubits of a register</h2>
 <p>
-A circuit on $m$ qubits applies small gates (on $1$, $2$ or $3$ qubits) to a few qubits at a time. The easiest way to say what this does is on basis states: the gate acts on the bits it touches,
-and every other bit stays the same.
+A gate like $H$ is a $2\times2$ matrix, so it acts on one qubit. But a circuit works on a register of $m$ qubits, whose state is a vector of $2^m$ amplitudes. So what does it mean to apply $H$ to, say, qubit 2 of a $3$-qubit register?
+</p>
+<p>
+The answer is simple if we start with a basis state, which is just a string of bits. <strong>The gate acts on the bits it touches, and every other bit stays the same.</strong> In steps:
+</p>
+<ol>
+  <li>Look at the bits the gate touches.</li>
+  <li>Apply the gate to just those bits. This may give a combination of several new values.</li>
+  <li>For each new value, put it back into the string in the same positions, leaving the other bits alone, and keep its amplitude.</li>
+</ol>
+<p>
+For example, apply $H$ to qubit 1 of $\ket{10}$. Qubit 1 holds the bit $1$, and $H\ket1 = \tfrac1{\sqrt2}(\ket0-\ket1)$ by <a href="#lem-hadamard">the Hadamard Formula</a>. Putting each value back in position 1, with qubit 2 still $0$, gives
+$$\tfrac1{\sqrt2}\big(\ket{00}-\ket{10}\big).$$
+In the same way, applying $H$ to qubit 2 of $\ket{011}$ gives $\tfrac1{\sqrt2}\big(\ket{001}-\ket{011}\big)$: only the middle bit changes, and the outer bits stay $0$ and $1$.
+</p>
+<p>
+If the register is in a superposition of several basis states, we do this to each basis state separately and add up the results, keeping each amplitude. (This is what it means for the gate to be linear.) Here is the same thing written formally.
 </p>
 <div class="box def" id="def-apply">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Applying a $k$-qubit gate to chosen qubits)</span></div>
-  <p>Let $G$ be a $2^k\times2^k$ unitary (a <strong>$k$-qubit gate</strong>) and let $j_1,\dots,j_k$ be distinct qubit positions in $\{1,\dots,m\}$.
-  For $z\in\{0,1\}^m$ and $c\in\{0,1\}^k$, write $z[j\gets c]$ for the string $z$ with positions $j_1,\dots,j_k$ replaced by $c_1,\dots,c_k$.
-  Then &ldquo;$G$ applied to qubits $j_1,\dots,j_k$&rdquo; is the $2^m\times 2^m$ matrix $G_{[j_1,\dots,j_k]}$ defined on basis states by
+  <p>Let $G$ be a $k$-qubit gate (a $2^k\times2^k$ unitary), and pick $k$ different qubit positions $j_1,\dots,j_k$ out of $\{1,\dots,m\}$.
+  For a string $z\in\{0,1\}^m$ and new bits $c\in\{0,1\}^k$, write $z[j\gets c]$ for the string $z$ with the bits in positions $j_1,\dots,j_k$ replaced by $c_1,\dots,c_k$.
+  We write $G_{[j_1,\dots,j_k]}$ for $G$ applied to those qubits. On a basis state it does
   $$G_{[j_1,\dots,j_k]}\ket z = \sum_{c\in\{0,1\}^k}\amp{c}{G}{z_{j_1}\cdots z_{j_k}}\,\ket{z[j\gets c]},$$
-  and extended linearly. Here $\amp cG u$ is the amplitude of $\ket c$ in $G\ket u$ (the $(c,u)$ entry of $G$).</p>
+  and on a superposition it acts on each basis state separately. Here $\amp cG u$ is the amplitude of $\ket c$ in $G\ket u$.</p>
 </div>
 <p>
-For example, if $m=2$, then $G_{[1]} = G\otimes I$ and $G_{[2]} = I\otimes G$, by <a href="background.html#fact-tensor">the properties of the tensor product</a>. In general $G_{[j_1,\dots,j_k]}$ is $G\otimes I$ with the qubits reordered, so it is unitary.
-For instance, applying $H$ to qubit 1 of $\ket{10}$ gives $\tfrac1{\sqrt2}\big(\ket{00} - \ket{10}\big)$: the first bit splits according to <a href="#lem-hadamard">the Hadamard Formula</a> and the second bit stays the same.
+In words: read off the touched bits $u = z_{j_1}\cdots z_{j_k}$, apply $G$ to get $G\ket u = \sum_c \amp cGu\,\ket c$, and write each $c$ back into the string. In the first example above, $G = H$, $j_1 = 1$, $z = 10$, $u = 1$, and the two values $c = 0$ and $c = 1$ give $\ket{00}$ and $\ket{10}$.
+</p>
+<p>
+$G_{[j_1,\dots,j_k]}$ is again unitary. It is just $G\otimes I$ with the qubits listed in a different order (see <a href="background.html#fact-tensor">the properties of the tensor product</a>), so it keeps norms the same.
 </p>
 
 <h2 id="multi">CNOT, Toffoli, and classical gates</h2>
