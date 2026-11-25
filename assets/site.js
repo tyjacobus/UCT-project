@@ -10,7 +10,7 @@
   // ------------------------------------------------------------------
   // Site map (single source of truth for navigation). Edit here to add/rename chapters.
   // ------------------------------------------------------------------
-  var SCRIBE = "Tyler Jacobus";          // shown in each chapter banner
+  var SCRIBE = "";   // optional byline for each chapter banner (e.g. "Scribe: ..."); empty = none
   var PAGES = [
     { file: "index.html",        title: "Overview and Roadmap" },
     { file: "intro.html",        title: "Why Quantum Complexity?" },
@@ -100,7 +100,7 @@
     var banner = content.querySelector(".chapter-banner");
     if (banner) {
       banner.insertAdjacentHTML("afterbegin", ICON.replace('width="18" height="16"', 'width="58" height="52"'));
-      if (!banner.querySelector(".byline")) banner.insertAdjacentHTML("beforeend", '<div class="byline">Scribe: ' + SCRIBE + "</div>");
+      if (SCRIBE && !banner.querySelector(".byline")) banner.insertAdjacentHTML("beforeend", '<div class="byline">Scribe: ' + SCRIBE + "</div>");
     }
 
     // right-hand tools

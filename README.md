@@ -26,7 +26,7 @@ Shared code lives in `assets/`:
 - `site.js` builds the sidebar, per-page table of contents, prev/next links, renders math (KaTeX, vendored in `assets/katex`),
   draws circuit diagrams from `<figure class="circuit" data-wires=... data-gates=...>`, and shows hover previews for links to any
   definition/theorem box (`<div class="box ..." id="...">`), including boxes on other pages.
-  **To add or rename a chapter, edit the `PAGES` array at the top of `site.js`; the scribe name shown in each chapter banner is `SCRIBE` there.**
+  **To add or rename a chapter, edit the `PAGES` array at the top of `site.js`; an optional byline for the chapter banners is `SCRIBE` there (currently empty).**
 - `explorer.js` is the interactive path-sum explorer embedded on Pages 8 and 9.
 - `site.css` holds all styles (light and dark mode).
 
