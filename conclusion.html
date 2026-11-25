@@ -54,7 +54,7 @@
   <tr><td>Error reduction for $\mathsf{BQP}$ (see <a href="bqp.html#rem-robust">remark</a>)</td><td>Robustness of the definition (not used in any proof)</td><td>[BV97; AB09, Ch. 10]</td></tr>
   <tr><td>Holevo's theorem (see <a href="states.html#rem-exp">remark</a>)</td><td>Intuition only</td><td>[NC10, &sect;12.1]</td></tr>
   <tr><td>Simon, Shor, Grover, BBBV, Raz&ndash;Tal (see <a href="intro.html#fact-separations">fact</a>)</td><td>Context and evidence</td><td>[Sim97, Sho97, Gro96, BBBV97, RT22]</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PP}$, Fortnow&ndash;Rogers, Aaronson (see <a href="pp.html#fact-beyond">remark</a>)</td><td>Context beyond <a href="pp.html#thm-main">the Main Theorem</a></td><td>[ADH97, FR99, Aar05, Wat08]</td></tr>
+  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PP}$ (see <a href="pp.html#fact-beyond">remark</a>)</td><td>Context beyond <a href="pp.html#thm-main">the Main Theorem</a></td><td>[ADH97, Wat08]</td></tr>
 </table></div>
 
 <h2 id="references">References</h2>
@@ -66,12 +66,11 @@
   <li>[S13] M. Sipser. <em>Introduction to the Theory of Computation</em>, 3rd edition. Cengage, 2013. <span class="muted">CS455 background: circuits, BPP, PSPACE.</span></li>
   <li>[O'D15] R. O'Donnell and J. Wright. <em>15-859BB: Quantum Computation and Information</em>, CMU, Fall 2015. Lecture notes at <a href="https://www.cs.cmu.edu/~odonnell/quantum15/">cs.cmu.edu/~odonnell/quantum15</a>. <span class="muted">The "randomized computation with negative probabilities" viewpoint of <a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>.</span></li>
   <li>[Wat08] J. Watrous. Quantum computational complexity. In <em>Encyclopedia of Complexity and Systems Science</em>, Springer, 2009. arXiv:0804.3401. <span class="muted">Survey; BQP &sube; PP.</span></li>
-  <li>[Aar13] S. Aaronson. <em>Quantum Computing Since Democritus.</em> Cambridge University Press, 2013. <span class="muted">Further reading; intuition for PostBQP = PP.</span></li>
+  <li>[Aar13] S. Aaronson. <em>Quantum Computing Since Democritus.</em> Cambridge University Press, 2013. <span class="muted">Further reading.</span></li>
 </ul>
 <h3>Original papers</h3>
 <ul>
   <li>[ADH97] L. M. Adleman, J. DeMarrais and M.-D. A. Huang. Quantum computability. <em>SIAM Journal on Computing</em> 26(5):1524&ndash;1540, 1997. <span class="muted">BQP &sube; PP (stated without proof).</span></li>
-  <li>[Aar05] S. Aaronson. Quantum computing, postselection, and probabilistic polynomial-time. <em>Proceedings of the Royal Society A</em> 461:3473&ndash;3482, 2005. <span class="muted">PostBQP = PP.</span></li>
   <li>[Aha03] D. Aharonov. A simple proof that Toffoli and Hadamard are quantum universal. arXiv:quant-ph/0301040, 2003.</li>
   <li>[BBBV97] C. H. Bennett, E. Bernstein, G. Brassard and U. Vazirani. Strengths and weaknesses of quantum computing. <em>SIAM Journal on Computing</em> 26(5):1510&ndash;1523, 1997.</li>
   <li>[Ben73] C. H. Bennett. Logical reversibility of computation. <em>IBM Journal of Research and Development</em> 17(6):525&ndash;532, 1973. <span class="muted">Uncomputation, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>.</span></li>
@@ -79,8 +78,6 @@
   <li>[DHHMNO05] C. M. Dawson, H. L. Haselgrove, A. P. Hines, D. Mortimer, M. A. Nielsen and T. J. Osborne. Quantum computing and polynomial equations over the finite field $\mathbb Z_2$. <em>Quantum Information and Computation</em> 5(2):102&ndash;112, 2005. <span class="muted">Path sums for Hadamard + Toffoli circuits (see <a href="pp.html#lem-pathsum">lemma</a>).</span></li>
   <li>[DN06] C. M. Dawson and M. A. Nielsen. The Solovay&ndash;Kitaev algorithm. <em>Quantum Information and Computation</em> 6(1):81&ndash;95, 2006.</li>
   <li>[Fey82] R. P. Feynman. Simulating physics with computers. <em>International Journal of Theoretical Physics</em> 21:467&ndash;488, 1982.</li>
-  <li>[FR99] L. Fortnow and J. Rogers. Complexity limitations on quantum computation. <em>Journal of Computer and System Sciences</em> 59(2):240&ndash;252, 1999.</li>
-  <li>[Gil77] J. Gill. Computational complexity of probabilistic Turing machines. <em>SIAM Journal on Computing</em> 6(4):675&ndash;695, 1977. <span class="muted">Definition of PP (mentioned in the further results).</span></li>
   <li>[Gro96] L. K. Grover. A fast quantum mechanical algorithm for database search. <em>STOC</em> 1996, 212&ndash;219.</li>
   <li>[RT22] R. Raz and A. Tal. Oracle separation of BQP and PH. <em>Journal of the ACM</em> 69(4), 2022 (preliminary version STOC 2019).</li>
   <li>[Shi03] Y. Shi. Both Toffoli and controlled-NOT need little help to do universal quantum computation. <em>Quantum Information and Computation</em> 3(1):84&ndash;92, 2003.</li>
