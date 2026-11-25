@@ -43,7 +43,7 @@
     <li><strong>Quantum = randomized with signs.</strong> Swap probabilities for amplitudes that can be negative, and stochastic matrices for unitary ones. Everything else stays the same (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>).</li>
     <li><strong>Interference is cancellation of paths, and it needs a shared endpoint.</strong> If anything records which path was taken, like leftover garbage or a measurement, the interference goes away. That is why we uncompute (<a href="interference.html#rem-same-endpoint">the interference principle</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>).</li>
     <li><strong>Classical gates don't branch; Hadamards do.</strong> So a path is a choice string $b\in\{0,1\}^h$, and following it is a classical polynomial-time computation (see <a href="pp.html#def-follow">definition</a>).</li>
-    <li><strong>Amplitudes are signed counts of paths.</strong> So an acceptance probability is a sum of squares of signed counts, which a classical machine can add up one path at a time (<a href="pp.html#cor-signed">the Signed Counts Corollary</a>).</li>
+    <li><strong>Amplitudes are signed counts of paths.</strong> So an acceptance probability is a sum of squares of signed counts, which a classical machine can add up one path at a time (<a href="pp.html#lem-pathsum">the Path-Sum Lemma</a>).</li>
     <li><strong>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PSPACE}$.</strong> Quantum computers are at least as strong as randomized ones, and no stronger than polynomial-space machines. Proving they are strictly stronger than randomized ones would also prove $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
   </ol>
 

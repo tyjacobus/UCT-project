@@ -43,7 +43,7 @@
   <tr><td>$p_C(x)$</td><td>probability that $C$ accepts $x$ (last qubit reads $1$)</td><td><a href="bqp.html#def-accept">The definition of acceptance probability</a></td></tr>
   <tr><td>$b\in\{0,1\}^h$</td><td>choice string: which branch each Hadamard takes (a "path")</td><td><a href="pp.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
   <tr><td>$\mathrm{Follow}(z,b) = (w,\varphi)$</td><td>endpoint $w(z,b)$ and sign bit $\varphi(z,b)$ of path $b$</td><td><a href="pp.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
-  <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pp.html#cor-signed">The Signed Counts Corollary</a></td></tr>
+  <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pp.html#lem-pathsum">The Path-Sum Lemma</a></td></tr>
 </table></div>
 
 <h2 id="definitions">Definitions (alphabetical)</h2>
@@ -115,7 +115,7 @@
   <tr><td><a href="interference.html#lem-paths">The Sum-over-Paths Lemma</a></td><td>Sum over paths</td></tr>
   <tr><td><a href="bqp.html#lem-garbage">The Reversible Simulation Lemma</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a></td><td>Reversible simulation; clean computation</td></tr>
   <tr><td><a href="bqp.html#thm-p-bqp">The theorem $\mathsf{P}\subseteq\mathsf{BQP}$</a>, <a href="bqp.html#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a></td><td>$\mathsf{P}\subseteq\mathsf{BQP}$; $\mathsf{BPP}\subseteq\mathsf{BQP}$</td></tr>
-  <tr><td><a href="pp.html#lem-pathsum">The Path-Sum Lemma</a>, <a href="pp.html#cor-signed">the Signed Counts Corollary</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
+  <tr><td><a href="pp.html#lem-pathsum">The Path-Sum Lemma</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
   <tr><td><a href="pp.html#thm-main">The Main Theorem</a> &#9733;</td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
   <tr><td><a href="pp.html#cor-consequences">The Consequences Corollary</a></td><td>$\mathsf{BPP}\ne\mathsf{BQP}\Rightarrow\mathsf{P}\ne\mathsf{PSPACE}$</td></tr>
 </table></div>
