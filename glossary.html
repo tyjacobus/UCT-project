@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary and Notation | Quantum Computation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+<main><div class="content">
+
+<p class="page-kicker">Reference</p>
+<h1>Glossary and Notation</h1>
+<p class="subtitle">Every definition and named result on the site, in one place. Hover over a link to preview the full statement, or click it to jump there.</p>
+
+<h2 id="notation">Notation</h2>
+<p>Each letter means the same thing on every page.</p>
+<div class="table-wrap"><table>
+  <tr><th>Symbol</th><th>Meaning</th><th>Defined</th></tr>
+  <tr><td>$n$</td><td>input length; inputs $x\in\{0,1\}^n$</td><td></td></tr>
+  <tr><td>$m$</td><td>number of qubits of a circuit</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$T$</td><td>number of gates (size) of a circuit</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$h$</td><td>number of Hadamard gates of a circuit</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$\overline\alpha$, $|\alpha|$</td><td>complex conjugate and modulus</td><td><a href="background.html#linear-algebra">Page 2 &sect;1</a></td></tr>
+  <tr><td>$A^\dagger$, $\langle u,v\rangle$, $\|v\|$</td><td>conjugate transpose, inner product, norm</td><td><a href="background.html#def-inner">Def 2.1</a></td></tr>
+  <tr><td>$u\otimes v$, $A\otimes B$</td><td>tensor (Kronecker) product</td><td><a href="background.html#def-tensor">Def 2.2</a></td></tr>
+  <tr><td>$\ket 0,\ket 1$; $\ket+,\ket-$</td><td>basis states of one qubit; $\tfrac1{\sqrt2}(\ket0\pm\ket1)$</td><td><a href="states.html#def-qubit">Def 3.1</a>, <a href="states.html#ex-plusminus">Ex 3.3</a></td></tr>
+  <tr><td>$\ket z$ for $z\in\{0,1\}^m$</td><td>computational basis state; qubit $j$ holds bit $z_j$ (qubit 1 is leftmost)</td><td><a href="states.html#def-state">Def 3.4</a></td></tr>
+  <tr><td>$\braket z\psi$</td><td>the amplitude of $\ket z$ in $\ket\psi$</td><td><a href="states.html#def-state">Def 3.4</a></td></tr>
+  <tr><td>$\ket\psi\ket\phi$</td><td>shorthand for $\ket\psi\otimes\ket\phi$</td><td><a href="states.html#fact-product">Fact 3.5</a></td></tr>
+  <tr><td>$G_{[j_1,\dots,j_k]}$</td><td>gate $G$ applied to qubits $j_1,\dots,j_k$</td><td><a href="gates.html#def-apply">Def 4.6</a></td></tr>
+  <tr><td>$z[j\gets c]$</td><td>$z$ with the bits at positions $j$ overwritten by $c$</td><td><a href="gates.html#def-apply">Def 4.6</a></td></tr>
+  <tr><td>$a\oplus b$; $x\cdot y$</td><td>XOR; $\sum_i x_iy_i \bmod 2$</td><td><a href="gates.html#def-cnot">Def 4.7</a>, <a href="gates.html#lem-hn">Lemma 4.13</a></td></tr>
+  <tr><td>$\amp yCx$</td><td>the amplitude of $\ket y$ in $C\ket x$</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$\mathcal G$</td><td>$\{H, X, \CNOT, \TOF\}$, our gate set</td><td><a href="gates.html#def-gateset">Def 4.11</a></td></tr>
+  <tr><td>$H^{\otimes n}$</td><td>Hadamard on each of $n$ qubits</td><td><a href="gates.html#lem-hn">Lemma 4.13</a></td></tr>
+  <tr><td>$z = x0^{m-n}$</td><td>initial basis string when running a circuit on $x$</td><td><a href="bqp.html#def-accept">Def 6.1</a></td></tr>
+  <tr><td>$p_C(x)$</td><td>probability that $C$ accepts $x$ (last qubit reads $1$)</td><td><a href="bqp.html#def-accept">Def 6.1</a></td></tr>
+  <tr><td>$O_f$</td><td>oracle gate $\ket x\ket b\mapsto\ket x\ket{b\oplus f(x)}$</td><td><a href="algorithms.html#def-oracle">Def 7.1</a></td></tr>
+  <tr><td>$b\in\{0,1\}^h$</td><td>choice string: which branch each Hadamard takes (a "path")</td><td><a href="pspace.html#def-follow">Def 8.2</a></td></tr>
+  <tr><td>$\mathrm{Follow}(z,b) = (w,\varphi)$</td><td>endpoint $w(z,b)$ and sign bit $\varphi(z,b)$ of path $b$</td><td><a href="pspace.html#def-follow">Def 8.2</a></td></tr>
+  <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pspace.html#cor-signed">Cor 8.4</a></td></tr>
+  <tr><td>$v(b,b')$</td><td>value of a pair of paths in the two-path formula</td><td><a href="pp.html#lem-twopath">Lemma 9.3</a></td></tr>
+  <tr><td>$[\,\cdot\,]$</td><td>indicator: $1$ if the condition holds, else $0$</td><td><a href="pp.html#lem-twopath">Lemma 9.3</a></td></tr>
+</table></div>
+
+<h2 id="definitions">Definitions (alphabetical)</h2>
+<dl class="gloss">
+  <dt id="gl-accept">Acceptance probability $p_C(x)$</dt>
+  <dd>$\sum_{y_m=1}|\amp{y}{C}{x0^{m-n}}|^2$. <span class="where"><a href="bqp.html#def-accept">Definition 6.1</a></span></dd>
+  <dt id="gl-amplitude">Amplitude</dt>
+  <dd>A coordinate of a quantum state; $\braket z\psi$. <span class="where"><a href="states.html#def-qubit">Definition 3.1</a>, <a href="states.html#def-state">Definition 3.4</a></span></dd>
+  <dt id="gl-bell">Bell state $\ket{\Phi^+}$</dt>
+  <dd>$\tfrac1{\sqrt2}(\ket{00}+\ket{11})$, an entangled state. <span class="where"><a href="states.html#prop-bell">Proposition 3.9</a>, <a href="gates.html#ex-bell">Example 4.9</a></span></dd>
+  <dt id="gl-bpp">BPP</dt>
+  <dd>Bounded-error probabilistic polynomial time. <span class="where"><a href="background.html#def-bpp">Definition 2.4</a></span></dd>
+  <dt id="gl-bqp">BQP</dt>
+  <dd>Bounded-error quantum polynomial time: uniform circuits over $\mathcal G$ with $p\ge\frac23$ on yes-instances and $\le\frac13$ on no-instances. <span class="where"><a href="bqp.html#def-bqp">Definition 6.2</a></span></dd>
+  <dt id="gl-classical-gate">Classical (permutation) gate</dt>
+  <dd>A gate that maps each basis state to a basis state; $X$, CNOT, TOF. <span class="where"><a href="gates.html#def-perm">Definition 4.8</a></span></dd>
+  <dt id="gl-cnot">CNOT, Toffoli</dt>
+  <dd>$\ket{a,b}\mapsto\ket{a,b\oplus a}$; $\ket{a,b,c}\mapsto\ket{a,b,c\oplus ab}$. <span class="where"><a href="gates.html#def-cnot">Definition 4.7</a></span></dd>
+  <dt id="gl-circuit">Quantum circuit</dt>
+  <dd>A sequence of gates; computes $C = U_T\cdots U_1$. <span class="where"><a href="gates.html#def-circuit">Definition 4.10</a></span></dd>
+  <dt id="gl-entangled">Entangled / product state</dt>
+  <dd>Product: $\ket a\otimes\ket b$; entangled: not a product. <span class="where"><a href="states.html#def-entangled">Definition 3.8</a></span></dd>
+  <dt id="gl-follow">Follow</dt>
+  <dd>The classical path-following procedure. <span class="where"><a href="pspace.html#def-follow">Definition 8.2</a></span></dd>
+  <dt id="gl-gateset">Gate set $\mathcal G$</dt>
+  <dd>$\{H,X,\CNOT,\TOF\}$. <span class="where"><a href="gates.html#def-gateset">Definition 4.11</a>; universality: <a href="gates.html#fact-universal">Fact 4.12</a></span></dd>
+  <dt id="gl-gate-apply">Gate applied to chosen qubits</dt>
+  <dd>$G_{[j_1..j_k]}$ acts on the chosen bits and carries the rest along. <span class="where"><a href="gates.html#def-apply">Definition 4.6</a></span></dd>
+  <dt id="gl-hadamard">Hadamard gate $H$; Hadamard formula</dt>
+  <dd>$H\ket a = \tfrac{1}{\sqrt2}\sum_c(-1)^{ac}\ket c$. <span class="where"><a href="gates.html#def-1q">Definition 4.3</a>, <a href="gates.html#lem-hadamard">Lemma 4.4</a></span></dd>
+  <dt id="gl-hn">Hadamard transform</dt>
+  <dd>$H^{\otimes n}\ket x = 2^{-n/2}\sum_y(-1)^{x\cdot y}\ket y$. <span class="where"><a href="gates.html#lem-hn">Lemma 4.13</a></span></dd>
+  <dt id="gl-inner">Inner product, norm, conjugate transpose</dt>
+  <dd><span class="where"><a href="background.html#def-inner">Definition 2.1</a></span></dd>
+  <dt id="gl-interference">Interference</dt>
+  <dd>Cancellation (destructive) or reinforcement (constructive) of path weights that end at the same basis state. <span class="where"><a href="interference.html#lem-paths">Lemma 5.3</a>, <a href="interference.html#rem-same-endpoint">Remark 5.6</a></span></dd>
+  <dt id="gl-measure">Measurement (Born rule)</dt>
+  <dd>Outcome $z$ with probability $|\braket z\psi|^2$; one qubit: $\sum_{z_j=1}|\braket z\psi|^2$. <span class="where"><a href="states.html#def-measure1">Definition 3.2</a>, <a href="states.html#def-measure">Definition 3.6</a></span></dd>
+  <dt id="gl-oracle">Oracle gate, query algorithm</dt>
+  <dd><span class="where"><a href="algorithms.html#def-oracle">Definition 7.1</a>; phase kickback: <a href="algorithms.html#lem-kickback">Lemma 7.2</a></span></dd>
+  <dt id="gl-pathsum">Path-sum lemma</dt>
+  <dd>$C\ket z = 2^{-h/2}\sum_b(-1)^{\varphi(z,b)}\ket{w(z,b)}$. <span class="where"><a href="pspace.html#lem-pathsum">Lemma 8.3</a></span></dd>
+  <dt id="gl-pp">PP</dt>
+  <dd>Probabilistic polynomial time: accept with probability $>\frac12$ exactly on yes-instances. <span class="where"><a href="background.html#def-pp">Definition 2.5</a></span></dd>
+  <dt id="gl-qubit">Qubit; $m$-qubit state</dt>
+  <dd>A unit vector in $\C^2$; in $\C^{2^m}$. <span class="where"><a href="states.html#def-qubit">Definition 3.1</a>, <a href="states.html#def-state">Definition 3.4</a></span></dd>
+  <dt id="gl-reversible">Reversible simulation; uncomputation</dt>
+  <dd><span class="where"><a href="bqp.html#lem-garbage">Lemma 6.4</a>, <a href="bqp.html#lem-bennett">Lemma 6.5</a></span></dd>
+  <dt id="gl-signed">Signed counting ("abstain" trick)</dt>
+  <dd><span class="where"><a href="pp.html#lem-gap">Lemma 9.2</a></span></dd>
+  <dt id="gl-stochastic">Stochastic matrix</dt>
+  <dd><span class="where"><a href="interference.html#def-stochastic">Definition 5.1</a></span></dd>
+  <dt id="gl-sumpaths">Sum over paths</dt>
+  <dd><span class="where"><a href="interference.html#lem-paths">Lemma 5.3</a></span></dd>
+  <dt id="gl-tensor">Tensor product</dt>
+  <dd><span class="where"><a href="background.html#def-tensor">Definition 2.2</a>, <a href="background.html#fact-tensor">Fact 2.3</a></span></dd>
+  <dt id="gl-twopath">Two-path formula</dt>
+  <dd>$2p_C(x)-1 = 2^{-h}\sum_{b,b'}v(b,b')$. <span class="where"><a href="pp.html#lem-twopath">Lemma 9.3</a></span></dd>
+  <dt id="gl-uniform">Uniform circuit family</dt>
+  <dd><span class="where"><a href="background.html#def-uniform">Definition 2.7</a></span></dd>
+  <dt id="gl-unitary">Unitary matrix</dt>
+  <dd>$U^\dagger U = I$; equivalently norm-preserving. <span class="where"><a href="gates.html#def-unitary">Definition 4.1</a>, <a href="gates.html#fact-unitary">Fact 4.2</a></span></dd>
+  <dt id="gl-x-z-s">$X$, $Z$, $S$ gates</dt>
+  <dd><span class="where"><a href="gates.html#def-1q">Definition 4.3</a></span></dd>
+</dl>
+
+<h2 id="results">Results, in order</h2>
+<div class="table-wrap"><table>
+  <tr><th>Item</th><th>Statement</th></tr>
+  <tr><td><a href="background.html#prop-pp-pspace">Proposition 2.6</a></td><td>$\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$</td></tr>
+  <tr><td><a href="states.html#prop-bell">Proposition 3.9</a></td><td>The Bell state is entangled</td></tr>
+  <tr><td><a href="gates.html#fact-unitary">Fact 4.2</a></td><td>Unitary $\iff$ norm-preserving</td></tr>
+  <tr><td><a href="gates.html#lem-hadamard">Lemma 4.4</a></td><td>Hadamard formula</td></tr>
+  <tr><td><a href="gates.html#fact-universal">Fact 4.12</a></td><td>$\{H,\TOF\}$ is universal (cited)</td></tr>
+  <tr><td><a href="gates.html#lem-hn">Lemma 4.13</a></td><td>Hadamard transform</td></tr>
+  <tr><td><a href="interference.html#lem-paths">Lemma 5.3</a></td><td>Sum over paths</td></tr>
+  <tr><td><a href="bqp.html#lem-garbage">Lemma 6.4</a>, <a href="bqp.html#lem-bennett">Lemma 6.5</a></td><td>Reversible simulation; clean computation</td></tr>
+  <tr><td><a href="bqp.html#thm-p-bqp">Theorem 6.6</a>, <a href="bqp.html#thm-bpp-bqp">Theorem 6.7</a></td><td>$\mathsf{P}\subseteq\mathsf{BQP}$; $\mathsf{BPP}\subseteq\mathsf{BQP}$</td></tr>
+  <tr><td><a href="algorithms.html#lem-kickback">Lemma 7.2</a>, <a href="algorithms.html#lem-charsum">Lemma 7.3</a></td><td>Phase kickback; character sum</td></tr>
+  <tr><td><a href="algorithms.html#thm-dj">Theorem 7.4</a>, <a href="algorithms.html#prop-dj-lb">Proposition 7.5</a></td><td>Deutsch&ndash;Jozsa; deterministic lower bound</td></tr>
+  <tr><td><a href="algorithms.html#thm-bv">Theorem 7.6</a>, <a href="algorithms.html#prop-bv-lb">Proposition 7.7</a></td><td>Bernstein&ndash;Vazirani; randomized lower bound</td></tr>
+  <tr><td><a href="pspace.html#prop-exp">Proposition 8.1</a></td><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td></tr>
+  <tr><td><a href="pspace.html#lem-pathsum">Lemma 8.3</a>, <a href="pspace.html#cor-signed">Corollary 8.4</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
+  <tr><td><a href="pspace.html#thm-pspace">Theorem 8.6</a></td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
+  <tr><td><a href="pp.html#thm-main">Theorem 9.1</a> &#9733;</td><td>$\mathsf{BQP}\subseteq\mathsf{PP}$</td></tr>
+  <tr><td><a href="pp.html#lem-gap">Lemma 9.2</a>, <a href="pp.html#lem-twopath">Lemma 9.3</a></td><td>Signed counting is in $\mathsf{PP}$; two-path formula</td></tr>
+  <tr><td><a href="pp.html#cor-consequences">Corollary 9.5</a></td><td>$\mathsf{BPP}\ne\mathsf{BQP}\Rightarrow\mathsf{P}\ne\mathsf{PSPACE}$</td></tr>
+</table></div>
+
+</div></main>
+</body>
+</html>

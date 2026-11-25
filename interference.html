@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5. Quantum vs. Randomized Computation | Quantum Computation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+<main><div class="content">
+
+<p class="page-kicker">Page 5 &middot; Lecture A: the model</p>
+<h1>Quantum vs. Randomized Computation</h1>
+<p class="subtitle">The same picture with one change: probabilities can only add up, amplitudes can cancel.</p>
+
+<div class="place">
+  <b>Where this page sits.</b> This is the conceptual core of Lecture A. We put randomized and quantum computation in the same linear-algebra framework,
+  so the <em>only</em> difference is visible: signs.
+  <ul>
+    <li><b>You will learn:</b> stochastic vs. unitary matrices, the sum-over-paths formula, interference, and two ways to destroy it.</li>
+    <li><b>Used later:</b> Lemma 5.3 (sum over paths) is the seed of the simulations on Pages 8&ndash;9. Remark 5.6 explains why we must "uncompute" on Page 6, and why the centerpiece proof pairs up paths with the same endpoint.</li>
+  </ul>
+</div>
+
+<h2 id="randomized"><span class="sec">&sect;1</span>Randomized computation is linear algebra too</h2>
+<p>
+Think of a randomized algorithm on an $m$-bit memory. At any moment its state is a <em>probability distribution</em> over $\{0,1\}^m$, that is, a vector $p\in\R^{2^m}$
+with $p_z\ge0$ and $\sum_z p_z = 1$. Each step updates the distribution linearly: if from memory contents $z$ the step moves to $z'$ with probability $M_{z',z}$, then the new
+distribution is $Mp$.
+</p>
+<div class="box def" id="def-stochastic">
+  <div class="box-title"><span class="label">Definition 5.1</span> <span class="name">(Stochastic matrix)</span></div>
+  <p>A real matrix $M$ is <strong>stochastic</strong> if all its entries are nonnegative and each column sums to $1$. Exactly these matrices map every probability vector to a probability vector.
+  The basic randomized gate is the <strong>coin flip</strong>
+  $$F = \begin{pmatrix}\tfrac12&\tfrac12\\[2pt]\tfrac12&\tfrac12\end{pmatrix},$$
+  which replaces a bit by a fresh random bit. Classical gates (permutation matrices) are stochastic too.</p>
+</div>
+
+<p>Side by side, the two models look almost identical:</p>
+<div class="table-wrap"><table>
+  <tr><th></th><th>Randomized</th><th>Quantum</th></tr>
+  <tr><td>State of $m$ bits</td><td>probability vector $p\in\R^{2^m}$</td><td>amplitude vector $\ket\psi\in\C^{2^m}$</td></tr>
+  <tr><td>Entries</td><td>$p_z\ge 0$</td><td>$\braket z\psi$ any sign (any complex number)</td></tr>
+  <tr><td>Normalization</td><td>$\sum_z p_z = 1$ (1-norm)</td><td>$\sum_z|\braket z\psi|^2 = 1$ (2-norm)</td></tr>
+  <tr><td>Operations</td><td>stochastic matrices</td><td>unitary matrices</td></tr>
+  <tr><td>"Basic randomness" gate</td><td>coin flip $F$</td><td>Hadamard $H$</td></tr>
+  <tr><td>Probability of seeing $z$</td><td>$p_z$</td><td>$|\braket z\psi|^2$</td></tr>
+</table></div>
+
+<div class="box ex" id="ex-hh">
+  <div class="box-title"><span class="label">Example 5.2</span> <span class="name">(Flip a coin twice vs. apply $H$ twice)</span></div>
+  <div class="two-col">
+    <div>
+      <p><strong>Randomized.</strong> Start with the bit $0$, i.e. $p = (1,0)^T$.<br>
+      $Fp = (\tfrac12,\tfrac12)^T$, and $F(Fp) = (\tfrac12,\tfrac12)^T$.<br>
+      Once randomness is created, more coin flips can never remove it.</p>
+    </div>
+    <div>
+      <p><strong>Quantum.</strong> Start with $\ket0$.<br>
+      $H\ket0 = \ket+$, which looks like a fair coin if measured.<br>
+      But $H\ket+ = \ket 0$ (<a href="gates.html#ex-hadamard">Example 4.5</a>): the outcome is $0$ <em>with certainty</em>.</p>
+    </div>
+  </div>
+  <p>The quantum "coin" was flipped twice and came back deterministic. Where did the randomness go? The next section answers this by tracking paths.</p>
+</div>
+
+<h2 id="paths"><span class="sec">&sect;2</span>Sum over paths</h2>
+<p>
+A computation that applies $U_1$, then $U_2$, ..., then $U_T$ to a basis state $\ket x$ can be pictured as a tree: from $x$ it branches to every $z_1$ with $(U_1)_{z_1,x}\ne0$,
+from each $z_1$ to every $z_2$, and so on. The final entries are sums over root-to-leaf paths. This is nothing but matrix multiplication written out:
+</p>
+<div class="box lem" id="lem-paths">
+  <div class="box-title"><span class="label">Lemma 5.3</span> <span class="name">(Sum over paths)</span></div>
+  <p>Let $U_1,\dots,U_T$ be $2^m\times2^m$ matrices and $x,y\in\{0,1\}^m$. Then
+  $$\big(U_T\cdots U_1\big)_{y,x} \;=\; \sum_{z_1,\dots,z_{T-1}\in\{0,1\}^m}\;\prod_{t=1}^{T}\,(U_t)_{z_t,\,z_{t-1}}, \qquad\text{where } z_0 = x,\; z_T = y .$$
+  We call $x=z_0\to z_1\to\cdots\to z_T=y$ a <strong>path</strong> and the product its <strong>weight</strong>.</p>
+</div>
+<div class="proof"><span class="proof-label">Proof.</span>
+  Induction on $T$. For $T=1$ there is nothing to prove. For $T>1$, by the definition of matrix multiplication,
+  $(U_T\cdot U_{T-1}\cdots U_1)_{y,x} = \sum_{z_{T-1}}(U_T)_{y,z_{T-1}}\,(U_{T-1}\cdots U_1)_{z_{T-1},x}$. Expand the second factor using the induction hypothesis.
+  <span class="qed">&#8718;</span>
+</div>
+<p>Lemma 5.3 holds for <em>any</em> matrices. What differs between the two models is what the weights look like:</p>
+<ul>
+  <li><strong>Randomized</strong> ($U_t$ stochastic): the weight of a path is the probability of taking it, and the lemma is just the law of total probability:
+    $\Pr[\text{end at } y] = \sum_{\text{paths}}\Pr[\text{path}]$. Every term is $\ge0$, so contributions <em>only accumulate</em>.</li>
+  <li><strong>Quantum</strong> ($U_t$ unitary, applied to $\ket x$): the lemma gives the <em>amplitude</em> $\amp{y}{C}{x}$ as a sum of path weights, and weights can be negative. Then
+  $$\Pr[\text{see } y] = \Big|\sum_{\text{paths } x\to y}\text{weight}(\text{path})\Big|^2,\qquad\text{which is }\textbf{not}\text{ the same as}\quad \sum_{\text{paths}}|\text{weight}|^2 .$$
+  Paths with opposite signs <strong>cancel</strong> (destructive interference), and paths with equal signs <strong>reinforce</strong> (constructive interference).</li>
+</ul>
+
+<div class="box ex" id="ex-hh-paths">
+  <div class="box-title"><span class="label">Example 5.4</span> <span class="name">(The paths of $HH\ket0$)</span></div>
+  <figure>
+    <svg viewBox="0 0 600 250" width="600" height="250" role="img" aria-label="Path tree for H applied twice to |0>: four paths; the path 0 to 1 to 1 has weight minus one half, and cancels the path 0 to 0 to 1." style="color:var(--text)">
+      <g stroke="currentColor" stroke-width="1.3" fill="none">
+        <line x1="62" y1="120" x2="208" y2="70"/>
+        <line x1="62" y1="120" x2="208" y2="172"/>
+        <line x1="250" y1="62" x2="390" y2="36"/>
+        <line x1="250" y1="70" x2="390" y2="96"/>
+        <line x1="250" y1="172" x2="390" y2="146"/>
+        <line x1="250" y1="180" x2="390" y2="206" style="stroke:var(--neg)" stroke-width="2"/>
+      </g>
+      <g font-family="Georgia, serif" font-size="16" fill="currentColor" text-anchor="middle" dominant-baseline="central">
+        <circle cx="42" cy="120" r="20" style="fill:var(--card);stroke:currentColor"/><text x="42" y="120">|0⟩</text>
+        <circle cx="230" cy="66" r="20" style="fill:var(--card);stroke:currentColor"/><text x="230" y="66">|0⟩</text>
+        <circle cx="230" cy="176" r="20" style="fill:var(--card);stroke:currentColor"/><text x="230" y="176">|1⟩</text>
+        <circle cx="410" cy="34" r="20" style="fill:var(--card);stroke:currentColor"/><text x="410" y="34">|0⟩</text>
+        <circle cx="410" cy="98" r="20" style="fill:var(--card);stroke:currentColor"/><text x="410" y="98">|1⟩</text>
+        <circle cx="410" cy="144" r="20" style="fill:var(--card);stroke:currentColor"/><text x="410" y="144">|0⟩</text>
+        <circle cx="410" cy="208" r="20" style="fill:var(--card);stroke:currentColor"/><text x="410" y="208">|1⟩</text>
+      </g>
+      <g font-family="Georgia, serif" font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="125" y="84">+1/√2</text>
+        <text x="125" y="168">+1/√2</text>
+        <text x="320" y="38">+1/√2</text>
+        <text x="320" y="100">+1/√2</text>
+        <text x="320" y="148">+1/√2</text>
+        <text x="320" y="212" style="fill:var(--neg)" font-weight="bold">−1/√2</text>
+        <text x="42" y="160" fill="currentColor" style="fill:var(--muted)">start</text>
+        <text x="230" y="230" style="fill:var(--muted)">after 1st H</text>
+        <text x="410" y="244" style="fill:var(--muted)">after 2nd H</text>
+      </g>
+      <g font-family="Georgia, serif" font-size="15" text-anchor="start" dominant-baseline="central">
+        <text x="446" y="34" fill="currentColor">weight +½ → |0⟩</text>
+        <text x="446" y="98" fill="currentColor">weight +½ → |1⟩</text>
+        <text x="446" y="144" fill="currentColor">weight +½ → |0⟩</text>
+        <text x="446" y="208" style="fill:var(--neg)">weight −½ → |1⟩</text>
+      </g>
+    </svg>
+    <figcaption>Each edge is labeled with an entry of $H$ (from <a href="gates.html#lem-hadamard">Lemma 4.4</a>). The only negative edge is $1\to1$.</figcaption>
+  </figure>
+  <p>Collect the four paths by their endpoint:
+  $$\amp{0}{HH}{0} = \tfrac12 + \tfrac12 = 1,\qquad \amp{1}{HH}{0} = \tfrac12 - \tfrac12 = 0 .$$
+  For the coin $F$, the same tree has every edge weighted $\tfrac12$, every path weighted $+\tfrac14$, and each endpoint gets $\tfrac14+\tfrac14 = \tfrac12$.
+  <strong>The trees are identical. Only the sign on one edge differs, and that sign makes the paths to $\ket1$ cancel.</strong></p>
+</div>
+
+<div class="box intu" id="intu-design">
+  <div class="box-title"><span class="label">Intuition</span> <span class="name">(how to think about quantum algorithms)</span></div>
+  <p>A quantum algorithm is a way of choreographing cancellations. It branches into exponentially many paths, just like a randomized algorithm, but it arranges the signs so that paths leading to
+  <em>wrong</em> answers cancel and paths leading to <em>right</em> answers reinforce. A randomized algorithm can't do this, because its weights are all nonnegative.</p>
+  <p>Now look ahead to the upper bounds. Lemma 5.3 says an amplitude is "just" a sum of path weights. A classical machine can add up exponentially many path weights one at a time, without storing the state.
+  That idea gives $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ (Page 8), and a more careful version gives $\mathsf{BQP}\subseteq\mathsf{PP}$ (Page 9).</p>
+</div>
+
+<h2 id="which-path"><span class="sec">&sect;3</span>Interference needs paths that end in the same place</h2>
+<p>
+Cancellation is fragile. Here is the most important way to destroy it, and it will matter on every later page.
+</p>
+<div class="box ex" id="ex-whichpath">
+  <div class="box-title"><span class="label">Example 5.5</span> <span class="name">("Which-path" information kills interference)</span></div>
+  <p>Take Example 5.2's circuit $H, H$ on qubit 1, but between the two $H$'s add a CNOT that copies qubit 1 into a second qubit:</p>
+  <figure class="circuit" data-wires="|0⟩;|0⟩" data-gates="H 0, SLICE ψ_1, CNOT 0 1, SLICE ψ_2, H 0, SLICE ψ_3, M 0" data-alt="H on qubit 1, CNOT from qubit 1 to qubit 2, H on qubit 1, measure qubit 1"></figure>
+  <p>
+  $\ket{\psi_1} = \tfrac1{\sqrt2}(\ket{00}+\ket{10})$, and $\ket{\psi_2} = \tfrac1{\sqrt2}(\ket{00}+\ket{11})$ (a Bell state). Applying $H$ to qubit 1 (Definition 4.6):
+  $$\ket{\psi_3} = \tfrac12\big(\ket{00} + \ket{10}\big) + \tfrac12\big(\ket{01} - \ket{11}\big).$$
+  Now $\Pr[\text{qubit 1 reads }1] = \tfrac14+\tfrac14 = \tfrac12$. Without the CNOT, the answer was $0$ with certainty!
+  </p>
+  <p>The path picture explains why. The two paths into "qubit 1 $=1$" are still there with weights $+\tfrac12$ and $-\tfrac12$, but they now end at <em>different</em> basis states, $\ket{10}$ and $\ket{11}$,
+  because qubit 2 recorded which branch was taken. Lemma 5.3 adds up weights only for paths ending at the <em>same</em> string $y$, so these two never meet and never cancel.</p>
+</div>
+
+<div class="box rem" id="rem-same-endpoint">
+  <div class="box-title"><span class="label">Remark 5.6</span> <span class="name">(the interference principle)</span></div>
+  <p>Two paths interfere only if they end in the <strong>same basis state of the entire register</strong>. Any record of which branch was taken, in any qubit, even one we never look at,
+  separates the paths and prevents cancellation. Measuring a qubit in the middle of the computation has exactly the same effect, because the measurement outcome is such a record.
+  (This is the principle of deferred measurement from Page 4 seen from the other side.)</p>
+  <p>Two consequences come later:</p>
+  <ol>
+    <li>When a quantum algorithm runs a classical subroutine, it must <strong>erase its scratch work</strong> ("uncompute"), or the garbage will act as a which-path record. See <a href="bqp.html#lem-bennett">Lemma 6.5</a>.</li>
+    <li>In the centerpiece proof, a <strong>pair</strong> of paths contributes to the acceptance probability only when both paths end at the same string. See <a href="pp.html#lem-twopath">Lemma 9.3</a>.</li>
+  </ol>
+</div>
+
+<h2 id="coins"><span class="sec">&sect;4</span>Coins are a special case</h2>
+<p>
+Remark 5.6 also tells us how a quantum computer can <em>imitate</em> a coin flip: apply $H$ to a fresh qubit in state $\ket0$, and afterwards use that qubit only as a <em>control</em>
+(never apply another $H$ to it). Its value is then permanently recorded in the register, so its two branches can never interfere, and it behaves exactly like a fair random bit.
+We'll turn this into the proof that $\mathsf{BPP}\subseteq\mathsf{BQP}$ in <a href="bqp.html#thm-bpp-bqp">Theorem 6.7</a>.
+</p>
+
+<h2 id="exercises">Exercises</h2>
+<div class="exercise-q">
+  <span class="label">Exercise 5.A</span> Use paths to compute $HZH\ket0$. Which paths cancel?
+  <details><summary>Show solution</summary>
+    <p>Paths $0\to z_1\to z_1\to z_2$ ($Z$ doesn't branch; it multiplies by $(-1)^{z_1}$). The weights are
+    $0\to0\to0$: $+\tfrac12$; $\;0\to1\to0$: $(+\tfrac1{\sqrt2})(-1)(+\tfrac1{\sqrt2}) = -\tfrac12$; $\;0\to0\to1$: $+\tfrac12$; $\;0\to1\to1$: $(+\tfrac1{\sqrt2})(-1)(-\tfrac1{\sqrt2}) = +\tfrac12$.
+    So the amplitude of $\ket0$ is $0$ (cancellation) and the amplitude of $\ket1$ is $1$: $HZH\ket0 = \ket1$, consistent with $HZH = X$ (Exercise 4.A).</p>
+  </details>
+</div>
+<div class="exercise-q">
+  <span class="label">Exercise 5.B</span> Show that a matrix that is both stochastic and unitary must be a permutation matrix. ("The only operations that are both randomized and quantum are reversible classical ones.")
+  <details><summary>Show solution</summary>
+    <p>Each column $c$ has nonnegative real entries with $\sum_i c_i = 1$ and $\sum_i c_i^2 = 1$. Since $0\le c_i\le1$, we have $c_i^2\le c_i$, with equality only if $c_i\in\{0,1\}$. Summing, $1 = \sum c_i^2\le\sum c_i = 1$, so equality holds everywhere and
+    each column is a standard basis vector. Columns of a unitary are orthonormal, so they are <em>distinct</em> basis vectors. That makes it a permutation matrix.</p>
+  </details>
+</div>
+
+<div class="box takeaways" id="takeaways">
+  <div class="box-title"><span class="label">Takeaways</span></div>
+  <ul>
+    <li>Randomized = nonnegative weights, quantum = signed weights. Everything else in the framework is the same.</li>
+    <li><strong>Sum over paths:</strong> amplitude = sum of path weights. Probabilities add up; amplitudes add up and <em>then</em> get squared.</li>
+    <li>$HH\ket0=\ket0$ because the two paths to $\ket1$ have weights $+\tfrac12$ and $-\tfrac12$.</li>
+    <li>Paths interfere only if they end at the same full basis string. Leftover records (garbage, measurements) destroy interference.</li>
+  </ul>
+</div>
+
+</div></main>
+</body>
+</html>

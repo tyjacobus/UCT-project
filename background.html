@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2. Background Review | Quantum Computation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+<main><div class="content">
+
+<p class="page-kicker">Page 2 &middot; Start here</p>
+<h1>Background Review</h1>
+<p class="subtitle">Exactly what we assume, plus quick reviews of the few things that go beyond 455.</p>
+
+<div class="place">
+  <b>Where this page sits.</b> This is a reference page. Skim it now and come back when a later page links here.
+  <ul>
+    <li><b>Assumed from 455 (not reviewed in depth):</b> TMs, $\mathsf{P}$, $\mathsf{NP}$, $\mathsf{PSPACE}$, $\mathsf{EXP}$, reusing space, Boolean circuits, $\mathsf{BPP}$.</li>
+    <li><b>Reviewed here:</b> complex vectors (&sect;1), tensor products (&sect;2), $\mathsf{BPP}$ and $\mathsf{PP}$ (&sect;3), uniform circuits (&sect;4).</li>
+  </ul>
+</div>
+
+<h2 id="linear-algebra"><span class="sec">&sect;1</span>Complex vectors and inner products</h2>
+<p>
+A <strong>complex number</strong> is $\alpha = a + bi$ with $a,b\in\R$ and $i^2=-1$. Its <strong>conjugate</strong> is $\bar\alpha = a - bi$,
+and its <strong>modulus</strong> is $|\alpha| = \sqrt{a^2+b^2}$. The one identity we really use is
+$$|\alpha|^2 = \alpha\,\bar\alpha .$$
+For a real number, $|\alpha|^2 = \alpha^2$. That will be the only case we need for the main theorem: our gate set
+(<a href="gates.html#def-gateset">Definition 4.11</a>) only produces real amplitudes.
+</p>
+
+<div class="box def" id="def-inner">
+  <div class="box-title"><span class="label">Definition 2.1</span> <span class="name">(Conjugate transpose, inner product, norm)</span></div>
+  <p>For a complex matrix $A$, its <strong>conjugate transpose</strong> $A^\dagger$ is obtained by transposing $A$ and conjugating every entry:
+  $(A^\dagger)_{ij} = \overline{A_{ji}}$. For $u, v\in\C^N$ (column vectors), the <strong>inner product</strong> and <strong>norm</strong> are
+  $$\langle u, v\rangle = u^\dagger v = \sum_{i=1}^N \overline{u_i}\, v_i, \qquad \|v\| = \sqrt{\langle v,v\rangle} = \Big(\sum_{i=1}^N |v_i|^2\Big)^{1/2}.$$
+  A <strong>unit vector</strong> has $\|v\|=1$. The standard basis vectors $e_1,\dots,e_N$ are orthonormal: $\langle e_i, e_j\rangle = 1$ if $i=j$ and $0$ otherwise.</p>
+</div>
+<p>For real vectors, all of this is the ordinary dot product and Euclidean length from your linear algebra course.</p>
+
+<h2 id="tensor"><span class="sec">&sect;2</span>Tensor products</h2>
+<p>
+Quantum computing uses the tensor product to "put systems side by side." If one system is described by a vector in $\C^N$ and another by a
+vector in $\C^M$, the pair is described by a vector in $\C^{NM}$, with one coordinate for every <em>pair</em> of indices.
+</p>
+<div class="box def" id="def-tensor">
+  <div class="box-title"><span class="label">Definition 2.2</span> <span class="name">(Tensor (Kronecker) product)</span></div>
+  <p>For $u\in\C^N$ and $v\in\C^M$, the tensor product $u\otimes v\in\C^{NM}$ has coordinates indexed by pairs $(i,j)$, listed in
+  lexicographic order:
+  $$(u\otimes v)_{(i,j)} = u_i\, v_j.$$
+  Similarly, for an $N\times N$ matrix $A$ and an $M\times M$ matrix $B$, $A\otimes B$ is the $NM\times NM$ matrix with
+  $(A\otimes B)_{(i,j),(i',j')} = A_{ii'}\,B_{jj'}$. In block form,
+  $A\otimes B = \begin{pmatrix} A_{11}B & \cdots & A_{1N}B\\ \vdots & & \vdots \\ A_{N1}B & \cdots & A_{NN}B\end{pmatrix}$.</p>
+</div>
+
+<div class="box ex" id="ex-tensor">
+  <div class="box-title"><span class="label">Example</span></div>
+  <p>$\begin{pmatrix}a\\b\end{pmatrix}\otimes\begin{pmatrix}c\\d\end{pmatrix} = \begin{pmatrix}ac\\ad\\bc\\bd\end{pmatrix}$, with coordinates indexed by the pairs $(1,1),(1,2),(2,1),(2,2)$.
+  For instance $\begin{pmatrix}1\\0\end{pmatrix}\otimes\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}0\\1\\0\\0\end{pmatrix}$: the tensor product of two standard basis vectors is a standard basis vector.</p>
+</div>
+
+<div class="box fact" id="fact-tensor">
+  <div class="box-title"><span class="label">Fact 2.3</span> <span class="name">(Properties of $\otimes$)</span></div>
+  <ol>
+    <li><strong>Bilinear:</strong> $(\alpha u + \beta u')\otimes v = \alpha(u\otimes v) + \beta(u'\otimes v)$, and the same in the second slot.</li>
+    <li><strong>Basis to basis:</strong> $e_i\otimes e_j = e_{(i,j)}$.</li>
+    <li><strong>Acts factor by factor:</strong> $(A\otimes B)(u\otimes v) = (Au)\otimes(Bv)$, and $(A\otimes B)(C\otimes D) = (AC)\otimes(BD)$.</li>
+    <li><strong>Norms multiply:</strong> $\|u\otimes v\| = \|u\|\,\|v\|$.</li>
+    <li><strong>Associative:</strong> $(u\otimes v)\otimes w = u\otimes(v\otimes w)$, so we can drop parentheses.</li>
+  </ol>
+</div>
+<div class="proof"><span class="proof-label">Proof sketch.</span>
+  Each item follows by comparing coordinates. For example, for item 3:
+  $\big((A\otimes B)(u\otimes v)\big)_{(i,j)} = \sum_{i',j'} A_{ii'}B_{jj'}u_{i'}v_{j'} = \big(\sum_{i'}A_{ii'}u_{i'}\big)\big(\sum_{j'}B_{jj'}v_{j'}\big) = (Au)_i (Bv)_j$.
+  For item 4, $\sum_{i,j}|u_iv_j|^2 = \sum_i |u_i|^2\sum_j|v_j|^2$.
+  <span class="qed">&#8718;</span>
+</div>
+
+<h2 id="pp"><span class="sec">&sect;3</span>Randomized classes: BPP and PP</h2>
+<p>
+Recall that a <strong>probabilistic Turing machine</strong> (PTM) is a TM that can flip fair coins. We always assume, without loss of generality,
+that on inputs of length $n$ it runs in polynomial time and flips <em>exactly</em> $r(n)$ coins, for some polynomial $r$ (pad with unused flips if needed).
+Then "the probability that $M$ accepts $x$" is simply the fraction of coin sequences $\rho\in\{0,1\}^{r(n)}$ that lead to acceptance.
+Equivalently, there is a deterministic polynomial-time machine $V(x,\rho)$ that runs $M$ on $x$ with coins $\rho$.
+</p>
+
+<div class="box def" id="def-bpp">
+  <div class="box-title"><span class="label">Definition 2.4</span> <span class="name">($\mathsf{BPP}$, review from 455)</span></div>
+  <p>$L\in\mathsf{BPP}$ if there is a polynomial-time PTM $M$ such that for every $x$:
+  if $x\in L$ then $\Pr[M \text{ accepts } x]\ge 2/3$, and if $x\notin L$ then $\Pr[M\text{ accepts }x]\le 1/3$.
+  (By repetition and a majority vote, $2/3$ can be replaced by $1-2^{-\mathrm{poly}(n)}$.)</p>
+</div>
+
+<p>
+455 may not have covered the following class. It drops the requirement that there be a <em>gap</em> between yes-instances and no-instances.
+</p>
+<div class="box def" id="def-pp">
+  <div class="box-title"><span class="label">Definition 2.5</span> <span class="name">($\mathsf{PP}$, "probabilistic polynomial time"; Gill 1977)</span></div>
+  <p>$L\in\mathsf{PP}$ if there is a polynomial-time PTM $M$ such that for every $x$:
+  $$x\in L \iff \Pr[M\text{ accepts }x] > \tfrac12 .$$
+  (So if $x\notin L$ then $\Pr[M\text{ accepts }x]\le\frac12$.)</p>
+</div>
+
+<div class="box intu" id="intu-pp">
+  <div class="box-title"><span class="label">Intuition</span> <span class="name">($\mathsf{PP}$ is "majority vote with no margin")</span></div>
+  <p>A $\mathsf{BPP}$ machine must be right with a <em>noticeable</em> margin, so you can run it a few times and trust the majority. A
+  $\mathsf{PP}$ machine only has to tip the balance by the smallest possible amount, perhaps a single coin sequence out of $2^{r(n)}$.
+  You can't detect such a bias by sampling. What a $\mathsf{PP}$ machine really does is decide whether an exponentially large
+  <strong>count</strong> (of accepting coin sequences) is above a threshold. The canonical $\mathsf{PP}$-complete problem is
+  $$\mathrm{MAJSAT} = \{\varphi : \text{more than half of all assignments satisfy the Boolean formula } \varphi\}.$$
+  $\mathsf{PP}$ is a very powerful class. By Toda's theorem it contains the whole polynomial hierarchy in a certain sense ($\mathsf{PH}\subseteq\mathsf{P}^{\mathsf{PP}}$).</p>
+</div>
+
+<div class="box prop" id="prop-pp-pspace">
+  <div class="box-title"><span class="label">Proposition 2.6</span> <span class="name">($\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$)</span></div>
+  <p>$\mathsf{BPP}\subseteq\mathsf{PP}$ and $\mathsf{PP}\subseteq\mathsf{PSPACE}$.</p>
+</div>
+<div class="proof"><span class="proof-label">Proof.</span>
+  If $M$ witnesses $L\in\mathsf{BPP}$, the same $M$ witnesses $L\in\mathsf{PP}$, since $\ge 2/3$ implies $>1/2$ and $\le 1/3$ implies $\le 1/2$.
+  <br>
+  For $\mathsf{PP}\subseteq\mathsf{PSPACE}$: let $M$ use $r=r(n)$ coins, and let $V(x,\rho)$ be the deterministic machine that runs $M$ with coins $\rho$.
+  A $\mathsf{PSPACE}$ machine loops over all $\rho\in\{0,1\}^r$ in lexicographic order. For each one it runs $V(x,\rho)$, <em>reusing the same work space</em>
+  every time, and adds $1$ to a counter if $V$ accepts. At the end it accepts if and only if the counter exceeds $2^{r-1}$.
+  The space used is $r$ bits for the current $\rho$, $r+1$ bits for the counter, and polynomial space for one run of $V$. That totals $\mathrm{poly}(n)$.
+  <span class="qed">&#8718;</span>
+</div>
+
+<div class="exercise-q" id="ex-np-pp">
+  <span class="label">Exercise 2.A</span> (A first taste of the "abstain" trick.) Show that $\mathsf{NP}\subseteq\mathsf{PP}$.
+  Hint: on input a formula $\varphi$ with $k$ variables, pick a random assignment $a$ and one extra coin $c$.
+  <details><summary>Show solution</summary>
+    <p>Let $M$ pick $a\in\{0,1\}^k$ and $c\in\{0,1\}$ uniformly at random. If $\varphi(a)=1$, accept. Otherwise accept if and only if $c=0$, so on these branches $M$
+    "abstains" by accepting exactly half of the time. If $s$ is the number of satisfying assignments, then
+    $$\Pr[M\text{ accepts}] = \frac{s}{2^k} + \Big(1-\frac{s}{2^k}\Big)\cdot\frac12 = \frac12 + \frac{s}{2^{k+1}},$$
+    which is $>1/2$ if and only if $s\ge1$, that is, if and only if $\varphi\in\mathrm{SAT}$. Since $\mathrm{SAT}$ is $\mathsf{NP}$-complete under polynomial-time reductions,
+    and $\mathsf{PP}$ is closed under them, $\mathsf{NP}\subseteq\mathsf{PP}$.
+    The same trick (accept on some branches, reject on others, and flip a fair coin on the rest so they contribute exactly $1/2$) is the engine of the centerpiece proof:
+    see <a href="pp.html#lem-gap">Lemma 9.2</a>.</p>
+  </details>
+</div>
+
+<h2 id="uniform"><span class="sec">&sect;4</span>Uniform circuit families</h2>
+<p>
+A single circuit only handles inputs of one length, so a "circuit algorithm" is really a <em>family</em> $\{C_n\}_{n\ge1}$, one circuit per input length.
+To be a realistic algorithm, the family must not hide extra computational power in how the circuits are chosen. So we require that the circuits be easy to construct.
+</p>
+<div class="box def" id="def-uniform">
+  <div class="box-title"><span class="label">Definition 2.7</span> <span class="name">(Polynomial-time uniform circuit family)</span></div>
+  <p>A family of circuits $\{C_n\}_{n\ge 1}$ is <strong>polynomial-time uniform</strong> if there is a deterministic Turing machine that, on input $1^n$,
+  outputs a description of $C_n$ (the list of its gates and the wires each gate acts on) in time polynomial in $n$. In particular, $C_n$ has $\mathrm{poly}(n)$ gates.</p>
+</div>
+<p>
+The same definition will apply to quantum circuits (<a href="bqp.html#def-bqp">Definition 6.2</a>). The only thing that changes is which gates are allowed.
+</p>
+
+<div class="box fact" id="fact-tm-circuits">
+  <div class="box-title"><span class="label">Fact 2.8</span> <span class="name">(Polynomial-time machines become uniform circuits)</span></div>
+  <p>Let $V$ be a deterministic TM that runs in polynomial time on inputs of length $N$ and outputs one bit. Then there is a polynomial-time uniform family of
+  Boolean circuits $\{D_N\}$, built from AND, OR and NOT gates of fan-in at most $2$, such that $D_N(w) = V(w)$ for every $w\in\{0,1\}^N$.</p>
+</div>
+<div class="box omit" id="omit-tm-circuits">
+  <div class="box-title"><span class="label">Omitted detail</span></div>
+  <p>This is the "tableau" construction from the proof of the Cook&ndash;Levin theorem in 455. Each cell of the $t(N)\times t(N)$ computation table is computed
+  from the three cells above it by a constant-size circuit. That gives a circuit of size $O(t(N)^2)$, and its wiring is so regular that it can be printed in polynomial time.
+  See Sipser, <em>Introduction to the Theory of Computation</em> (3rd ed.), Section 9.3, or Arora&ndash;Barak, <em>Computational Complexity: A Modern Approach</em>, Chapter 6.</p>
+</div>
+
+<div class="box takeaways" id="takeaways">
+  <div class="box-title"><span class="label">Takeaways</span></div>
+  <ul>
+    <li>$\langle u,v\rangle = \sum_i \overline{u_i}v_i$ and $\|v\|^2 = \sum_i |v_i|^2$. Quantum states will be unit vectors in this norm.</li>
+    <li>$u\otimes v$ has one coordinate $u_iv_j$ for every pair $(i,j)$. Tensoring basis vectors gives basis vectors, and $(A\otimes B)(u\otimes v) = Au\otimes Bv$.</li>
+    <li>$\mathsf{PP}$ = "accept with probability $>1/2$ exactly on yes-instances," with no gap required. It is really a class about comparing exponentially large counts, and it sits inside $\mathsf{PSPACE}$.</li>
+    <li>Polynomial-time TMs can be converted efficiently into polynomial-size circuits (Fact 2.8). We'll make these circuits reversible on <a href="bqp.html">Page 6</a>.</li>
+  </ul>
+</div>
+
+</div></main>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9. Centerpiece: BQP ⊆ PP | Quantum Computation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site.js"></script>
+  <script defer src="assets/explorer.js"></script>
+</head>
+<body>
+<main><div class="content">
+
+<p class="page-kicker">Page 9 &middot; Lecture B: power and limits &middot; &#9733; centerpiece</p>
+<h1>Centerpiece: BQP &sube; PP</h1>
+<p class="subtitle">A probabilistic machine that guesses <em>two</em> computation paths at a time can simulate any quantum computer.</p>
+
+<div class="place">
+  <b>Where this page sits.</b> This is the main theorem of the site. It sharpens <a href="pspace.html#thm-pspace">Theorem 8.6</a> ($\mathsf{BQP}\subseteq\mathsf{PSPACE}$) to $\mathsf{BQP}\subseteq\mathsf{PP}$, and completes the sandwich
+  $\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$.
+  <ul>
+    <li><b>Prerequisites:</b> $\mathsf{PP}$ (<a href="background.html#def-pp">Definition 2.5</a>), $p_C(x)$ and $\mathsf{BQP}$ (<a href="bqp.html#def-accept">Definitions 6.1</a>, <a href="bqp.html#def-bqp">6.2</a>),
+      $\mathrm{Follow}$ and the path-sum lemma (<a href="pspace.html#def-follow">Definition 8.2</a>, <a href="pspace.html#lem-pathsum">Lemma 8.3</a>, <a href="pspace.html#cor-signed">Corollary 8.4</a>). Hover over any of these links for a reminder.</li>
+    <li><b>Structure:</b> the statement (&sect;1), why it is plausible but not obvious (&sect;2), two lemmas (&sect;3&ndash;4), the proof (&sect;5), a worked example and an explorer (&sect;6), and consequences (&sect;7).</li>
+  </ul>
+</div>
+
+<h2 id="statement"><span class="sec">&sect;1</span>The theorem</h2>
+<div class="box thm centerpiece" id="thm-main">
+  <div class="box-title"><span class="label">Theorem 9.1</span> <span class="name">(Adleman, DeMarrais and Huang 1997)</span></div>
+  <p>$\mathsf{BQP}\subseteq\mathsf{PP}$.</p>
+  <p>More precisely: for every polynomial-time uniform family $\{C_n\}$ of circuits over $\mathcal G$ with $h = h(n)$ Hadamard gates, there is a polynomial-time probabilistic Turing machine $M$ such that for every input $x$ of length $n$,
+  $$\Pr[M\text{ accepts }x] \;=\; \frac12 + \frac{2\,p_{C_n}(x) - 1}{2^{h+1}} . \tag{$\star$}$$
+  In particular, $\Pr[M\text{ accepts }x]>\tfrac12$ if and only if $p_{C_n}(x)>\tfrac12$.</p>
+</div>
+<p>
+Formula $(\star)$ is a good way to remember the theorem. The $\mathsf{PP}$ machine reproduces the quantum circuit's bias toward accepting, $p_{C_n}(x)-\tfrac12$, but shrunk by the exponential factor $2^h$.
+$\mathsf{PP}$ doesn't care how small the bias is, only which way it points.
+</p>
+<p>
+Why is this stronger than Theorem 8.6? Because $\mathsf{PP}\subseteq\mathsf{PSPACE}$ (<a href="background.html#prop-pp-pspace">Proposition 2.6</a>), and $\mathsf{PP}$ is not believed to be all of $\mathsf{PSPACE}$. Conceptually, it says that
+<strong>quantum computation is a special kind of counting</strong>. Theorem 8.6 only said that a quantum computation can be <em>replayed</em> in polynomial space.
+</p>
+
+<h2 id="obstacle"><span class="sec">&sect;2</span>Why this is plausible, and the one obstacle</h2>
+<p>
+Here is what we have and what we need.
+</p>
+<div class="two-col">
+  <div class="card"><h4>What $\mathsf{PP}$ can do</h4>
+    <p>A PTM's acceptance probability is an <em>average over coin sequences</em>. Write $\mathrm{gap} = \#\text{accepting} - \#\text{rejecting}$. A $\mathsf{PP}$ machine decides whether $\mathrm{gap}>0$.
+    So $\mathsf{PP}$ can decide the <strong>sign of a signed count</strong>, where each coin sequence contributes $+1$ or $-1$ (Lemma 9.2 below makes this precise).</p></div>
+  <div class="card"><h4>What the quantum computer gives us</h4>
+    <p>By Corollary 8.4, an amplitude is a signed count: $\amp yCz = 2^{-h/2}A_y$, where $A_y$ = #positive paths to $y$ $-$ #negative paths to $y$.
+    But the acceptance probability is a sum of <strong>squares</strong>, $\sum_{y_m=1}A_y^2/2^h$, and a square is not a signed count of single paths.</p></div>
+</div>
+<p>
+The way around the square is algebra you already know: $\big(\sum_b a_b\big)^2 = \sum_{b,b'}a_ba_{b'}$. <strong>A square of a sum over paths is a sum over pairs of paths.</strong>
+So the $\mathsf{PP}$ machine should guess <em>two</em> paths $b,b'$ at once, and each pair contributes the product of the two signs. Two more points make this work:
+</p>
+<ul>
+  <li><strong>Only pairs with the same endpoint count.</strong> When we expand $\sum_y A_y^2$, a pair $(b,b')$ contributes only if both paths end at the same $y$. Pairs that end in different places contribute $0$, so the machine must "abstain" on them.
+    (This is <a href="interference.html#rem-same-endpoint">Remark 5.6</a> again: paths with different endpoints don't interfere.)</li>
+  <li><strong>Accept minus reject in one sum.</strong> Rather than comparing $p$ with a threshold, we use $2p-1 = p - (1-p)$, which is "probability of accepting minus probability of rejecting." It is a single signed sum
+    in which outcomes with $y_m=0$ get an extra minus sign.</li>
+</ul>
+
+<p>The proof has three steps:</p>
+<ol class="roadmap">
+  <li><strong>Lemma 9.2 (signed counting is in $\mathsf{PP}$).</strong> If $f(x)$ is a sum of exponentially many terms in $\{-1,0,+1\}$, each computable in polynomial time, then some PTM accepts with probability exactly $\tfrac12 + f(x)/2^{q+1}$. The trick: flip a fair coin on the $0$ terms ("abstain").</li>
+  <li><strong>Lemma 9.3 (two-path formula).</strong> $2p_C(x)-1 = 2^{-h}\sum_{b,b'}v(b,b')$, where $v(b,b')\in\{-1,0,+1\}$ is computed from $\mathrm{Follow}(z,b)$ and $\mathrm{Follow}(z,b')$.</li>
+  <li><strong>Combine.</strong> Apply Lemma 9.2 to the sum from Lemma 9.3 to get $(\star)$. The $\mathsf{BQP}$ promise $p\ge\tfrac23$ or $p\le\tfrac13$ then puts $\Pr[M\text{ accepts}]$ on the correct side of $\tfrac12$.</li>
+</ol>
+
+<h2 id="gap-lemma"><span class="sec">&sect;3</span>Step 1: signed counting is in PP</h2>
+<div class="box lem" id="lem-gap">
+  <div class="box-title"><span class="label">Lemma 9.2</span> <span class="name">(Signed counting; the "abstain" trick)</span></div>
+  <p>Let $q:\mathbb N\to\mathbb N$ be polynomially bounded and computable from $1^n$ in polynomial time (for example, a polynomial). Let $v(x,u)\in\{-1,0,+1\}$ be computable in polynomial time, for $x\in\{0,1\}^*$ and $u\in\{0,1\}^{q(|x|)}$. Define
+  $$f(x) = \sum_{u\in\{0,1\}^{q(|x|)}}v(x,u).$$
+  Then there is a polynomial-time PTM $M$ with $\Pr[M\text{ accepts }x] = \dfrac12 + \dfrac{f(x)}{2^{q(|x|)+1}}$ for every $x$. In particular, $\{x: f(x)>0\}\in\mathsf{PP}$.</p>
+</div>
+<div class="proof"><span class="proof-label">Proof.</span>
+  On input $x$, $M$ computes $q = q(|x|)$ (polynomial time, by assumption). It then flips $q$ coins to get a uniformly random $u\in\{0,1\}^q$, and one more coin $c$. It computes $v(x,u)$ and then:
+  <ul>
+    <li>if $v(x,u) = +1$, accept;</li>
+    <li>if $v(x,u) = -1$, reject;</li>
+    <li>if $v(x,u) = 0$, accept if and only if $c = 0$ (abstain).</li>
+  </ul>
+  Given $u$, the probability of accepting is $1$, $0$ or $\tfrac12$ in the three cases. In every case that equals $\frac{1+v(x,u)}{2}$. Averaging over $u$:
+  $$\Pr[M\text{ accepts }x] = \frac{1}{2^q}\sum_{u}\frac{1+v(x,u)}{2} = \frac12 + \frac{1}{2^{q+1}}\sum_u v(x,u) = \frac12+\frac{f(x)}{2^{q+1}}.$$
+  $M$ runs in polynomial time. If $f(x)>0$ it accepts with probability $>\tfrac12$, and if $f(x)\le0$ with probability $\le\tfrac12$. So $M$ witnesses $\{x:f(x)>0\}\in\mathsf{PP}$ (Definition 2.5).
+  <span class="qed">&#8718;</span>
+</div>
+<div class="box intu" id="intu-gap">
+  <div class="box-title"><span class="label">Intuition</span></div>
+  <p>A PTM can only add <em>nonnegative</em> amounts to its acceptance probability. Lemma 9.2 gets signs anyway by measuring everything relative to $\tfrac12$: accepting counts as $+1$, rejecting as $-1$, and a fair coin flip as $0$.
+  This is how negative numbers, the essential ingredient of quantum computation (<a href="gates.html#intu-signs">Page 4</a>), get into a classical probabilistic machine. You saw the same trick in <a href="background.html#ex-np-pp">Exercise 2.A</a> ($\mathsf{NP}\subseteq\mathsf{PP}$).
+  Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994).</p>
+</div>
+
+<h2 id="two-path"><span class="sec">&sect;4</span>Step 2: the two-path formula</h2>
+<p>
+Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an input $x\in\{0,1\}^n$, and let $z = x0^{m-n}$ as on Page 8. Abbreviate $w(b) = w(z,b)$ and $\varphi(b) = \varphi(z,b)$, the outputs of $\mathrm{Follow}(z,b)$.
+</p>
+<div class="box lem" id="lem-twopath">
+  <div class="box-title"><span class="label">Lemma 9.3</span> <span class="name">(Two-path formula)</span></div>
+  <p>For $b,b'\in\{0,1\}^h$ define
+  $$v(b,b') = \begin{cases}0 & \text{if } w(b)\ne w(b'),\\[3pt] (-1)^{\varphi(b)+\varphi(b')+1+w(b)_m} & \text{if } w(b) = w(b').\end{cases}$$
+  Then
+  $$2\,p_C(x) - 1 \;=\; \frac{1}{2^h}\sum_{b,b'\in\{0,1\}^h}v(b,b') .$$</p>
+</div>
+<p class="small"><em>Reading the sign:</em> $(-1)^{\varphi(b)}$ and $(-1)^{\varphi(b')}$ are the signs of the two paths, and $(-1)^{1+w(b)_m}$ is $+1$ if the common endpoint accepts ($w(b)_m=1$) and $-1$ if it rejects.</p>
+<div class="proof"><span class="proof-label">Proof.</span>
+  <p><em>Accepting minus rejecting.</em> Since $C$ is unitary, $C\ket z$ is a unit vector (<a href="gates.html#fact-unitary">Fact 4.2</a>), so $\sum_y\amp yCz^2 = 1$. Here we used that amplitudes are real (Corollary 8.4). Splitting by the last bit,
+  $p_C(x) = \sum_{y_m=1}\amp yCz^2$ and $1 - p_C(x) = \sum_{y_m=0}\amp yCz^2$. Subtracting,
+  $$2p_C(x) - 1 = \sum_{y\in\{0,1\}^m}(-1)^{1+y_m}\,\amp yCz^2 . \tag{1}$$</p>
+  <p><em>Square as pairs.</em> By Corollary 8.4, $\amp yCz = 2^{-h/2}\sum_b[w(b)=y](-1)^{\varphi(b)}$, where $[\cdot]$ is $1$ if the condition holds and $0$ otherwise. Squaring the sum,
+  $$\amp yCz^2 = \frac{1}{2^h}\sum_{b,b'}[w(b)=y]\,[w(b')=y]\,(-1)^{\varphi(b)+\varphi(b')} . \tag{2}$$</p>
+  <p><em>Swap the sums.</em> Substitute (2) into (1) and exchange the order of summation:
+  $$2p_C(x)-1 = \frac1{2^h}\sum_{b,b'}(-1)^{\varphi(b)+\varphi(b')}\sum_y[w(b)=y]\,[w(b')=y]\,(-1)^{1+y_m}.$$
+  For a fixed pair $(b,b')$, the inner sum over $y$ has at most one nonzero term, namely $y = w(b)$. That term is present exactly when $w(b') = w(b)$, and it equals $(-1)^{1+w(b)_m}$.
+  So the inner sum times $(-1)^{\varphi(b)+\varphi(b')}$ is exactly $v(b,b')$.
+  <span class="qed">&#8718;</span></p>
+</div>
+<div class="box intu" id="intu-twopath">
+  <div class="box-title"><span class="label">Why it works</span></div>
+  <p>Think of $\amp yCz^2$ as "the number of ways to pick two histories that both end at $y$," counted with signs. Pairs of histories that end in different places cancel out of the total, not because of any cleverness,
+  but because different basis states are orthogonal: they never add to the same amplitude. That is why the $\mathsf{PP}$ machine can safely abstain on them.
+  The circuit's real work, interference among histories with the <em>same</em> endpoint, is captured exactly by the signs $(-1)^{\varphi(b)+\varphi(b')}$.</p>
+</div>
+
+<h2 id="proof"><span class="sec">&sect;5</span>Step 3: proof of the theorem</h2>
+<div class="proof"><span class="proof-label">Proof of Theorem 9.1.</span>
+  Let $L\in\mathsf{BQP}$ via a polynomial-time uniform family $\{C_n\}$ over $\mathcal G$ (Definition 6.2). For an input $x$ of length $n$, let $m$, $T$, $h$ be the numbers of qubits, gates and Hadamards of $C_n$, and let $z = x0^{m-n}$.
+  <p><em>Define the signed count.</em> Let $q(n) = 2h(n)$. This is at most $2T(n)$, so it is polynomially bounded, and it can be computed from $1^n$ in polynomial time by printing $C_n$ and counting its Hadamard gates. For $u\in\{0,1\}^{2h}$, split $u = (b,b')$ into two halves and let $v(x,u) = v(b,b')$, defined as in Lemma 9.3 for the circuit $C_n$ and start string $z$.</p>
+  <p><em>$v$ is computable in polynomial time.</em> Given $(x,u)$: compute $C_n$ from $1^n$ (uniformity), run $\mathrm{Follow}(z,b)$ and $\mathrm{Follow}(z,b')$ (time $O(T+m)$ each, by Definition 8.2), compare the endpoints, and compute the sign. Every step takes time polynomial in $n$.</p>
+  <p><em>The sum is the quantum bias.</em> By Lemma 9.3,
+  $$f(x) := \sum_{u\in\{0,1\}^{2h}}v(x,u) = \sum_{b,b'}v(b,b') = 2^h\big(2p_{C_n}(x)-1\big).$$</p>
+  <p><em>Apply Lemma 9.2.</em> It gives a polynomial-time PTM $M$ with
+  $$\Pr[M\text{ accepts }x] = \frac12 + \frac{f(x)}{2^{2h+1}} = \frac12 + \frac{2^h(2p_{C_n}(x) - 1)}{2^{2h+1}} = \frac12 + \frac{2p_{C_n}(x)-1}{2^{h+1}},$$
+  which is $(\star)$.</p>
+  <p><em>Conclude.</em> If $x\in L$, then $p_{C_n}(x)\ge\tfrac23$, so $2p_{C_n}(x)-1\ge\tfrac13>0$ and $\Pr[M\text{ accepts }x]>\tfrac12$.
+  If $x\notin L$, then $p_{C_n}(x)\le\tfrac13$, so $2p_{C_n}(x)-1\le-\tfrac13<0$ and $\Pr[M\text{ accepts }x]<\tfrac12$.
+  So $x\in L\iff\Pr[M\text{ accepts }x]>\tfrac12$, and $L\in\mathsf{PP}$.
+  <span class="qed">&#8718;</span></p>
+</div>
+
+<p>It helps to see the machine $M$ all in one place. It is short:</p>
+<div class="algo-box" id="algo-M">
+  <div class="algo-title">The $\mathsf{PP}$ machine $M$, unrolled</div>
+  <ol>
+    <li>Compute $C_n$; read off $m$ and $h$; set $z = x0^{m-n}$.</li>
+    <li>Flip $2h+1$ coins: two random paths $b,b'\in\{0,1\}^h$ and one extra coin $c$.</li>
+    <li>$(w,\varphi)\gets\mathrm{Follow}(z,b)$ and $(w',\varphi')\gets\mathrm{Follow}(z,b')$.</li>
+    <li>If $w\ne w'$: <em>the paths can't interfere</em>, so abstain: accept if and only if $c=0$.</li>
+    <li>Otherwise accept if and only if $\varphi\oplus\varphi'\oplus 1\oplus w_m = 0$, that is, if and only if (sign of $b$) $\times$ (sign of $b'$) $\times$ ($+1$ if $w$ accepts, $-1$ if not) $=+1$.</li>
+  </ol>
+</div>
+<p>In one sentence: <strong>guess two histories of the quantum computer. If they end in different places, flip a coin. If they end in the same place, accept if and only if their signs agree with each other exactly when the endpoint is accepting.</strong></p>
+
+<h2 id="example"><span class="sec">&sect;6</span>A worked example, and an explorer</h2>
+<div class="box ex" id="ex-pp-hh">
+  <div class="box-title"><span class="label">Example 9.4</span> <span class="name">($M$ for the circuit $H,H$)</span></div>
+  <p>Take $C = H,H$ on $m=1$ qubit, run on the empty input ($z = 0$). Then $C\ket0 = \ket0$, so $p = 0$ (the last qubit never reads $1$), and $(\star)$ predicts
+  $\Pr[M\text{ accepts}] = \tfrac12 + \tfrac{0-1}{2^3} = \tfrac38$. Let's check directly. From <a href="pspace.html#ex-follow">Example 8.5</a>: $w(b_1b_2) = b_2$ and $\varphi(b_1b_2) = b_1\wedge b_2$.</p>
+  <ul>
+    <li><strong>Different endpoints</strong> ($b_2\ne b_2'$): $8$ of the $16$ pairs. $v=0$, and $M$ abstains.</li>
+    <li><strong>Both end at $0$</strong> ($b_2=b_2'=0$): $4$ pairs, all with $\varphi=\varphi'=0$ and $w_m = 0$, so $v = (-1)^{0+0+1+0} = -1$.</li>
+    <li><strong>Both end at $1$</strong> ($b_2=b_2'=1$): $4$ pairs with $v = (-1)^{b_1+b_1'+1+1} = (-1)^{b_1+b_1'}$, which is $+1,-1,-1,+1$. These sum to $0$: this is the cancellation $\amp1{HH}0 = 0$, now seen in pairs.</li>
+  </ul>
+  <p>So $f = -4 = 2^2(2\cdot0-1)$, as Lemma 9.3 promises. Counting $M$'s $2\cdot16 = 32$ coin sequences: the abstaining pairs give $8$ acceptances, the two $v=+1$ pairs give $2\cdot 2 = 4$, and the six $v=-1$ pairs give $0$.
+  That is $12/32 = 3/8$. &#10003;</p>
+</div>
+
+<p>The explorer below runs $M$ by brute force on all $2\cdot4^h$ coin sequences for any small circuit, and checks the count against $(\star)$. Try "Hadamards around a Toffoli," where $p$ is strictly between $0$ and $1$, or type your own circuit.</p>
+<div class="explorer" data-mode="pairs" data-preset="hh"></div>
+
+<div class="box intu" id="intu-whisper">
+  <div class="box-title"><span class="label">Intuition</span> <span class="name">(a whisper of a bias, and why this doesn't give $\mathsf{BQP}\subseteq\mathsf{BPP}$)</span></div>
+  <p>The quantum circuit is right with probability at least $\tfrac23$, a bias of at least $\tfrac16$ away from $\tfrac12$. The $\mathsf{PP}$ machine has bias $(2p-1)/2^{h+1}$, which can be as small as about $\tfrac{1}{3}\cdot 2^{-(h+1)}$.
+  To detect such a bias by repeated sampling you would need about $4^h$ runs. So this simulation is a <strong>counting</strong> argument, not an efficient randomized algorithm. That's no accident:
+  the exponentially many cancellations that a quantum computer gets for free are paid for here by the extra power of $\mathsf{PP}$, which can decide a majority with no margin at all.</p>
+</div>
+
+<div class="box rem" id="rem-proof-notes">
+  <div class="box-title"><span class="label">Remarks on the proof</span></div>
+  <ol>
+    <li><strong>Unbounded error.</strong> The proof never used the gap between $\tfrac23$ and $\tfrac13$, only that $p\ne\tfrac12$ goes the right way. So any language with $x\in L\iff p_{C_n}(x)>\tfrac12$ (no gap required) is also in $\mathsf{PP}$ (Exercise 9.A).</li>
+    <li><strong>Real amplitudes.</strong> We used $|a|^2 = a^2$, which holds because circuits over $\mathcal G$ have real amplitudes. For gate sets with complex entries, Fact 4.12 lets us switch to $\mathcal G$ first. Alternatively, write $|a|^2 = a\bar a$ and expand into pairs exactly as here, which is how Adleman, DeMarrais and Huang handle algebraic amplitudes.</li>
+    <li><strong>The proof relativizes.</strong> If circuits may also use an oracle gate $\ket{u}\ket{c}\mapsto\ket u\ket{c\oplus A(u)}$, $\mathrm{Follow}$ treats it like any other classical gate by querying $A$. So $\mathsf{BQP}^A\subseteq\mathsf{PP}^A$ for every oracle $A$ (Exercise 9.C).</li>
+  </ol>
+</div>
+
+<h2 id="consequences"><span class="sec">&sect;7</span>Consequences and further results</h2>
+<div class="box cor" id="cor-consequences">
+  <div class="box-title"><span class="label">Corollary 9.5</span></div>
+  <ol>
+    <li>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$.</li>
+    <li>If $\mathsf{P} = \mathsf{PP}$, then $\mathsf{P} = \mathsf{BQP}$.</li>
+    <li>If $\mathsf{BPP}\ne\mathsf{BQP}$, then $\mathsf{P}\ne\mathsf{PP}$, and therefore $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
+  </ol>
+</div>
+<div class="proof"><span class="proof-label">Proof.</span>
+  (1) Theorem 6.7, Theorem 9.1 and Proposition 2.6.
+  (2) If $\mathsf{P}=\mathsf{PP}$ then $\mathsf{P}\subseteq\mathsf{BQP}\subseteq\mathsf{PP} = \mathsf{P}$.
+  (3) Suppose $\mathsf{P}=\mathsf{PP}$. By (2), $\mathsf{P} = \mathsf{BQP}$, and then $\mathsf{BPP}$, which sits between them, also equals $\mathsf{BQP}$. That is the contrapositive of the first implication.
+  For the second: if $\mathsf{P} = \mathsf{PSPACE}$ then $\mathsf{PP}$, sandwiched in between, equals $\mathsf{P}$.
+  <span class="qed">&#8718;</span>
+</div>
+<p>
+Part 3 is the punchline of the whole site. <strong>An unconditional proof that quantum computers are more powerful than classical ones would separate $\mathsf{P}$ from $\mathsf{PSPACE}$</strong>, which is one of the major open problems of 455.
+So the evidence for quantum advantage necessarily comes in conditional forms: query separations (<a href="algorithms.html">Page 7</a>), and specific problems such as factoring that we believe are hard classically.
+</p>
+
+<div class="box fact" id="fact-beyond">
+  <div class="box-title"><span class="label">Fact 9.6</span> <span class="name">(What else is known)</span></div>
+  <ol>
+    <li><strong>Fortnow&ndash;Rogers (1999).</strong> $\mathsf{BQP}$ is <em>low</em> for $\mathsf{PP}$: $\mathsf{PP}^{\mathsf{BQP}} = \mathsf{PP}$. They also place $\mathsf{BQP}$ inside a smaller counting class, $\mathsf{AWPP}\subseteq\mathsf{PP}$. A $\mathsf{PP}$ machine gains nothing from a quantum subroutine.</li>
+    <li><strong>Aaronson (2005).</strong> $\mathsf{PostBQP} = \mathsf{PP}$: quantum polynomial time <em>with postselection</em> (the ability to condition on an event of exponentially small probability) is exactly $\mathsf{PP}$.
+      Since $\mathsf{BQP}\subseteq\mathsf{PostBQP}$ trivially, this gives a second proof of Theorem 9.1, and it explains why $\mathsf{PP}$ is the natural ceiling.</li>
+    <li><strong>BQP vs. the polynomial hierarchy.</strong> It is open whether $\mathsf{BQP}\subseteq\mathsf{PH}$. Relative to an oracle it is false (Raz&ndash;Tal; Fact 7.8), so a proof would have to be non-relativizing.</li>
+  </ol>
+</div>
+<div class="box omit" id="omit-beyond">
+  <div class="box-title"><span class="label">Omitted detail</span></div>
+  <p>We do not prove Fact 9.6. See L. Fortnow and J. Rogers, "Complexity limitations on quantum computation," <em>J. Comput. Syst. Sci.</em> 59(2), 1999; S. Aaronson, "Quantum computing, postselection, and probabilistic polynomial-time," <em>Proc. R. Soc. A</em> 461, 2005;
+  and J. Watrous, "Quantum computational complexity" (survey, 2008), which also presents Theorem 9.1 in $\mathsf{GapP}$ language.</p>
+</div>
+
+<h2 id="exercises">Exercises</h2>
+<div class="exercise-q">
+  <span class="label">Exercise 9.A</span> (Unbounded error.) Let $\{C_n\}$ be uniform over $\mathcal G$, and let $L = \{x: p_{C_n}(x)>\tfrac12\}$. Show that $L\in\mathsf{PP}$.
+  <details><summary>Show solution</summary><p>By $(\star)$, $\Pr[M\text{ accepts }x]>\tfrac12\iff 2p_{C_n}(x)-1>0\iff x\in L$. The proof of Theorem 9.1 never used the constants $\tfrac23,\tfrac13$ except to reach this equivalence.
+  (With a little more work one can show the converse, so "unbounded-error quantum polynomial time" equals $\mathsf{PP}$ for reasonable gate sets.)</p></details>
+</div>
+<div class="exercise-q">
+  <span class="label">Exercise 9.B</span> Why doesn't this proof show $\mathsf{BQP}\subseteq\mathsf{BPP}$? Be quantitative.
+  <details><summary>Show solution</summary><p>$M$'s bias is $|2p-1|/2^{h+1}\ge\tfrac13\cdot2^{-(h+1)}$, which is only exponentially small in general. To tell bias $+\varepsilon$ from $-\varepsilon$ by sampling, you need $\Omega(1/\varepsilon^2)$ samples, which here is $\Omega(4^h)$.
+  That is exponential, since $h$ is typically polynomial in $n$.</p></details>
+</div>
+<div class="exercise-q">
+  <span class="label">Exercise 9.C</span> (Relativization.) Let $A\subseteq\{0,1\}^*$ be any language, and allow quantum circuits to contain the gate $O_A\ket u\ket c = \ket u\ket{c\oplus A(u)}$ on $k+1$ qubits, for any $k$. Show $\mathsf{BQP}^A\subseteq\mathsf{PP}^A$.
+  <details><summary>Show solution</summary><p>$O_A$ is a classical gate (Definition 4.8), so the path-sum lemma still holds with one more case in $\mathrm{Follow}$: "if $g_t = O_A$ on qubits $j_1..j_k, j$: $w_j\gets w_j\oplus A(w_{j_1}\cdots w_{j_k})$." The induction step for classical gates is unchanged.
+  A polynomial-time machine with oracle $A$ can run this $\mathrm{Follow}$, so $v$ is polynomial-time computable relative to $A$, and Lemma 9.2 holds relative to $A$ with the same proof.</p></details>
+</div>
+
+<div class="box takeaways" id="takeaways">
+  <div class="box-title"><span class="label">Takeaways from the centerpiece</span></div>
+  <ol>
+    <li><strong>Amplitude = signed count of paths</strong> (Lemma 8.3).</li>
+    <li><strong>Probability = square = signed count of <em>pairs</em> of paths with the same endpoint</strong> (Lemma 9.3). Pairs with different endpoints contribute nothing, because they never interfere.</li>
+    <li><strong>$\mathsf{PP}$ decides the sign of any signed count</strong>, by accepting on $+1$, rejecting on $-1$, and flipping a coin on $0$ (Lemma 9.2).</li>
+    <li>So a $\mathsf{PP}$ machine accepts with probability exactly $\tfrac12+\frac{2p-1}{2^{h+1}}$: the same bias as the quantum computer, shrunk exponentially but with the same sign.</li>
+    <li>Consequence: proving $\mathsf{BPP}\neq\mathsf{BQP}$ unconditionally would prove $\mathsf{P}\neq\mathsf{PP}$, and hence $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
+  </ol>
+</div>
+
+</div></main>
+</body>
+</html>

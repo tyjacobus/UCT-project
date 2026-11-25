@@ -4,176 +4,178 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quantum Computation: A Complexity Theory View</title>
-  <script>
-    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
-  </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-  <style>
-    :root {
-      --bg: #fdfdfb;
-      --text: #222;
-      --muted: #666;
-      --accent: #3b4cca;
-      --card: #f3f4f8;
-      --border: #dde0ea;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #16171c;
-        --text: #e6e6e6;
-        --muted: #a0a0a8;
-        --accent: #8f9cff;
-        --card: #20222a;
-        --border: #33364a;
-      }
-    }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.6;
-    }
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 48px 16px 64px;
-    }
-    h1 {
-      font-size: 2.1rem;
-      line-height: 1.2;
-      margin: 0 0 8px;
-    }
-    .subtitle {
-      color: var(--muted);
-      margin: 0 0 32px;
-      font-style: italic;
-    }
-    h2 {
-      font-size: 1.4rem;
-      margin-top: 40px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
-    }
-    ol.outline {
-      padding-left: 0;
-      list-style: none;
-      counter-reset: section;
-    }
-    ol.outline > li {
-      counter-increment: section;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 16px;
-    }
-    ol.outline > li h3 {
-      margin: 0 0 6px;
-      font-size: 1.15rem;
-      color: var(--accent);
-    }
-    ol.outline > li h3::before {
-      content: counter(section) ". ";
-    }
-    ol.outline > li p {
-      margin: 0;
-    }
-    .note {
-      background: var(--card);
-      border-left: 4px solid var(--accent);
-      padding: 12px 16px;
-      border-radius: 4px;
-    }
-    a { color: var(--accent); }
-    footer {
-      margin-top: 48px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-  </style>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site.js"></script>
 </head>
 <body>
-<main>
-  <h1>Quantum Computation: A Complexity Theory View</h1>
+<main><div class="content">
 
-  <h2>Outline</h2>
-  <ol class="outline">
-    <li>
-      <h3>Introduction</h3>
-      <p>
-        Why quantum computation is worth studying and why it is confusing at first.
-        This page will give a short overview of what the site covers, the background
-        I assume (linear algebra, and basic complexity classes like P, BPP and PSPACE),
-        and the main question we are working toward: how powerful are quantum computers
-        compared to classical ones?
-      </p>
-    </li>
-    <li>
-      <h3>Qubits and Quantum States</h3>
-      <p>
-        A qubit as a unit vector in $\mathbb{C}^2$, written as
-        $\alpha|0\rangle + \beta|1\rangle$ with $|\alpha|^2 + |\beta|^2 = 1$.
-        I will explain Dirac notation and measurement (you see $0$ with probability
-        $|\alpha|^2$ and $1$ with probability $|\beta|^2$). Then multi-qubit states
-        using tensor products, why $n$ qubits need $2^n$ amplitudes, and entanglement,
-        using the Bell state as an example of a state that is not a tensor product of
-        single qubits.
-      </p>
-    </li>
-    <li>
-      <h3>Unitary Gates</h3>
-      <p>
-        Why quantum operations have to be unitary matrices (they are exactly the
-        matrices that keep the length of a state equal to $1$). I will go through the
-        common gates: $X$, $Z$, the Hadamard gate $H$, phase gates, and the two-qubit
-        CNOT gate, with worked examples of each one acting on a state. This page will
-        also show how CNOT and $H$ together create entanglement.
-      </p>
-    </li>
-    <li>
-      <h3>Quantum Circuits vs. Randomized Computation</h3>
-      <p>
-        How quantum circuits are a generalization of randomized computation. A randomized
-        computation can be described by probability vectors and stochastic matrices, while
-        a quantum computation uses amplitude vectors and unitary matrices. The key difference
-        is that amplitudes can be negative or complex, so they can cancel out (interference).
-        I will use the example of applying $H$ twice, which gets back to $|0\rangle$, while
-        flipping a fair coin twice stays random.
-      </p>
-    </li>
-    <li>
-      <h3>Reversible Computation</h3>
-      <p>
-        Unitary gates are always reversible, but gates like AND are not. This page shows
-        how any classical circuit can still be simulated by a quantum circuit: using the
-        Toffoli gate to make AND reversible, keeping extra "garbage" bits, and then
-        uncomputing the garbage. This gives $\mathsf{P} \subseteq \mathsf{BQP}$, and with
-        Hadamard gates used as coin flips, $\mathsf{BPP} \subseteq \mathsf{BQP}$.
-      </p>
-    </li>
-    <li>
-      <h3>BQP and PSPACE</h3>
-      <p>
-        The formal definition of $\mathsf{BQP}$ (problems solved by polynomial size quantum
-        circuits with bounded error), and a proof that $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.
-        The idea is that the final amplitude can be written as a sum over exponentially many
-        paths, and we can add up the paths one at a time while reusing space. I will finish
-        with the known picture
-        $\mathsf{BPP} \subseteq \mathsf{BQP} \subseteq \mathsf{PP} \subseteq \mathsf{PSPACE}$
-        and what is still open.
-      </p>
-    </li>
-    <li>
-      <h3>Conclusion and References</h3>
-      <p>
-        A short summary of what quantum computers can and cannot do from a complexity
-        point of view, and why the question "is quantum computing more powerful?" is
-        still not fully answered. This page will also list all the sources I used.
-      </p>
-    </li>
-  </ol>
+<p class="page-kicker">Overview and roadmap</p>
+<h1>Quantum Computation: A Complexity Theory View</h1>
+<p class="subtitle">How powerful are quantum computers? We define the class $\mathsf{BQP}$ carefully and then trap it between two classical classes:
+$\mathsf{BPP} \subseteq \mathsf{BQP} \subseteq \mathsf{PP}$.</p>
 
-</main>
+<h2 id="story">The story in one paragraph</h2>
+<p>
+A randomized algorithm can be described by assigning a <em>probability</em> to every possible computation path; the probability
+of an outcome is the sum over the paths that lead to it. A quantum algorithm does the same thing with <em>amplitudes</em>, which are
+allowed to be negative. Positive and negative contributions can <strong>cancel</strong>, and that cancellation (called
+<em>interference</em>) is the only new ingredient. It is enough to give quantum computers a fast algorithm for factoring, which
+nobody knows how to do classically. On the other hand, a sum over paths with signs is exactly the kind of thing a classical
+<em>counting</em> machine can evaluate. Making that precise proves this site's main theorem:
+</p>
+
+<div class="box thm centerpiece" id="thm-main-preview">
+  <div class="box-title"><span class="label">Centerpiece theorem</span> <span class="name">(Adleman, DeMarrais and Huang, 1997)</span></div>
+  <p>$\mathsf{BQP} \subseteq \mathsf{PP}$. Every language decided by a polynomial-time quantum algorithm with bounded error is
+  decided by a polynomial-time probabilistic Turing machine that accepts with probability more than $1/2$ exactly on members of the language.</p>
+  <p class="small">Stated precisely as <a href="pp.html#thm-main">Theorem 9.1</a> and proved in full on <a href="pp.html">Page 9</a>.</p>
+</div>
+
+<p>Here is the whole picture we'll build. Every inclusion is proved on this site except the first one, which you already know from 455.</p>
+
+<div class="chain" aria-label="P is contained in BPP, contained in BQP, contained in PP, contained in PSPACE">
+  <div class="cls">$\mathsf{P}$</div>
+  <div class="sub"><span class="sym">$\subseteq$</span>455</div>
+  <div class="cls">$\mathsf{BPP}$</div>
+  <div class="sub"><span class="sym">$\subseteq$</span><a href="bqp.html#thm-bpp-bqp">Thm 6.7</a></div>
+  <div class="cls q">$\mathsf{BQP}$</div>
+  <div class="sub star"><span class="sym">$\subseteq$</span><a href="pp.html#thm-main">Thm 9.1 &#9733;</a></div>
+  <div class="cls">$\mathsf{PP}$</div>
+  <div class="sub"><span class="sym">$\subseteq$</span><a href="background.html#prop-pp-pspace">Prop 2.6</a></div>
+  <div class="cls">$\mathsf{PSPACE}$</div>
+</div>
+<p class="small muted" style="text-align:center;margin-top:-8px">The warm-up <a href="pspace.html#thm-pspace">Theorem 8.6</a> proves $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ directly, using the same main lemma.</p>
+
+<h2 id="what-you-learn">What you will learn</h2>
+<p>By the end of the site you should be able to:</p>
+<ol>
+  <li>Compute with qubits, unitary gates and measurements, and explain <em>exactly</em> how a quantum circuit differs from a randomized one. The difference is signs, and the cancellation they allow.</li>
+  <li>State the definition of $\mathsf{BQP}$ precisely and prove $\mathsf{P} \subseteq \mathsf{BPP} \subseteq \mathsf{BQP}$, using reversible computation and Bennett's "uncompute" trick.</li>
+  <li>Analyze the Deutsch&ndash;Jozsa and Bernstein&ndash;Vazirani algorithms, and say what kind of evidence they give that $\mathsf{BQP}$ is more powerful than $\mathsf{BPP}$.</li>
+  <li>Prove that amplitudes are <em>signed counts of paths</em> (the path-sum lemma), and use it to show $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.</li>
+  <li>Prove the centerpiece theorem $\mathsf{BQP} \subseteq \mathsf{PP}$, and explain why the proof needs <em>pairs</em> of paths.</li>
+</ol>
+
+<h2 id="roadmap">Roadmap</h2>
+<p>
+The pages are meant to be read in order. Together they are about two 455 lectures' worth of material.
+<strong>Lecture A</strong> (Pages 3&ndash;6) builds the model and ends with the definition of $\mathsf{BQP}$ and its first
+inclusions. <strong>Lecture B</strong> (Pages 7&ndash;9) asks how powerful the model is, from below (algorithms) and from above
+(simulations), and ends with the centerpiece proof.
+</p>
+
+<ol class="outline">
+  <li>
+    <h3><a href="intro.html"><span class="n">1.</span>Why Quantum Complexity?</a></h3>
+    <p>The Extended Church&ndash;Turing thesis, where quantum computing sits relative to the classes you know from 455, and why complexity theorists care.</p>
+  </li>
+  <li>
+    <h3><a href="background.html"><span class="n">2.</span>Background Review</a></h3>
+    <p>Exactly what we assume from 455, plus short reviews of what goes beyond it: complex vectors and unitary matrices, tensor products,
+      the class $\mathsf{PP}$, and uniform circuit families. Skim it now, and come back when a later page links here.</p>
+    <div class="yields">Key items: Definition 2.5 ($\mathsf{PP}$), Proposition 2.6 ($\mathsf{PP}\subseteq\mathsf{PSPACE}$), Fact 2.8 (TMs &rarr; circuits)</div>
+  </li>
+  <li>
+    <h3><a href="states.html"><span class="n">3.</span>Qubits and Quantum States</a> <span class="lecture-tag">Lecture A</span></h3>
+    <p>Qubits as unit vectors, Dirac notation, measurement, multi-qubit states via tensor products, entanglement (the Bell state),
+      and why $m$ qubits need $2^m$ numbers to describe.</p>
+  </li>
+  <li>
+    <h3><a href="gates.html"><span class="n">4.</span>Unitary Gates and Circuits</a> <span class="lecture-tag">Lecture A</span></h3>
+    <p>Why operations must be unitary; the gates $X$, $Z$, $S$, $H$, CNOT and Toffoli with worked examples; building a Bell state;
+      the formal definition of a quantum circuit; and the Hadamard transform formula that every later page uses.</p>
+    <div class="yields">Key items: Lemma 4.4 (Hadamard formula), Definition 4.10 (quantum circuit), Definition 4.11 (our gate set $\mathcal G$)</div>
+  </li>
+  <li>
+    <h3><a href="interference.html"><span class="n">5.</span>Quantum vs. Randomized Computation</a> <span class="lecture-tag">Lecture A</span></h3>
+    <p>Randomized computation as stochastic matrices; quantum as unitary matrices. Flipping a coin twice versus applying $H$ twice.
+      The <em>sum-over-paths</em> picture, and two ways interference can be destroyed (measuring, and leaving "which-path" garbage).</p>
+    <div class="yields">Key item: Lemma 5.3 (sum over paths), which is the seed of the centerpiece proof</div>
+  </li>
+  <li>
+    <h3><a href="bqp.html"><span class="n">6.</span>BQP and Reversible Computation</a> <span class="lecture-tag">Lecture A</span></h3>
+    <p>The formal definition of $\mathsf{BQP}$. Then reversible computing with Toffoli gates, garbage, and Bennett's uncomputation trick,
+      giving $\mathsf{P}\subseteq\mathsf{BQP}$ and $\mathsf{BPP}\subseteq\mathsf{BQP}$.</p>
+    <div class="yields">Key items: Definition 6.2 ($\mathsf{BQP}$), Lemma 6.5 (clean computation), Theorem 6.7 ($\mathsf{BPP}\subseteq\mathsf{BQP}$)</div>
+  </li>
+  <li>
+    <h3><a href="algorithms.html"><span class="n">7.</span>Evidence of Power: Query Algorithms</a> <span class="lecture-tag">Lecture B</span></h3>
+    <p>Oracles and phase kickback; the Deutsch&ndash;Jozsa and Bernstein&ndash;Vazirani algorithms with matching classical lower bounds;
+      a guided tour (without proofs) of Simon, Shor, Grover and the oracle separations.</p>
+  </li>
+  <li>
+    <h3><a href="pspace.html"><span class="n">8.</span>Warm-up: BQP &sube; PSPACE</a> <span class="lecture-tag">Lecture B</span></h3>
+    <p>Schr&ouml;dinger-style simulation ($\mathsf{BQP}\subseteq\mathsf{EXP}$) versus Feynman-style simulation.
+      The <strong>path-sum lemma</strong>: every amplitude is $2^{-h/2}$ times a signed count of paths. Then $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ by reusing space.</p>
+    <div class="yields">Key items: Lemma 8.3 (path-sum lemma), Theorem 8.6 ($\mathsf{BQP}\subseteq\mathsf{PSPACE}$)</div>
+  </li>
+  <li>
+    <h3><a href="pp.html"><span class="n">9.</span>Centerpiece: BQP &sube; PP</a> &#9733; <span class="lecture-tag">Lecture B</span></h3>
+    <p>Why squaring amplitudes is the obstacle, and how pairs of paths get around it; the "abstain" trick for signed counting in $\mathsf{PP}$;
+      the full proof, with an exact formula for the $\mathsf{PP}$ machine's acceptance probability; and an interactive explorer.</p>
+    <div class="yields">Key items: Lemma 9.2 (signed counting is in $\mathsf{PP}$), Lemma 9.3 (two-path formula), Theorem 9.1</div>
+  </li>
+  <li>
+    <h3><a href="conclusion.html"><span class="n">10.</span>Conclusion and References</a></h3>
+    <p>What we know and what is open (is $\mathsf{BPP} \ne \mathsf{BQP}$? is $\mathsf{NP}\subseteq\mathsf{BQP}$?), why proving quantum advantage
+      unconditionally would separate $\mathsf{P}$ from $\mathsf{PSPACE}$, a list of every omitted detail with its source, and all references.</p>
+  </li>
+</ol>
+
+<h3>How the pages depend on each other</h3>
+<p>If you are short on time, here is the shortest path to the centerpiece:
+<a href="states.html">3</a> &rarr; <a href="gates.html">4</a> &rarr; <a href="interference.html">5</a> &rarr;
+<a href="bqp.html#def-bqp">6 (just the definition of BQP)</a> &rarr; <a href="pspace.html">8</a> &rarr; <a href="pp.html">9</a>.
+Page 7 (algorithms) is the "why should I care" page. Nothing in the proofs on Pages 8&ndash;9 depends on it.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<p>This site assumes <strong>exactly the background of a 15-455 student</strong>:</p>
+<ul>
+  <li>Turing machines, running time and space; the classes $\mathsf{P}$, $\mathsf{NP}$, $\mathsf{PSPACE}$, $\mathsf{EXP}$; the idea of reusing space (as in Savitch's theorem).</li>
+  <li>Probabilistic Turing machines and $\mathsf{BPP}$ (including error reduction by repetition).</li>
+  <li>Boolean circuits, and the fact (used in the Cook&ndash;Levin theorem) that a polynomial-time machine can be turned into polynomial-size circuits by an efficient procedure.</li>
+  <li>Basic linear algebra (vectors, matrices, matrix multiplication) and discrete probability.</li>
+</ul>
+<p>Everything beyond that is reviewed on <a href="background.html">Page 2</a>: complex numbers and unitary matrices, tensor products, the
+class $\mathsf{PP}$ (which 455 may not cover), and uniform circuit families. No physics is assumed. We treat quantum mechanics as a
+mathematical model of computation, the way 455 treats coin flips.</p>
+
+<h2 id="how-to-read">How to use this site</h2>
+<ul>
+  <li><strong>Boxes are color-coded.</strong>
+    <span style="color:var(--def)">Definitions</span>,
+    <span style="color:var(--thm)">theorems</span>,
+    <span style="color:var(--lem)">lemmas, propositions and facts</span>,
+    <span style="color:var(--ex)">examples</span>,
+    <span style="color:var(--intu)">intuition</span>, and
+    <span style="color:var(--omit)">omitted details</span> (each says what was omitted and where to find it).
+    Items are numbered "Page.Item", so Definition 6.2 is on Page 6.</li>
+  <li><strong>Hover over any reference</strong> such as <a href="bqp.html#def-bqp">Definition 6.2</a> to see a preview of it, even when it lives on another page. Click it to go there.</li>
+  <li>The <strong>sidebar</strong> always shows where you are in the roadmap, and lists the sections of the current page. The <a href="glossary.html">glossary</a> lists every definition and every piece of notation in one place.</li>
+  <li>Each page ends with <strong>exercises</strong> (solutions hidden behind a click) and a box of <strong>takeaways</strong>.</li>
+</ul>
+
+<h2 id="notation">Notation at a glance</h2>
+<p>We use the same letters for the same things on every page:</p>
+<div class="table-wrap"><table>
+  <tr><th>Symbol</th><th>Meaning</th><th>Defined in</th></tr>
+  <tr><td>$n$</td><td>input length; inputs are $x\in\{0,1\}^n$</td><td></td></tr>
+  <tr><td>$m$</td><td>number of qubits (wires) of a circuit</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$T$, $h$</td><td>number of gates in a circuit; number of those that are Hadamard gates</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$\ket{z}$, $z\in\{0,1\}^m$</td><td>computational basis state; qubit $j$ holds bit $z_j$</td><td><a href="states.html#def-state">Def 3.4</a></td></tr>
+  <tr><td>$\braket{z}{\psi}$</td><td>the amplitude of $\ket z$ in the state $\ket\psi$</td><td><a href="states.html#def-state">Def 3.4</a></td></tr>
+  <tr><td>$\amp{y}{C}{x}$</td><td>the amplitude of $\ket y$ in $C\ket x$</td><td><a href="gates.html#def-circuit">Def 4.10</a></td></tr>
+  <tr><td>$\mathcal G$</td><td>our gate set $\{H, X, \mathrm{CNOT}, \mathrm{TOF}\}$</td><td><a href="gates.html#def-gateset">Def 4.11</a></td></tr>
+  <tr><td>$p_C(x)$</td><td>probability that circuit $C$ accepts $x$ (the last qubit is measured as $1$)</td><td><a href="bqp.html#def-accept">Def 6.1</a></td></tr>
+  <tr><td>$\mathrm{Follow}(z,b)$</td><td>classical path-following procedure; returns an endpoint $w$ and a sign bit $\varphi$</td><td><a href="pspace.html#def-follow">Def 8.2</a></td></tr>
+</table></div>
+<p class="small">Full list: <a href="glossary.html#notation">notation table</a>.</p>
+
+</div></main>
 </body>
 </html>
