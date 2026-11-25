@@ -6,10 +6,10 @@
   <title>Quantum vs. Randomized Computation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=5">
+  <link rel="stylesheet" href="assets/site.css?v=6">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=5"></script>
+  <script defer src="assets/site.js?v=6"></script>
 </head>
 <body>
 <main><div class="content">
@@ -166,15 +166,6 @@ Cancellation is easy to break. Here is the most important way it can break, and 
 (never apply another $H$ to it). Its value stays recorded in the register, so its two branches can never cancel, and it acts exactly like a fair random bit.
 We use this idea in the <a href="bqp.html#thm-bpp-bqp">proof that $\mathsf{BPP}\subseteq\mathsf{BQP}$</a>.
 </p>
-
-<h2 id="exercises">Exercises</h2>
-<div class="box exercise" id="exer-5a">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Use paths to compute $HZH\ket0$. Which paths cancel?</p>
-  <div class="proof" data-label="Solution"><p>The paths are $0\to z_1\to z_1\to z_2$ ($Z$ doesn't split the computation, it just multiplies by $(-1)^{z_1}$). The weights are
-    $0\to0\to0$: $+\tfrac12$; $\;0\to1\to0$: $(+\tfrac1{\sqrt2})(-1)(+\tfrac1{\sqrt2}) = -\tfrac12$; $\;0\to0\to1$: $+\tfrac12$; $\;0\to1\to1$: $(+\tfrac1{\sqrt2})(-1)(-\tfrac1{\sqrt2}) = +\tfrac12$.
-    So the amplitude of $\ket0$ is $0$ (cancellation) and the amplitude of $\ket1$ is $1$: $HZH\ket0 = \ket1$, consistent with $HZH = X$ (see <a href="gates.html#exer-4a">exercise</a>).</p></div>
-</div>
 
 <h2 id="summary">Summary</h2>
 <ul>

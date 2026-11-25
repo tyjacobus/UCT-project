@@ -6,11 +6,11 @@
   <title>The Main Theorem: BQP ⊆ PP | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=5">
+  <link rel="stylesheet" href="assets/site.css?v=6">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=5"></script>
-  <script defer src="assets/explorer.js?v=5"></script>
+  <script defer src="assets/site.js?v=6"></script>
+  <script defer src="assets/explorer.js?v=6"></script>
 </head>
 <body>
 <main><div class="content">
@@ -85,7 +85,7 @@ So the $\mathsf{PP}$ machine should guess <em>two</em> paths $b,b'$ at once, and
   $M$ runs in polynomial time. If $f(x)>0$ it accepts with probability $>\tfrac12$, and if $f(x)\le0$ with probability $\le\tfrac12$. So $M$ witnesses $\{x:f(x)>0\}\in\mathsf{PP}$ (see <a href="background.html#def-pp">definition</a>).
   <span class="qed">&#8718;</span>
 </div>
-<p>A probability can never be negative. But if we measure everything relative to $\tfrac12$ (accept counts as $+1$, reject as $-1$, and a fair coin flip as $0$), a PTM can add up positive and negative terms. This is how the negative numbers of quantum computation get into a classical machine. Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994), and you saw the same trick in <a href="background.html#exer-2a">the exercise showing $\mathsf{NP}\subseteq\mathsf{PP}$</a>.</p>
+<p>A probability can never be negative. But if we measure everything relative to $\tfrac12$ (accept counts as $+1$, reject as $-1$, and a fair coin flip as $0$), a PTM can add up positive and negative terms. This is how the negative numbers of quantum computation get into a classical machine. Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994).</p>
 
 <h2 id="two-path">Step 2: the two-path formula</h2>
 <p>
@@ -200,14 +200,6 @@ So for now, the evidence for quantum advantage has to come in other forms: oracl
 <div class="box rem" id="fact-beyond">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(Further results, without proof)</span></div>
   <p>Fortnow and Rogers (1999) strengthened the Main Theorem: $\mathsf{BQP}$ is <em>low</em> for $\mathsf{PP}$, that is, $\mathsf{PP}^{\mathsf{BQP}}=\mathsf{PP}$. Aaronson (2005) showed that $\mathsf{PP}$ is exactly quantum polynomial time <em>with postselection</em>, which explains why $\mathsf{PP}$ is the natural ceiling. Whether $\mathsf{BQP}\subseteq\mathsf{PH}$ is open. See the survey of Watrous (2008) and the <a href="conclusion.html#references">References</a>.</p>
-</div>
-
-<h2 id="exercises">Exercises</h2>
-<div class="box exercise" id="exer-9a">
-  <div class="box-title"><span class="label">Exercise</span> <span class="name">(Unbounded error)</span></div>
-  <p>Let $\mathcal C = (C_0,C_1,\dots)$ be uniform over $\mathcal G$, and let $L = \{x: p_{C_n}(x)>\tfrac12\}$. Show that $L\in\mathsf{PP}$.</p>
-  <div class="proof" data-label="Solution"><p>By $(\star)$, $\Pr[M(x)\text{ accepts}]>\tfrac12\iff 2p_{C_n}(x)-1>0\iff x\in L$. The proof of <a href="#thm-main">the Main Theorem</a> never used the constants $\tfrac23,\tfrac13$ except to reach this equivalence.
-  (With a little more work one can show the converse, so "unbounded-error quantum polynomial time" equals $\mathsf{PP}$ for reasonable gate sets.)</p></div>
 </div>
 
 <h2 id="summary">Summary</h2>

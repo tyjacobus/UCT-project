@@ -70,7 +70,7 @@
 
     // number the sections of this chapter (CSS shows the numbers; we need them for the sidebar)
     var heads = content.querySelectorAll("h2:not(.nonum)");
-    var html = '<div class="side-head">' + ICON + "Scribe Notes</div><ul>";
+    var html = '<div class="side-head">' + ICON + "Sections</div><ul>";
     PAGES.forEach(function (p, i) {
       html += '<li class="chap' + (i === curIdx ? " current" : "") + '"><a href="' + p.file + '">' + ICON + "<span>" + p.title + "</span></a>";
       if (i === curIdx && heads.length) html += '<ul class="secs" id="secs"></ul>';

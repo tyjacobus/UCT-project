@@ -6,10 +6,10 @@
   <title>Unitary Gates and Circuits | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=5">
+  <link rel="stylesheet" href="assets/site.css?v=6">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=5"></script>
+  <script defer src="assets/site.js?v=6"></script>
 </head>
 <body>
 <main><div class="content">
@@ -174,14 +174,6 @@ We use this gate set because it is simple and it keeps the proofs of $\mathsf{BQ
   <span class="qed">&#8718;</span>
 </div>
 <p>So $n$ Hadamard gates turn $\ket{0^n}$ into $n$ &ldquo;quantum coins&rdquo;: measuring them would give a uniformly random $n$-bit string.</p>
-
-<h2 id="exercises">Exercises</h2>
-<div class="box exercise" id="exer-4a">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Check that $HXH = Z$ and $HZH = X$. (So we can make $Z$ from our gate set even though it isn&rsquo;t in it.)</p>
-  <div class="proof" data-label="Solution"><p>Check on basis states. For $a=0$: $H\ket0 = \ket+$, $X\ket+ = \ket+$, and $H\ket+ = \ket0 = Z\ket0$. For $a=1$: $H\ket1 = \ket-$, $X\ket- = \tfrac1{\sqrt2}(\ket1-\ket0) = -\ket-$, and $H(-\ket-) = -\ket1 = Z\ket1$.
-  Then $HZH = H(HXH)H = X$, since $HH=I$.</p></div>
-</div>
 
 <h2 id="summary">Summary</h2>
 <ul>

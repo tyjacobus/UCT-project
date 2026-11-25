@@ -6,11 +6,11 @@
   <title>Warm-up: BQP ⊆ PSPACE | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=5">
+  <link rel="stylesheet" href="assets/site.css?v=6">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=5"></script>
-  <script defer src="assets/explorer.js?v=5"></script>
+  <script defer src="assets/site.js?v=6"></script>
+  <script defer src="assets/explorer.js?v=6"></script>
 </head>
 <body>
 <main><div class="content">
@@ -151,18 +151,8 @@ So we can compute the whole thing with nested loops, reusing the same space each
 <p>
 The number we computed, $S = \sum_{y_m=1}A_y^2$, is built from <em>counts</em> of things we can check in polynomial time. Counting is exactly what $\mathsf{PP}$ is good at (see <a href="background.html#intu-pp">remark</a>). The one thing in the way of a $\mathsf{PP}$ simulation is <strong>the square</strong>.
 The acceptance probability of a PTM is a <em>linear</em> function of path counts, but $S$ is <em>quadratic</em> in the $A_y$. The fix is to expand the square, which turns a sum over paths into a sum over
-<em>pairs</em> of paths (see <a href="#exer-8b">exercise</a>). That is where the proof of the Main Theorem starts in the next chapter.
+<em>pairs</em> of paths. That is where the proof of the Main Theorem starts in the next chapter.
 </p>
-
-<h2 id="exercises">Exercises</h2>
-<div class="box exercise" id="exer-8b">
-  <div class="box-title"><span class="label">Exercise</span> <span class="name">(Preview of the Two-Path Lemma)</span></div>
-  <p>Show that
-  $\displaystyle S = \sum_{b,b'\in\{0,1\}^h}\big[w(z,b) = w(z,b')\text{ and }w(z,b)_m = 1\big]\,(-1)^{\varphi(z,b)+\varphi(z,b')}$, where $[\cdot]$ is $1$ if the condition holds and $0$ otherwise.</p>
-  <div class="proof" data-label="Solution"><p>By the Signed Counts Corollary, $A_y = \sum_b[w(z,b)=y](-1)^{\varphi(z,b)}$, so
-    $A_y^2 = \sum_{b,b'}[w(z,b)=y]\,[w(z,b')=y]\,(-1)^{\varphi(z,b)+\varphi(z,b')}$.
-    Add this up over $y$ with $y_m=1$ and swap the order of the sums. For a fixed pair $(b,b')$, the only $y$ that can count is $y = w(z,b)$, and it counts exactly when $w(z,b') = w(z,b)$ and $w(z,b)_m = 1$.</p></div>
-</div>
 
 <h2 id="summary">Summary</h2>
 <ul>

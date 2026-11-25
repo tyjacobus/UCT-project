@@ -6,10 +6,10 @@
   <title>BQP and Reversible Computation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=5">
+  <link rel="stylesheet" href="assets/site.css?v=6">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=5"></script>
+  <script defer src="assets/site.js?v=6"></script>
 </head>
 <body>
 <main><div class="content">
@@ -149,14 +149,6 @@ Bennett&rsquo;s trick from 1973 removes the garbage: compute, copy the answer, a
   <span class="qed">&#8718;</span></p>
 </div>
 <p id="rem-coins-classical">The coins act like normal random bits because nothing ever applies $H$ to the coin register again. The coin register is a permanent record of which path was taken, so the $2^r$ branches never cancel. To get <em>more</em> power than $\mathsf{BPP}$, a quantum algorithm has to let branches cancel, and then removing garbage becomes essential.</p>
-
-<h2 id="exercises">Exercises</h2>
-<div class="box exercise" id="exer-6b">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>In the proof of <a href="#thm-bpp-bqp">$\mathsf{BPP}\subseteq\mathsf{BQP}$</a>, suppose we used $R_{D_n}$ (which leaves garbage) instead of $B_{D_n}$, and measured the qubit holding $g_s$. Show that the acceptance probability doesn&rsquo;t change.</p>
-  <div class="proof" data-label="Solution"><p>The final state is $2^{-r/2}\sum_\rho\ket x\ket\rho\ket{g(x,\rho)}$. Different values of $\rho$ still give different basis states, so the probability of reading $g_s=1$ is still the fraction of $\rho$ with $V(x,\rho)=1$.
-  Garbage doesn&rsquo;t hurt when we don&rsquo;t need any cancellation afterwards.</p></div>
-</div>
 
 <h2 id="summary">Summary</h2>
 <ul>

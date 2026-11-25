@@ -6,10 +6,10 @@
   <title>Background Review | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=5">
+  <link rel="stylesheet" href="assets/site.css?v=6">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=5"></script>
+  <script defer src="assets/site.js?v=6"></script>
 </head>
 <body>
 <main><div class="content">
@@ -130,19 +130,6 @@ The next class is not covered in CS455. It is like $\mathsf{BPP}$, except that i
   <p>Each run of $M(x,r)$ takes polynomial time, hence polynomial space, and the <em>same</em> work space is reused for every $r$. Besides that, $M'$ stores the current $r$ ($p(|x|)$ bits)
   and the counter ($p(|x|)+1$ bits). So $M'$ runs in polynomial space, and it accepts exactly when $\Pr[M(x)\text{ accepts}]>\tfrac12$.
   <span class="qed">&#8718;</span></p>
-</div>
-
-<div class="box exercise" id="exer-2a">
-  <div class="box-title"><span class="label">Exercise</span> <span class="name">($\mathsf{NP}\subseteq\mathsf{PP}$)</span></div>
-  <p>Show that $\mathsf{NP}\subseteq\mathsf{PP}$.
-  Hint: on input a formula $\varphi$ with $k$ variables, pick a random assignment $a$ and one extra random bit $c$.</p>
-  <div class="proof" data-label="Solution"><p>Let $M$ pick $a\in\{0,1\}^k$ and $c\in\{0,1\}$ uniformly at random. If $\varphi(a)=1$, accept. Otherwise accept if and only if $c=0$, so on these branches $M$
-    &ldquo;abstains&rdquo; by accepting exactly half of the time. If $s$ is the number of satisfying assignments, then
-    $$\Pr[M(\varphi)\text{ accepts}] = \frac{s}{2^k} + \Big(1-\frac{s}{2^k}\Big)\cdot\frac12 = \frac12 + \frac{s}{2^{k+1}},$$
-    which is $>\tfrac12$ if and only if $s\ge1$, that is, if and only if $\varphi\in\mathrm{SAT}$. Since $\mathrm{SAT}$ is $\mathsf{NP}$-complete under polynomial-time reductions
-    (Reductions &amp; Completeness 1), and $\mathsf{PP}$ is closed under them, $\mathsf{NP}\subseteq\mathsf{PP}$.
-    We will use the same trick (accept on some branches, reject on others, and flip a fair coin on the rest so they count as exactly $\tfrac12$) in the proof of the Main Theorem:
-    see <a href="pp.html#lem-gap">the Signed Counting Lemma</a>.</p></div>
 </div>
 
 <h2 id="uniform">Uniform circuit families</h2>
