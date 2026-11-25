@@ -6,10 +6,10 @@
   <title>Quantum Computation: A Complexity Theory View</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=9">
+  <link rel="stylesheet" href="assets/site.css?v=10">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=9"></script>
+  <script defer src="assets/site.js?v=10"></script>
 </head>
 <body>
 <main><div class="content">
@@ -18,7 +18,7 @@
 
 <p>These notes provide a short unit on quantum computation in complexity theory. We will describe what quantum computation is, define $\mathsf{BQP}$, the class of problems that quantum computers can solve efficiently, and ask one main question about this class:
   <em>how powerful is it?</em> The main results we build up to answer this question by placing $\mathsf{BQP}$ between two classes:
-$$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}.$$</p>
+$$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PSPACE}.$$</p>
 
 <h2 id="what-you-learn">What you will learn</h2>
 <p>By the end of these notes you should be able to:</p>
@@ -26,7 +26,7 @@ $$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}.$$</p>
   <li>Work with qubits, unitary gates and measurements.</li>
   <li>Explain how a quantum circuit is different from a randomized one.</li>
   <li>State the definition of $\mathsf{BQP}$ and prove $\mathsf{P} \subseteq \mathsf{BPP} \subseteq \mathsf{BQP}$.</li>
-    <li>Prove that amplitudes are signed counts of paths, and use that fact to prove the Main Theorem $\mathsf{BQP} \subseteq \mathsf{PP}$.</li>
+    <li>Prove that amplitudes are signed counts of paths, and use that fact to prove the Main Theorem $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.</li>
 </ol>
 
 <h2 id="roadmap">Roadmap</h2>
@@ -39,7 +39,7 @@ We start with definitions and background knowledge, then do a warm-up proof, and
   <li><h4><a href="intro.html">Why Quantum Complexity?</a></h4>
     <p>We go over the Extended Church&ndash;Turing thesis, why quantum computation challenges it, and why we should care about where quantum computation fits among the classes we have studied so far.</p></li>
   <li><h4><a href="background.html">Background Review</a></h4>
-    <p>We go over some assumed knowledge and briefly review other background we will need for our proofs. This includes complex vectors, tensor products, the class $\mathsf{PP}$, and uniform circuit families.</p></li>
+    <p>We go over some assumed knowledge and briefly review other background we will need for our proofs. This includes complex vectors, tensor products, $\mathsf{BPP}\subseteq\mathsf{PSPACE}$, and uniform circuit families.</p></li>
   <li><h4><a href="states.html">Qubits and Quantum States</a></h4>
     <p>We go over how to represent qubits as unit vectors and how to measure them. We also go over how tensor products describe multi-qubit states, and why we need $2^m$ numbers to describe $m$ qubits.</p></li>
   <li><h4><a href="gates.html">Unitary Gates and Circuits</a></h4>
@@ -48,8 +48,8 @@ We start with definitions and background knowledge, then do a warm-up proof, and
     <p>We compare randomized and quantum computation side by side and show that the only real difference is that amplitudes can be negative. This lets computation paths cancel out. We also prove the <a href="interference.html#lem-paths">Sum-over-Paths Lemma</a>.</p></li>
   <li><h4><a href="bqp.html">$\mathsf{BQP}$ and Reversible Computation</a></h4>
     <p>We define $\mathsf{BQP}$. Then we show how to make classical circuits reversible so a quantum computer can run them, which proves $\mathsf{P}\subseteq\mathsf{BQP}$ and $\mathsf{BPP}\subseteq\mathsf{BQP}$.</p></li>
-  <li><h4><a href="pp.html">The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PP}$</a></h4>
-    <p>We prove the <a href="pp.html#lem-pathsum">Path-Sum Lemma</a>, which says every amplitude is a signed count of paths. Then we prove the main theorem. The key idea is to count <em>pairs</em> of paths instead of single paths. The chapter also works through a small example.</p></li>
+  <li><h4><a href="pp.html">The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a></h4>
+    <p>We prove the <a href="pp.html#lem-pathsum">Path-Sum Lemma</a>, which says every amplitude is a signed count of paths. Then we prove the main theorem by adding up the paths one at a time, reusing the same space. The chapter also works through a small example.</p></li>
   <li><h4><a href="conclusion.html">Conclusion and References</a></h4>
     <p>We summarize what we proved, list some open problems, and collect every detail we left out along with where to find it.</p></li>
 </ol>

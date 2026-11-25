@@ -1,7 +1,7 @@
 # Quantum Computation: A Complexity Theory View
 
 A CS455 (CMU Undergraduate Complexity Theory) project: scribe-style notes on quantum computation
-whose main theorem is **BQP ⊆ PP** (Adleman–DeMarrais–Huang 1997), with a complete proof.
+whose main theorem is **BQP ⊆ PSPACE** (Bernstein–Vazirani 1993), with a complete proof.
 The layout, statement blocks, collapsible proofs and notation follow the CS455 Panda Notes scribe notes.
 
 ## Structure
@@ -15,7 +15,7 @@ The layout, statement blocks, collapsible proofs and notation follow the CS455 P
 | `gates.html` | 4. Unitary gates and circuits |
 | `interference.html` | 5. Quantum vs. randomized computation |
 | `bqp.html` | 6. BQP and reversible computation (P ⊆ BPP ⊆ BQP) |
-| `pp.html` | 7. Path-sum lemma and the Main Theorem: BQP ⊆ PP |
+| `pp.html` | 7. Path-sum lemma and the Main Theorem: BQP ⊆ PSPACE |
 | `conclusion.html` | 8. Conclusion, omitted details, references |
 | `glossary.html` | Index of definitions and notation |
 

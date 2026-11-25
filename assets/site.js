@@ -19,7 +19,7 @@
     { file: "gates.html",        title: "Unitary Gates and Circuits" },
     { file: "interference.html", title: "Quantum vs. Randomized Computation" },
     { file: "bqp.html",          title: "BQP and Reversible Computation" },
-    { file: "pp.html",           title: "The Main Theorem: BQP ⊆ PP" },
+    { file: "pp.html",           title: "The Main Theorem: BQP ⊆ PSPACE" },
     { file: "conclusion.html",   title: "Conclusion and References" },
     { file: "glossary.html",     title: "Index of Definitions" }
   ];

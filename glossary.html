@@ -6,10 +6,10 @@
   <title>Glossary and Notation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=9">
+  <link rel="stylesheet" href="assets/site.css?v=10">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=9"></script>
+  <script defer src="assets/site.js?v=10"></script>
 </head>
 <body>
 <main><div class="content">
@@ -44,8 +44,6 @@
   <tr><td>$b\in\{0,1\}^h$</td><td>choice string: which branch each Hadamard takes (a "path")</td><td><a href="pp.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
   <tr><td>$\mathrm{Follow}(z,b) = (w,\varphi)$</td><td>endpoint $w(z,b)$ and sign bit $\varphi(z,b)$ of path $b$</td><td><a href="pp.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
   <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pp.html#cor-signed">The Signed Counts Corollary</a></td></tr>
-  <tr><td>$v(b,b')$</td><td>value of a pair of paths in the two-path formula</td><td><a href="pp.html#lem-twopath">The Two-Path Lemma</a></td></tr>
-  <tr><td>$[\,\cdot\,]$</td><td>indicator: $1$ if the condition holds, else $0$</td><td><a href="pp.html#lem-twopath">The Two-Path Lemma</a></td></tr>
 </table></div>
 
 <h2 id="definitions">Definitions (alphabetical)</h2>
@@ -87,21 +85,17 @@
   <dt id="gl-pathsum">Path-sum lemma</dt>
   <dd>$C\ket z = 2^{-h/2}\sum_b(-1)^{\varphi(z,b)}\ket{w(z,b)}$. <span class="where"><a href="pp.html#lem-pathsum">the Path-Sum Lemma</a></span></dd>
   <dt id="gl-pp">PP</dt>
-  <dd>Probabilistic polynomial time: accept with probability $>\frac12$ exactly on yes-instances. <span class="where"><a href="background.html#def-pp">the definition of $\mathsf{PP}$</a></span></dd>
+  <dd>Probabilistic polynomial time: accept with probability $>\frac12$ exactly on yes-instances. Mentioned only in <span class="where"><a href="pp.html#fact-beyond">the further results</a></span></dd>
   <dt id="gl-qubit">Qubit; $m$-qubit state</dt>
   <dd>A unit vector in $\C^2$; in $\C^{2^m}$. <span class="where"><a href="states.html#def-qubit">the definition of a qubit</a>, <a href="states.html#def-state">the definition of an $m$-qubit state</a></span></dd>
   <dt id="gl-reversible">Reversible simulation; uncomputation</dt>
   <dd><span class="where"><a href="bqp.html#lem-garbage">the Reversible Simulation Lemma</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a></span></dd>
-  <dt id="gl-signed">Signed counting ("abstain" trick)</dt>
-  <dd><span class="where"><a href="pp.html#lem-gap">the Signed Counting Lemma</a></span></dd>
   <dt id="gl-stochastic">Stochastic matrix</dt>
   <dd><span class="where"><a href="interference.html#def-stochastic">the definition of stochastic matrices</a></span></dd>
   <dt id="gl-sumpaths">Sum over paths</dt>
   <dd><span class="where"><a href="interference.html#lem-paths">the Sum-over-Paths Lemma</a></span></dd>
   <dt id="gl-tensor">Tensor product</dt>
   <dd><span class="where"><a href="background.html#def-tensor">the definition of the tensor product</a>, <a href="background.html#fact-tensor">the properties of the tensor product</a></span></dd>
-  <dt id="gl-twopath">Two-path formula</dt>
-  <dd>$2p_C(x)-1 = 2^{-h}\sum_{b,b'}v(b,b')$. <span class="where"><a href="pp.html#lem-twopath">the Two-Path Lemma</a></span></dd>
   <dt id="gl-uniform">Uniform circuit family</dt>
   <dd><span class="where"><a href="background.html#def-uniform">the definition of uniform circuit families</a></span></dd>
   <dt id="gl-unitary">Unitary matrix</dt>
@@ -113,7 +107,7 @@
 <h2 id="results">Results, in order</h2>
 <div class="table-wrap"><table>
   <tr><th>Item</th><th>Statement</th></tr>
-  <tr><td><a href="background.html#prop-pp-pspace">The proposition $\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$</a></td><td>$\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$</td></tr>
+  <tr><td><a href="background.html#prop-bpp-pspace">The proposition $\mathsf{BPP}\subseteq\mathsf{PSPACE}$</a></td><td>$\mathsf{BPP}\subseteq\mathsf{PSPACE}$</td></tr>
   <tr><td><a href="gates.html#fact-unitary">The fact that unitary means norm-preserving</a></td><td>Unitary $\iff$ norm-preserving</td></tr>
   <tr><td><a href="gates.html#lem-hadamard">The Hadamard Formula</a></td><td>Hadamard formula</td></tr>
   <tr><td><a href="gates.html#fact-universal">The universality theorem for Hadamard + Toffoli</a></td><td>$\{H,\TOF\}$ is universal (cited)</td></tr>
@@ -122,9 +116,7 @@
   <tr><td><a href="bqp.html#lem-garbage">The Reversible Simulation Lemma</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a></td><td>Reversible simulation; clean computation</td></tr>
   <tr><td><a href="bqp.html#thm-p-bqp">The theorem $\mathsf{P}\subseteq\mathsf{BQP}$</a>, <a href="bqp.html#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a></td><td>$\mathsf{P}\subseteq\mathsf{BQP}$; $\mathsf{BPP}\subseteq\mathsf{BQP}$</td></tr>
   <tr><td><a href="pp.html#lem-pathsum">The Path-Sum Lemma</a>, <a href="pp.html#cor-signed">the Signed Counts Corollary</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
-  <tr><td><a href="pp.html#cor-consequences">The Consequences Corollary</a></td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
-  <tr><td><a href="pp.html#thm-main">The Main Theorem</a> &#9733;</td><td>$\mathsf{BQP}\subseteq\mathsf{PP}$</td></tr>
-  <tr><td><a href="pp.html#lem-gap">The Signed Counting Lemma</a>, <a href="pp.html#lem-twopath">the Two-Path Lemma</a></td><td>Signed counting is in $\mathsf{PP}$; two-path formula</td></tr>
+  <tr><td><a href="pp.html#thm-main">The Main Theorem</a> &#9733;</td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
   <tr><td><a href="pp.html#cor-consequences">The Consequences Corollary</a></td><td>$\mathsf{BPP}\ne\mathsf{BQP}\Rightarrow\mathsf{P}\ne\mathsf{PSPACE}$</td></tr>
 </table></div>
 
