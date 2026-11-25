@@ -3,293 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Main Theorem: BQP ⊆ PP | Quantum Computation</title>
+  <title>The Main Theorem: BQP ⊆ PSPACE | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=9">
+  <link rel="stylesheet" href="assets/site.css?v=10">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=9"></script>
+  <script defer src="assets/site.js?v=10"></script>
 </head>
 <body>
 <main><div class="content">
 
-<header class="chapter-banner"><h1>The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PP}$</h1></header>
+<header class="chapter-banner"><h1>The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</h1></header>
 
-<p>In this chapter we prove the main theorem of these notes, $\mathsf{BQP}\subseteq\mathsf{PP}$, due to Adleman, DeMarrais and Huang. It completes the sandwich $\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$. First we show that every amplitude of a circuit over $\mathcal G$ is a signed count of paths (the <a href="#lem-pathsum">Path-Sum Lemma</a>). Then we show that a $\mathsf{PP}$ machine can use those counts to tell whether the circuit accepts. We will use <a href="background.html#def-pp">the definition of $\mathsf{PP}$</a> from the Background Review and <a href="bqp.html#def-bqp">the definition of $\mathsf{BQP}$</a>. You can hover over either link to see it again.</p>
+<p>In this chapter we prove that a normal computer can simulate a quantum computer using only polynomial space.</p>
+
 <h2 id="statement">The theorem</h2>
 <div class="box thm centerpiece" id="thm-main">
-  <div class="box-title"><span class="label">Theorem</span> <span class="name">(Main Theorem; Adleman, DeMarrais and Huang 1997)</span></div>
-  <p>$\mathsf{BQP}\subseteq\mathsf{PP}$.</p>
-  <p>More precisely: for every polynomial-time uniform circuit family $\mathcal C = (C_0, C_1, \dots)$ over $\mathcal G$ with $h = h(n)$ Hadamard gates, there is a polynomial-time probabilistic Turing machine $M$ such that for every input $x$ of length $n$,
-  $$\Pr[M(x)\text{ accepts}] \;=\; \frac12 + \frac{2\,p_{C_n}(x) - 1}{2^{h+1}} . \tag{$\star$}$$
-  In particular, $\Pr[M(x)\text{ accepts}]>\tfrac12$ if and only if $p_{C_n}(x)>\tfrac12$.</p>
+  <div class="box-title"><span class="label">Theorem</span> <span class="name">(Main Theorem; Bernstein and Vazirani 1993)</span></div>
+  <p>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$.</p>
 </div>
 <p>
-Formula $(\star)$ is the easiest way to remember the theorem. The $\mathsf{PP}$ machine leans toward accepting in the same direction as the quantum circuit, but by an amount that is exponentially smaller (divided by $2^h$).
-That is fine, because $\mathsf{PP}$ only cares which way the machine leans, not by how much.
-</p>
-<p>
-Since $\mathsf{PP}\subseteq\mathsf{PSPACE}$ (see <a href="background.html#prop-pp-pspace">proposition</a>), the theorem also gives $\mathsf{BQP}\subseteq\mathsf{PSPACE}$, which Bernstein and Vazirani proved first (1993). $\mathsf{PP}$ is not believed to be all of $\mathsf{PSPACE}$, so $\mathsf{BQP}\subseteq\mathsf{PP}$ is the stronger statement. It also tells us something about what quantum computers are doing:
-<strong>quantum computation is a special kind of counting</strong>.
+A quantum state on $m$ qubits has $2^m$ amplitudes so we can't represent the whole state. The idea will be not to represent the state but instead just find the the probability that the circuit accepts, finding this one path at a time.
 </p>
 
-<h2 id="setup">Setting up</h2>
+<h2 id="setup">Setup</h2>
 <p>
-Fix $L\in\mathsf{BQP}$, solved by a uniform circuit family $\mathcal C = (C_0, C_1, \dots)$ over $\mathcal G$ (see <a href="bqp.html#def-bqp">definition</a>). For an input $x$ of length $n$, let $m$, $T$ and $h$ be the number of qubits, gates and Hadamard gates of $C_n$. All three are polynomial in $n$.
-For the rest of the chapter we write
-$$z = x0^{m-n}\quad\text{for the starting basis string, so that}\quad p_{C_n}(x) = \sum_{y:\,y_m=1}\big|\amp{y}{C_n}{z}\big|^2$$
-by the <a href="bqp.html#def-accept">definition of acceptance probability</a>.
-</p>
-<p id="prop-exp">
-A classical machine can&rsquo;t just store the quantum state, because it has $2^m$ amplitudes (see <a href="states.html#rem-exp">remark</a>). Storing it would show $\mathsf{BQP}\subseteq\mathsf{EXP}$, but nothing better.
-Instead, we never write the state down. We compute amplitudes as sums over paths (see <a href="interference.html#lem-paths">the Sum-over-Paths Lemma</a>), where each path is short enough to follow on its own in polynomial time.
-The first step is to make the paths of our circuits concrete.
+Let $L\in\mathsf{BQP}$, solved by a uniform circuit family $C_0, C_1,\dots$ over $\mathcal G$ (see <a href="bqp.html#def-bqp">definition</a>). Fix an input $x$ of length $n$ and let $C = C_n$. Let $m$, $T$ and $h$ be the number of qubits, gates and Hadamard gates in $C$. m, T, and h are all polynomials.
+The circuit starts in the state $\ket z$, where $z = x0^{m-n}$, and it accepts if the last qubit reads $1$. So
+$$p_C(x) = \sum_{y:\,y_m=1}\amp{y}{C}{z}^2 .$$
 </p>
 
 <h2 id="pathsum">Amplitudes are signed counts of paths</h2>
 <p>
-<a href="interference.html#lem-paths">The Sum-over-Paths Lemma</a> writes an amplitude as a sum over sequences $z_0\to z_1\to\dots\to z_T$ of $m$-bit strings, but almost all of those sequences have weight $0$. For our gate set, we can say exactly which paths are nonzero.
-A classical gate sends a basis string to <em>one</em> basis string (see <a href="gates.html#def-perm">definition</a>). A Hadamard gate on qubit $j$ sends it to <em>two</em> basis strings, one for each value $c$ of the new bit $j$,
-with weight $(-1)^{w_j c}/\sqrt2$ (see <a href="gates.html#lem-hadamard">lemma</a>). So a nonzero path is determined by the $h$ bits chosen at the Hadamard gates, and its sign depends on how many times a Hadamard went from $1$ to $1$.
-The following classical procedure follows one path.
+A classical gate ($X$, CNOT, Toffoli) sends a string of bits to one new string. A Hadamard gate splits it into two (see <a href="gates.html#lem-hadamard">the Hadamard Formula</a>). So a path through the circuit is fixed by which way it goes at each Hadamard, which is a string $b\in\{0,1\}^h$. The procedure below follows one path.
 </p>
 
 <div class="box def" id="def-follow">
-  <div class="box-title"><span class="label">Definition</span> <span class="name">(The path-following procedure $\mathrm{Follow}$)</span></div>
-  <p>Let $C$ be a circuit over $\mathcal G$ on $m$ qubits with gates $g_1,\dots,g_T$, where $h$ of them are Hadamard gates. For a start string $z\in\{0,1\}^m$ and a <strong>choice string</strong> $b\in\{0,1\}^h$, define
-  $\mathrm{Follow}(z,b) = (w,\varphi)$ by:</p>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">($\mathrm{Follow}$)</span></div>
   <div class="pseudo">
     <div><b>def</b> $\mathrm{Follow}(z, b)$:</div>
     <div class="i1">$w \gets z$; $\ \varphi\gets 0$; $\ i\gets 0$</div>
-    <div class="i1"><b>for</b> $t = 1,\dots,T$:</div>
-    <div class="i2"><b>if</b> $g_t = X$ on qubit $j$: $\ w_j\gets 1-w_j$</div>
-    <div class="i2"><b>if</b> $g_t = \CNOT$ with control $c$, target $j$: $\ w_j\gets w_j\oplus w_c$</div>
-    <div class="i2"><b>if</b> $g_t = \TOF$ with controls $c,c'$, target $j$: $\ w_j\gets w_j\oplus(w_c\wedge w_{c'})$</div>
-    <div class="i2"><b>if</b> $g_t = H$ on qubit $j$: $\ i\gets i+1$; $\ \varphi\gets\varphi\oplus(w_j\wedge b_i)$; $\ w_j\gets b_i$</div>
+    <div class="i1"><b>for</b> each gate of $C$, in order:</div>
+    <div class="i2"><b>if</b> $X$ on qubit $j$: $\ w_j\gets 1-w_j$</div>
+    <div class="i2"><b>if</b> CNOT with control $c$, target $j$: $\ w_j\gets w_j\oplus w_c$</div>
+    <div class="i2"><b>if</b> Toffoli with controls $c,c'$, target $j$: $\ w_j\gets w_j\oplus(w_c\wedge w_{c'})$</div>
+    <div class="i2"><b>if</b> $H$ on qubit $j$: $\ i\gets i+1$; $\ \varphi\gets\varphi\oplus(w_j\wedge b_i)$; $\ w_j\gets b_i$</div>
     <div class="i1"><b>return</b> $(w,\varphi)$</div>
   </div>
-  <p>We write $w(z,b)$ and $\varphi(z,b)$ for the two outputs: the path&rsquo;s <strong>endpoint</strong> and its <strong>sign bit</strong>. Given $C$, $\mathrm{Follow}$ runs in time $O(T+m)$ and space $O(m+\log T)$.</p>
+  <p>$w$ is where the path ends, and $\varphi$ says its sign: $+$ if $\varphi=0$, $-$ if $\varphi=1$. $\mathrm{Follow}$ runs in polynomial time and space.</p>
 </div>
-<p>In words: $b_i$ is the bit chosen at the $i$-th Hadamard gate (which branch the path takes), $w$ is where the path currently is, and $\varphi$ is the parity of the number of $1\to1$ Hadamard steps. These are the negative edges in <a href="interference.html#ex-hh-paths">the path tree of $HH\ket0$</a>.</p>
 
 <div class="box lem" id="lem-pathsum">
-  <div class="box-title"><span class="label">Lemma</span> <span class="name">(Path-Sum Lemma; cf. Dawson et al. 2005)</span></div>
-  <p>For every circuit $C$ over $\mathcal G$ with $h$ Hadamard gates and every $z\in\{0,1\}^m$,
-  $$C\ket z \;=\; \frac{1}{2^{h/2}}\sum_{b\in\{0,1\}^h}(-1)^{\varphi(z,b)}\,\ket{w(z,b)} .$$
-  Equivalently, for every $y\in\{0,1\}^m$: $\displaystyle\amp{y}{C}{z} = \frac{1}{2^{h/2}}\sum_{b\,:\,w(z,b) = y}(-1)^{\varphi(z,b)}$.</p>
+  <div class="box-title"><span class="label">Lemma</span> <span class="name">(Path-Sum Lemma)</span></div>
+  <p>$$C\ket z = \frac{1}{2^{h/2}}\sum_{b\in\{0,1\}^h}(-1)^{\varphi(b)}\ket{w(b)},$$
+  where $(w(b),\varphi(b)) = \mathrm{Follow}(z,b)$.</p>
+  <p id="cor-signed">So for every $y$, $\amp yCz = A_y/2^{h/2}$, where $A_y$ is the number of positive paths ending at $y$ minus the number of negative paths ending at $y$.</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
-  We prove a slightly stronger statement by induction on the number of gates. For $0\le t\le T$, let $C_t = U_t\cdots U_1$ be the first $t$ gates, let $h_t$ be the number of Hadamards among them, and let
-  $\mathrm{Follow}_t(z,b) = (w_t(z,b),\varphi_t(z,b))$ be the result of running $\mathrm{Follow}$ only up to gate $t$, with $b\in\{0,1\}^{h_t}$. We claim
-  $$C_t\ket z = 2^{-h_t/2}\sum_{b\in\{0,1\}^{h_t}}(-1)^{\varphi_t(z,b)}\ket{w_t(z,b)}. \tag{$\ast$}$$
-  The case $t=T$ is the lemma.
-  <p><em>Base case, $t=0$.</em> $C_0 = I$ and $h_0=0$. The sum has one term (the empty $b$), with $\varphi=0$ and $w = z$, so both sides equal $\ket z$.</p>
-  <p><em>Step when $g_{t+1}$ is a classical gate</em> ($X$, CNOT or Toffoli). By the definitions of <a href="gates.html#def-apply">applying a gate</a> and of <a href="gates.html#def-perm">classical gates</a>, $U_{t+1}\ket w = \ket{w'}$, where $w'$ is $w$ updated exactly as in the $X$, CNOT and Toffoli lines of $\mathrm{Follow}$.
-  Applying $U_{t+1}$ to each term of $(\ast)$ turns $\ket{w_t(z,b)}$ into $\ket{w_{t+1}(z,b)}$, and $h$ and $\varphi$ don&rsquo;t change. That gives $(\ast)$ for $t+1$.</p>
-  <p><em>Step when $g_{t+1} = H$ on qubit $j$.</em> By the definition of <a href="gates.html#def-apply">applying a gate</a> and <a href="gates.html#lem-hadamard">the Hadamard Formula</a>, for every string $w$,
-  $$U_{t+1}\ket w = \frac{1}{\sqrt2}\sum_{c\in\{0,1\}}(-1)^{w_j\cdot c}\,\ket{w[j\gets c]} .$$
-  Applying this to each term of $(\ast)$ gives
-  $$C_{t+1}\ket z = \frac{1}{2^{(h_t+1)/2}}\sum_{b\in\{0,1\}^{h_t}}\;\sum_{c\in\{0,1\}}(-1)^{\varphi_t(z,b)\,\oplus\,(w_t(z,b)_j\,\wedge\, c)}\;\ket{w_t(z,b)[j\gets c]}.$$
-  Now treat the pair $(b,c)$ as one string $b' = bc\in\{0,1\}^{h_t+1}$. The $H$ line of $\mathrm{Follow}$ does exactly this at the $(h_t+1)$-th Hadamard: it reads $c = b'_{h_t+1}$, updates
-  $\varphi\gets\varphi\oplus(w_j\wedge c)$, and sets $w_j\gets c$. So the $b'$ term has sign $(-1)^{\varphi_{t+1}(z,b')}$ and basis state $\ket{w_{t+1}(z,b')}$, and $h_{t+1} = h_t+1$. That is $(\ast)$ for $t+1$.</p>
-  <p>The second form of the lemma comes from grouping the terms by their endpoint $w(z,b)$.
-  <span class="qed">&#8718;</span></p>
-</div>
-
-<div class="box cor" id="cor-signed">
-  <div class="box-title"><span class="label">Corollary</span> <span class="name">(Signed Counts)</span></div>
-  <p>For every $y$, $\amp{y}{C}{z} = A_y/2^{h/2}$, where
-  $$A_y \;=\; \#\{b: w(z,b)=y,\ \varphi(z,b)=0\} \;-\; \#\{b: w(z,b)=y,\ \varphi(z,b)=1\}$$
-  is an integer with $|A_y|\le 2^h$. In words: <strong>an amplitude is (up to a fixed scaling) the number of positive paths to $y$ minus the number of negative paths to $y$.</strong></p>
-</div>
-
-<div class="box ex" id="ex-follow">
-  <div class="box-title"><span class="label">Example</span> <span class="name">($HH\ket0$ using $\mathrm{Follow}$)</span></div>
-  <p>Let $C = H, H$ on one qubit, so $h=2$ and $b = b_1b_2$. In $\mathrm{Follow}(0,b)$, the first $H$ gives $\varphi = 0\wedge b_1 = 0$ and $w = b_1$. The second gives $\varphi = b_1\wedge b_2$ and $w = b_2$.</p>
-  <div class="table-wrap"><table>
-    <tr><th>$b$</th><th>path</th><th>$w$</th><th>$\varphi$</th><th>sign</th></tr>
-    <tr><td>00</td><td>$0\to0\to0$</td><td>0</td><td>0</td><td class="pos">+</td></tr>
-    <tr><td>01</td><td>$0\to0\to1$</td><td>1</td><td>0</td><td class="pos">+</td></tr>
-    <tr><td>10</td><td>$0\to1\to0$</td><td>0</td><td>0</td><td class="pos">+</td></tr>
-    <tr><td>11</td><td>$0\to1\to1$</td><td>1</td><td>1</td><td class="neg">&minus;</td></tr>
-  </table></div>
-  <p>So $A_0 = 2-0 = 2$ and $A_1 = 1-1 = 0$, which gives $\amp{0}{HH}{0} = 2/2 = 1$ and $\amp{1}{HH}{0} = 0$. These are the same four paths as in <a href="interference.html#ex-hh-paths">the path tree of $HH\ket0$</a>. Each choice string $b$ is one path.</p>
-</div>
-
-
-<h2 id="obstacle">From amplitudes to probabilities: the one obstacle</h2>
-<p>
-Here is what we have and what we need.
-</p>
-<div class="two-col">
-  <div class="card"><h4>What $\mathsf{PP}$ can do</h4>
-    <p>A PTM's acceptance probability is an <em>average over coin sequences</em>. Write $\mathrm{gap} = \#\text{accepting} - \#\text{rejecting}$. A $\mathsf{PP}$ machine decides whether $\mathrm{gap}>0$.
-    So $\mathsf{PP}$ can decide the <strong>sign of a signed count</strong>, where each coin sequence contributes $+1$ or $-1$ (<a href="#lem-gap">the Signed Counting Lemma</a> below makes this precise).</p></div>
-  <div class="card"><h4>What the quantum computer gives us</h4>
-    <p>By <a href="#cor-signed">the Signed Counts Corollary</a>, an amplitude is a signed count: $\amp yCz = 2^{-h/2}A_y$, where $A_y$ = #positive paths to $y$ $-$ #negative paths to $y$.
-    But the acceptance probability is a sum of <strong>squares</strong>, $\sum_{y_m=1}A_y^2/2^h$, and a square is not a signed count of single paths.</p></div>
-</div>
-<p>
-The way around the square is algebra you already know: $\big(\sum_b a_b\big)^2 = \sum_{b,b'}a_ba_{b'}$. <strong>A square of a sum over paths is a sum over pairs of paths.</strong>
-So the $\mathsf{PP}$ machine should guess <em>two</em> paths $b,b'$ at once, and each pair contributes the product of the two signs. Two more points make this work:
-</p>
-<ul>
-  <li><strong>Only pairs with the same endpoint count.</strong> When we expand $\sum_y A_y^2$, a pair $(b,b')$ contributes only if both paths end at the same $y$, so the machine must &ldquo;abstain&rdquo; on all other pairs. (This is <a href="interference.html#rem-same-endpoint">the interference principle</a> again.)</li>
-  <li><strong>Accept minus reject in one sum.</strong> Instead of comparing $p$ with $\tfrac12$, we compute $2p-1 = p-(1-p)$, a single signed sum in which rejecting outcomes ($y_m=0$) get an extra minus sign.</li>
-</ul>
-
-<p>With the Path-Sum Lemma in hand, the rest of the proof has three steps:</p>
-<ol class="roadmap">
-  <li><strong>The <a href="#lem-gap">Signed Counting Lemma</a> (signed counting is in $\mathsf{PP}$).</strong> A PTM can decide the sign of any efficiently computable sum of $\pm1$ and $0$ terms.</li>
-  <li><strong>The <a href="#lem-twopath">Two-Path Lemma</a>.</strong> The quantum bias $2p_C(x)-1$ is such a sum, over pairs of paths.</li>
-  <li><strong>Combine.</strong> Together they give $(\star)$.</li>
-</ol>
-
-<h2 id="gap-lemma">Step 1: signed counting is in PP</h2>
-<div class="box lem" id="lem-gap">
-  <div class="box-title"><span class="label">Lemma</span> <span class="name">(Signed Counting Lemma; the abstain trick)</span></div>
-  <p>Let $q:\mathbb N\to\mathbb N$ be polynomially bounded and computable from $1^n$ in polynomial time (for example, a polynomial). Let $v(x,u)\in\{-1,0,+1\}$ be computable in polynomial time, for $x\in\{0,1\}^*$ and $u\in\{0,1\}^{q(|x|)}$. Define
-  $$f(x) = \sum_{u\in\{0,1\}^{q(|x|)}}v(x,u).$$
-  Then there is a polynomial-time PTM $M$ with $\Pr[M(x)\text{ accepts}] = \dfrac12 + \dfrac{f(x)}{2^{q(|x|)+1}}$ for every $x$. In particular, $\{x: f(x)>0\}\in\mathsf{PP}$.</p>
-</div>
-<div class="proof"><span class="proof-label">Proof.</span>
-  We define $M$ as follows:
-  <div class="pseudo">
-    <div><b>def</b> $M(x)$:</div>
-    <div class="i1">$q\gets q(|x|)$ <span class="cm">(polynomial time, by assumption)</span></div>
-    <div class="i1">$u\gets$ $q$ random bits; $\ c\gets\mathrm{Bern}(1/2)$</div>
-    <div class="i1"><b>if</b> $v(x,u) = +1$: accept</div>
-    <div class="i1"><b>if</b> $v(x,u) = -1$: reject</div>
-    <div class="i1"><b>if</b> $v(x,u) = 0$: <span class="cm">(abstain)</span> <b>if</b> $c = 0$: accept <b>else</b>: reject</div>
-  </div>
-  Given $u$, the probability of accepting is $1$, $0$ or $\tfrac12$ in the three cases. In every case that equals $\frac{1+v(x,u)}{2}$. Averaging over $u$:
-  $$\Pr[M(x)\text{ accepts}] = \frac{1}{2^q}\sum_{u}\frac{1+v(x,u)}{2} = \frac12 + \frac{1}{2^{q+1}}\sum_u v(x,u) = \frac12+\frac{f(x)}{2^{q+1}}.$$
-  $M$ runs in polynomial time. If $f(x)>0$ it accepts with probability $>\tfrac12$, and if $f(x)\le0$ with probability $\le\tfrac12$. So $M$ witnesses $\{x:f(x)>0\}\in\mathsf{PP}$ (see <a href="background.html#def-pp">definition</a>).
+  We go through the gates one at a time and check that the formula stays true. Before any gates, there is one path (the empty $b$) at $z$ with sign $+$, and the state is $\ket z$.
+  <ul>
+    <li>Classical gate: It sends each $\ket w$ to a single $\ket{w'}$ (see <a href="gates.html#def-perm">definition</a>), where $w'$ is exactly what the matching line of $\mathrm{Follow}$ computes. So each path moves to $w'$ and keeps its sign.</li>
+    <li>Hadamard on qubit $j$: We use the <a href="gates.html#lem-hadamard">the Hadamard Formula</a> and <a href="gates.html#def-apply"> </a> to show the following:
+    $$\ket w\;\mapsto\;\tfrac{1}{\sqrt2}\sum_{c\in\{0,1\}}(-1)^{w_j c}\ket{w[j\gets c]}.$$
+    So each path splits in two, one for each new bit $c$. Each half picks up a factor $\tfrac1{\sqrt2}$, and a minus sign exactly when $w_j = c = 1$. That is the $H$ line of $\mathrm{Follow}$, with $c = b_i$.</li>
+  </ul>
+  After all $T$ gates, there is one term for each $b\in\{0,1\}^h$, with factor $2^{-h/2}$, sign $(-1)^{\varphi(b)}$ and endpoint $w(b)$. Collecting the terms that end at $y$ gives $\amp yCz = A_y/2^{h/2}$.
   <span class="qed">&#8718;</span>
 </div>
-<p>A probability can never be negative. But if we measure everything relative to $\tfrac12$ (accept counts as $+1$, reject as $-1$, and a fair coin flip as $0$), a PTM can add up positive and negative terms. This is how the negative numbers of quantum computation get into a classical machine. Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994).</p>
 
-<h2 id="two-path">Step 2: the two-path formula</h2>
-<p>
-Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an input $x\in\{0,1\}^n$, and let $z = x0^{m-n}$ as in <a href="#setup">the setup</a>. Abbreviate $w(b) = w(z,b)$ and $\varphi(b) = \varphi(z,b)$, the outputs of $\mathrm{Follow}(z,b)$.
-</p>
-<div class="box lem" id="lem-twopath">
-  <div class="box-title"><span class="label">Lemma</span> <span class="name">(Two-Path Lemma)</span></div>
-  <p>For $b,b'\in\{0,1\}^h$ define
-  $$v(b,b') = \begin{cases}0 & \text{if } w(b)\ne w(b'),\\[3pt] (-1)^{\varphi(b)+\varphi(b')+1+w(b)_m} & \text{if } w(b) = w(b').\end{cases}$$
-  Then
-  $$2\,p_C(x) - 1 \;=\; \frac{1}{2^h}\sum_{b,b'\in\{0,1\}^h}v(b,b') .$$</p>
-</div>
-<p class="small"><em>Reading the sign:</em> $(-1)^{\varphi(b)}$ and $(-1)^{\varphi(b')}$ are the signs of the two paths, and $(-1)^{1+w(b)_m}$ is $+1$ if the common endpoint accepts ($w(b)_m=1$) and $-1$ if it rejects.</p>
-<div class="proof"><span class="proof-label">Proof.</span>
-  <p><em>Accepting minus rejecting.</em> Since $C$ is unitary, $C\ket z$ is a unit vector (see <a href="gates.html#fact-unitary">fact</a>), so $\sum_y\amp yCz^2 = 1$. Here we used that amplitudes are real (see <a href="#cor-signed">corollary</a>). Splitting by the last bit,
-  $p_C(x) = \sum_{y_m=1}\amp yCz^2$ and $1 - p_C(x) = \sum_{y_m=0}\amp yCz^2$. Subtracting,
-  $$2p_C(x) - 1 = \sum_{y\in\{0,1\}^m}(-1)^{1+y_m}\,\amp yCz^2 . \tag{1}$$</p>
-  <p><em>Square as pairs.</em> By <a href="#cor-signed">the Signed Counts Corollary</a>, $\amp yCz = 2^{-h/2}\sum_b[w(b)=y](-1)^{\varphi(b)}$, where $[\cdot]$ is $1$ if the condition holds and $0$ otherwise. Squaring the sum,
-  $$\amp yCz^2 = \frac{1}{2^h}\sum_{b,b'}[w(b)=y]\,[w(b')=y]\,(-1)^{\varphi(b)+\varphi(b')} . \tag{2}$$</p>
-  <p><em>Swap the sums.</em> Substitute (2) into (1) and exchange the order of summation:
-  $$2p_C(x)-1 = \frac1{2^h}\sum_{b,b'}(-1)^{\varphi(b)+\varphi(b')}\sum_y[w(b)=y]\,[w(b')=y]\,(-1)^{1+y_m}.$$
-  For a fixed pair $(b,b')$, the inner sum over $y$ has at most one nonzero term, namely $y = w(b)$. That term is present exactly when $w(b') = w(b)$, and it equals $(-1)^{1+w(b)_m}$.
-  So the inner sum times $(-1)^{\varphi(b)+\varphi(b')}$ is exactly $v(b,b')$.
-  <span class="qed">&#8718;</span></p>
-</div>
-<div class="box intu" id="intu-twopath">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Why it works)</span></div>
-  <p>Think of $\amp yCz^2$ as counting the ways to pick two paths that both end at $y$, with signs. Two paths that end in different places never add to the same amplitude, so they have nothing to do with each other. That is why the $\mathsf{PP}$ machine can safely abstain on those pairs.
-  All of the interesting interference happens between paths with the <em>same</em> endpoint, and the signs $(-1)^{\varphi(b)+\varphi(b')}$ keep track of it exactly.</p>
-</div>
-
-<h2 id="proof">Step 3: proof of the theorem</h2>
-<div class="proof"><span class="proof-label">Proof of the Main Theorem.</span>
-  Let $L\in\mathsf{BQP}$ via a polynomial-time uniform circuit family $\mathcal C = (C_0, C_1, \dots)$ over $\mathcal G$ (see <a href="bqp.html#def-bqp">definition</a>). For an input $x$ of length $n$, let $m$, $T$, $h$ be the numbers of qubits, gates and Hadamards of $C_n$, and let $z = x0^{m-n}$.
-  <p><em>Define the signed count.</em> Let $q(n) = 2h(n)$. This is at most $2T(n)$, so it is polynomially bounded, and it can be computed from $1^n$ in polynomial time by printing $C_n$ and counting its Hadamard gates. For $u\in\{0,1\}^{2h}$, split $u = (b,b')$ into two halves and let $v(x,u) = v(b,b')$, defined as in <a href="#lem-twopath">the Two-Path Lemma</a> for the circuit $C_n$ and start string $z$.</p>
-  <p><em>$v$ is computable in polynomial time.</em> Given $(x,u)$: compute $C_n$ from $1^n$ (uniformity), run $\mathrm{Follow}(z,b)$ and $\mathrm{Follow}(z,b')$ (time $O(T+m)$ each, by <a href="#def-follow">the definition of $\mathrm{Follow}$</a>), compare the endpoints, and compute the sign. Every step takes time polynomial in $n$.</p>
-  <p><em>The sum is the quantum bias.</em> By <a href="#lem-twopath">the Two-Path Lemma</a>,
-  $$f(x) := \sum_{u\in\{0,1\}^{2h}}v(x,u) = \sum_{b,b'}v(b,b') = 2^h\big(2p_{C_n}(x)-1\big).$$</p>
-  <p><em>Apply <a href="#lem-gap">the Signed Counting Lemma</a>.</em> It gives a polynomial-time PTM $M$ with
-  $$\Pr[M(x)\text{ accepts}] = \frac12 + \frac{f(x)}{2^{2h+1}} = \frac12 + \frac{2^h(2p_{C_n}(x) - 1)}{2^{2h+1}} = \frac12 + \frac{2p_{C_n}(x)-1}{2^{h+1}},$$
-  which is $(\star)$.</p>
-  <p><em>Conclude.</em> If $x\in L$, then $p_{C_n}(x)\ge\tfrac23$, so $2p_{C_n}(x)-1\ge\tfrac13>0$ and $\Pr[M(x)\text{ accepts}]>\tfrac12$.
-  If $x\notin L$, then $p_{C_n}(x)\le\tfrac13$, so $2p_{C_n}(x)-1\le-\tfrac13<0$ and $\Pr[M(x)\text{ accepts}]<\tfrac12$.
-  So $x\in L\iff\Pr[M(x)\text{ accepts}]>\tfrac12$, and $L\in\mathsf{PP}$.
-  <span class="qed">&#8718;</span></p>
-</div>
-
-<p>It helps to see the PTM $M$ all in one place. It is short:</p>
+<h2 id="proof">Proof of the Main Theorem</h2>
+<p>By the lemma, $p_C(x) = \sum_{y_m=1}\big(A_y/2^{h/2}\big)^2 = S/2^h$, where $S = \sum_{y_m=1}A_y^2$. So the circuit accepts with probability more than $\tfrac12$ exactly when $S>2^{h-1}$. M finds this $S$:</p>
 <div class="pseudo" id="algo-M">
   <div><b>def</b> $M(x)$:</div>
-  <div class="i1">compute $C = C_{|x|}$; read off $m$ and $h$; set $z\gets x0^{m-|x|}$</div>
-  <div class="i1">$b\gets$ $h$ random bits; $\ b'\gets$ $h$ random bits; $\ c\gets\mathrm{Bern}(1/2)$</div>
-  <div class="i1">$(w,\varphi)\gets\mathrm{Follow}(z,b)$; $\ (w',\varphi')\gets\mathrm{Follow}(z,b')$</div>
-  <div class="i1"><b>if</b> $w\ne w'$: <span class="cm">(the two paths can't interfere: abstain)</span></div>
-  <div class="i2"><b>if</b> $c = 0$: accept <b>else</b>: reject</div>
-  <div class="i1"><b>else</b>:</div>
-  <div class="i2"><b>if</b> $\varphi\oplus\varphi'\oplus 1\oplus w_m = 0$: accept <b>else</b>: reject</div>
+  <div class="i1">build $C = C_{|x|}$. set $z\gets x0^{m-|x|}$, $\ S\gets 0$</div>
+  <div class="i1"><b>for all</b> $y\in\{0,1\}^m$ with $y_m = 1$:</div>
+  <div class="i2">$A\gets 0$</div>
+  <div class="i2"><b>for all</b> $b\in\{0,1\}^h$:</div>
+  <div class="i3">$(w,\varphi)\gets\mathrm{Follow}(z,b)$; <b>if</b> $w = y$: $\ A\gets A + (-1)^{\varphi}$</div>
+  <div class="i2">$S\gets S + A^2$</div>
+  <div class="i1"><b>if</b> $S > 2^{h-1}$: accept; <b>else</b>: reject</div>
 </div>
-<p>The last test says: accept if and only if (sign of $b$) $\times$ (sign of $b'$) $\times$ ($+1$ if $w$ accepts, $-1$ if not) $=+1$.</p>
-<p>In words: <strong>guess two paths of the quantum circuit. If they end in different places, flip a coin. If they end in the same place, multiply their two signs, flip the result if the endpoint rejects, and accept if you get $+1$.</strong></p>
-
-<h2 id="example">A worked example</h2>
-<div class="box ex" id="ex-pp-hh">
-  <div class="box-title"><span class="label">Example</span> <span class="name">($M$ for the circuit $H,H$)</span></div>
-  <p>Take $C = H,H$ on $m=1$ qubit, run on the empty input ($z = 0$). Then $C\ket0 = \ket0$, so $p = 0$ (the last qubit never reads $1$), and $(\star)$ predicts
-  $\Pr[M\text{ accepts}] = \tfrac12 + \tfrac{0-1}{2^3} = \tfrac38$. Let's check directly. From <a href="#ex-follow">the $\mathrm{Follow}$ example</a>: $w(b_1b_2) = b_2$ and $\varphi(b_1b_2) = b_1\wedge b_2$.</p>
+<div class="proof"><span class="proof-label">Proof.</span>
+  <p><em>Correctness.</em> Fix one $y$ with $y_m=1$. The inner loop runs $\mathrm{Follow}$ on every path $b$. It adds $+1$ for each positive path that ends at $y$ and subtracts $1$ for each negative path that ends at $y$, ignoring all other paths. So when the inner loop finishes, $A$ is exactly $A_y$, the signed count from <a href="#lem-pathsum">the Path-Sum Lemma</a>.</p>
+  <p>The outer loop then adds $A_y^2$ to $S$ for every $y$ with last bit $1$. So at the end, we have:
+  $$S = \sum_{y:\,y_m=1}A_y^2 = 2^h\sum_{y:\,y_m=1}\Big(\frac{A_y}{2^{h/2}}\Big)^2 = 2^h\sum_{y:\,y_m=1}\amp yCz^2 = 2^h\,p_C(x).$$
+  Basically $S$ is the acceptance probability scaled up by $2^h$. So comparing $S$ with $2^{h-1}$ is the same as comparing $p_C(x)$ with $\tfrac12$:</p>
   <ul>
-    <li><strong>Different endpoints</strong> ($b_2\ne b_2'$): $8$ of the $16$ pairs. $v=0$, and $M$ abstains.</li>
-    <li><strong>Both end at $0$</strong> ($b_2=b_2'=0$): $4$ pairs, all with $\varphi=\varphi'=0$ and $w_m = 0$, so $v = (-1)^{0+0+1+0} = -1$.</li>
-    <li><strong>Both end at $1$</strong> ($b_2=b_2'=1$): $4$ pairs with $v = (-1)^{b_1+b_1'+1+1} = (-1)^{b_1+b_1'}$, which is $+1,-1,-1,+1$. These sum to $0$: this is the cancellation $\amp1{HH}0 = 0$, now seen in pairs.</li>
+    <li>If $x\in L$, the circuit accepts with probability $p_C(x)\ge\tfrac23$. Then $S\ge\tfrac23\cdot 2^h > \tfrac12\cdot 2^h = 2^{h-1}$, so $M$ accepts.</li>
+    <li>If $x\notin L$, the circuit accepts with probability $p_C(x)\le\tfrac13$. Then $S\le\tfrac13\cdot 2^h < 2^{h-1}$, so $M$ rejects.</li>
   </ul>
-  <p>So $f = -4 = 2^2(2\cdot0-1)$, as <a href="#lem-twopath">the Two-Path Lemma</a> promises. Counting $M$'s $2\cdot16 = 32$ coin sequences: the abstaining pairs give $8$ acceptances, the two $v=+1$ pairs give $2\cdot 2 = 4$, and the six $v=-1$ pairs give $0$.
-  That is $12/32 = 3/8$. &#10003;</p>
-</div>
-
-
-<div class="box intu" id="intu-whisper">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(A whisper of a bias, and why this doesn't give $\mathsf{BQP}\subseteq\mathsf{BPP}$)</span></div>
-  <p>The quantum circuit is right with probability at least $\tfrac23$, so it is at least $\tfrac16$ away from $\tfrac12$. The $\mathsf{PP}$ machine is only $|2p-1|/2^{h+1}$ away from $\tfrac12$, which can be as small as about $\tfrac13\cdot 2^{-(h+1)}$.
-  To notice a difference that small by running $M$ over and over, you would need about $4^h$ runs. So this is a <strong>counting</strong> argument, not a fast randomized algorithm.
-  The cancellations that a quantum computer gets for free are paid for by the extra power of $\mathsf{PP}$, which can decide a majority even when it wins by a single vote.</p>
-</div>
-
-<div class="box rem" id="rem-proof-notes">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Where we used real amplitudes)</span></div>
-  <p>We used $|a|^2 = a^2$, which holds because circuits over $\mathcal G$ have real amplitudes. For gate sets with complex entries, the <a href="gates.html#fact-universal">universality theorem</a> lets us switch to $\mathcal G$ first. Alternatively, write $|a|^2 = a\bar a$ and expand into pairs exactly as here, which is how Adleman, DeMarrais and Huang handle general amplitudes.</p>
+  <p><em>Space Complexity.</em> $M$ only stores the circuit, the loop variables $y$ and $b$ ($m$ and $h$ bits), the counters $A$ and $S$. This fits in $m+2h+2$ bits, since $|A_y|\le 2^h$ as well the space required for $\mathrm{Follow}$ which is reused every time. All of this is polynomial in $n$. This is the same idea as the proof that <a href="background.html#prop-bpp-pspace">$\mathsf{BPP}\subseteq\mathsf{PSPACE}$</a>.
+  <span class="qed">&#8718;</span></p>
 </div>
 
 <h2 id="consequences">Consequences</h2>
 <div class="box cor" id="cor-consequences">
   <div class="box-title"><span class="label">Corollary</span> <span class="name">(Consequences)</span></div>
   <ol>
-    <li>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$. In particular, $\mathsf{BQP}\subseteq\mathsf{PSPACE}$.</li>
-    <li>If $\mathsf{P} = \mathsf{PP}$, then $\mathsf{P} = \mathsf{BQP}$.</li>
-    <li>If $\mathsf{BPP}\ne\mathsf{BQP}$, then $\mathsf{P}\ne\mathsf{PP}$, and therefore $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
+    <li>$\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PSPACE}$.</li>
+    <li>If $\mathsf{BPP}\ne\mathsf{BQP}$, then $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
   </ol>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
-  (1) Combine <a href="bqp.html#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a>, <a href="#thm-main">the Main Theorem</a> and <a href="background.html#prop-pp-pspace">the proposition $\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$</a>.
-  (2) If $\mathsf{P}=\mathsf{PP}$ then $\mathsf{P}\subseteq\mathsf{BQP}\subseteq\mathsf{PP} = \mathsf{P}$.
-  (3) Suppose $\mathsf{P}=\mathsf{PP}$. By (2), $\mathsf{P} = \mathsf{BQP}$, and then $\mathsf{BPP}$, which sits between them, also equals $\mathsf{BQP}$. That is the contrapositive of the first implication.
-  For the second: if $\mathsf{P} = \mathsf{PSPACE}$ then $\mathsf{PP}$, sandwiched in between, equals $\mathsf{P}$.
+  (1) Combine <a href="bqp.html#thm-bpp-bqp">$\mathsf{BPP}\subseteq\mathsf{BQP}$</a> with the Main Theorem. (2) If $\mathsf{P}=\mathsf{PSPACE}$, then everything in the chain in (1) equals $\mathsf{P}$, so $\mathsf{BPP}=\mathsf{BQP}$.
   <span class="qed">&#8718;</span>
 </div>
-<p>
-Part 3 is the punchline of these notes. <strong>Proving that quantum computers are more powerful than classical ones would also prove $\mathsf{P}\ne\mathsf{PSPACE}$</strong>, which is one of the biggest open problems in complexity theory.
-So for now, the evidence for quantum advantage has to come in other forms: oracle separations and specific problems (see <a href="intro.html#fact-separations">the evidence in the introduction</a>) such as factoring that we believe are hard classically.
-</p>
-
 <div class="box rem" id="fact-beyond">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Further results, without proof)</span></div>
-  <p>Fortnow and Rogers (1999) strengthened the Main Theorem: $\mathsf{BQP}$ is <em>low</em> for $\mathsf{PP}$, that is, $\mathsf{PP}^{\mathsf{BQP}}=\mathsf{PP}$. Aaronson (2005) showed that $\mathsf{PP}$ is exactly quantum polynomial time <em>with postselection</em>, which explains why $\mathsf{PP}$ is the natural ceiling. Whether $\mathsf{BQP}\subseteq\mathsf{PH}$ is open. See the survey of Watrous (2008) and the <a href="conclusion.html#references">References</a>.</p>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(A stronger result, without proof)</span></div>
+  <p>Adleman, DeMarrais and Huang (1997) showed $\mathsf{BQP}\subseteq\mathsf{PP}$, where $\mathsf{PP}$ is the class of problems a polynomial-time randomized machine can solve if it has to be right with probability more than $\tfrac12$. Note that $\mathsf{PP}\subseteq\mathsf{PSPACE}$.</p>
 </div>
 
 <h2 id="summary">Summary</h2>
-<ol>
-    <li><strong>Amplitude = signed count of paths</strong> (see <a href="#lem-pathsum">lemma</a>).</li>
-    <li><strong>Probability = square = signed count of <em>pairs</em> of paths with the same endpoint</strong> (<a href="#lem-twopath">the Two-Path Lemma</a>). Pairs with different endpoints contribute nothing, because they never interfere.</li>
-    <li><strong>$\mathsf{PP}$ decides the sign of any signed count</strong>, by accepting on $+1$, rejecting on $-1$, and flipping a coin on $0$ (<a href="#lem-gap">the Signed Counting Lemma</a>).</li>
-    <li>So $M$ accepts with probability exactly $\tfrac12+\frac{2p-1}{2^{h+1}}$: the quantum bias, shrunk exponentially but with the same sign. Consequently, proving $\mathsf{BPP}\ne\mathsf{BQP}$ would prove $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
-  </ol>
+<ul>
+  <li>Each path through a circuit is a string $b\in\{0,1\}^h$. Running $\mathrm{Follow}$ can find the endpoint of the path and sign in poly time.</li>
+  <li>An amplitude is a signed count of paths, so the acceptance probability is $2^{-h}\sum_{y_m=1}A_y^2$.</li>
+  <li>Adding this up one path can be done in polynomial space. So $\mathsf{BQP}\subseteq\mathsf{PSPACE}$.</li>
+</ul>
 
 </div></main>
 </body>

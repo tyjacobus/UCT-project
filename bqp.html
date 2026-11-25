@@ -6,80 +6,80 @@
   <title>BQP and Reversible Computation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=7">
+  <link rel="stylesheet" href="assets/site.css?v=10">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=7"></script>
+  <script defer src="assets/site.js?v=10"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>$\mathsf{BQP}$ and Reversible Computation</h1></header>
 
-<p>We now have everything we need to define $\mathsf{BQP}$, the quantum version of $\mathsf{BPP}$. In this chapter we define it and then prove the lower half of our result: $\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$. The main difficulty is that quantum computation has to be reversible, but normal Boolean circuits are not.</p>
+<p>We can now finally define $\mathsf{BQP}$ which is just the quantum version of $\mathsf{BPP}$. We will do that and then prove the lower bound part of our result: $\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$.</p>
 
 <h2 id="bqp">The class BQP</h2>
 <p>
-A quantum algorithm takes a classical input $x\in\{0,1\}^n$, puts it in the first $n$ qubits, sets every other qubit (the &ldquo;ancilla&rdquo; qubits) to $\ket0$, runs a circuit, and measures one qubit to get its answer.
-We use the <strong>last</strong> qubit as the answer qubit, so it never overlaps with the input.
+A quantum algorithm takes as input some $x\in\{0,1\}^n$. It then copies the first $n$ bits into $n$ qubits, seting all the other qubits to $\ket0$, and runs the quantum circuit on these qubits.
+The last qubit is the answer to our algorithm.
 </p>
 <div class="box def" id="def-accept">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Acceptance probability)</span></div>
-  <p>Let $C$ be a circuit on $m$ qubits and $x\in\{0,1\}^n$ with $n\le m$. <strong>Running $C$ on $x$</strong> means starting in $\ket{x0^{m-n}}$, applying $C$, and measuring qubit $m$. $C$ <strong>accepts</strong> if the result is $1$.
+  <p>Let $C$ be a circuit on $m$ qubits and $x\in\{0,1\}^n$ with $n\le m$. To run $C$ on $x$, start in the state $\ket{x0^{m-n}}$, apply the gates of $C$, and meaure qubit $m$. $C$ accepts if the measured qubit is $1$.
   By <a href="states.html#def-measure">the measurement rule</a>, the acceptance probability is
   $$p_C(x) \;=\; \sum_{y\in\{0,1\}^m:\;y_m = 1}\big|\amp{y}{C}{x0^{m-n}}\big|^2 .$$</p>
 </div>
 
 <div class="box def" id="def-bqp">
   <div class="box-title"><span class="label">Definition</span> <span class="name">($\mathsf{BQP}$, bounded-error quantum polynomial time; Bernstein&ndash;Vazirani 1993)</span></div>
-  <p>A <strong>quantum circuit family</strong> $\mathcal C = (C_0, C_1, C_2,\dots)$ <strong>solves a language $L$ with error $\epsilon$</strong> if
+  <p>A quantum circuit family $\mathcal C = (C_0, C_1, C_2,\dots)$ solves a language $L$ with error $\epsilon$ if
   $$\forall x\in L,\quad \Pr[C_{|x|}(x)\text{ accepts}]\ge 1-\epsilon, \qquad\qquad \forall x\notin L,\quad \Pr[C_{|x|}(x)\text{ accepts}]\le\epsilon,$$
   where $\Pr[C(x)\text{ accepts}] = p_C(x)$. Then
   $$\mathsf{BQP} = \{L \mid \exists \text{ polynomial-time uniform circuit family } \mathcal C \text{ over } \mathcal G \text{ solving } L \text{ with error } \tfrac13\}.$$
-  Here $\mathcal G = \{H,X,\CNOT,\TOF\}$ is our gate set (see <a href="gates.html#def-gateset">definition</a>). <em>Polynomial-time uniform</em> means the same thing as for Boolean circuits
-  (see <a href="background.html#def-uniform">definition</a>): a deterministic polynomial-time TM, given $1^n$, outputs the list of gates of $C_n$ and the qubits each one acts on.
-  In particular, $C_n$ has $m(n)$ qubits and $T(n)$ gates, both polynomial in $n$.</p>
+  As we've discussed already, $\mathcal G = \{H,X,\CNOT,\TOF\}$ is our gate set and polynomial-time uniform means the same thing as for Boolean circuits.
+  (see <a href="background.html#def-uniform">definition</a>). $C_n$ has $m(n)$ qubits and $T(n)$ gates where $m$ and $T$ are polynomials.</p>
 </div>
 
-<p>Compare this with the <a href="background.html#def-bpp">definition of $\mathsf{BPP}$</a>. It is the same definition, with the same error $\tfrac13$. The only difference is that the PTM is replaced by a uniform family of quantum circuits.</p>
+<p>Note that this is the same definition as <a href="background.html#def-bpp">definition of $\mathsf{BPP}$</a>. The only difference is that the PTM is replaced by a uniform family of quantum circuits.</p>
 
 <div class="box rem" id="rem-robust">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(The definition is robust; omitted details)</span></div>
-  <p>As with $\mathsf{BPP}$, the error $\tfrac13$ can be lowered to $2^{-\mathrm{poly}(n)}$. We run several independent copies of $C_n$ on separate qubits, compute the majority of their answers reversibly, and apply Hoeffding&rsquo;s inequality, just like in the Two-sided Error Reduction theorem of Probabilistic Time Complexity 2. Also, by the <a href="gates.html#fact-universal">universality fact</a>, using any other standard gate set instead of $\mathcal G$ gives the same class. We only sketch these facts; see Bernstein&ndash;Vazirani (1997) or Arora&ndash;Barak, Chapter 10. None of our proofs depend on them.</p>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(Definition details)</span></div>
+  <p>Just like with $\mathsf{BPP}$, the error $\tfrac13$ can be lowered to $2^{-\mathrm{poly}(n)}$ with the exact same strategy. We just run several independent copies of $C_n$ on separate qubits and compute the majority of their answers.</p>
 </div>
 
 <h2 id="reversible">Making classical circuits reversible</h2>
 <p>
-To prove $\mathsf{P}\subseteq\mathsf{BQP}$, we want to run a normal Boolean circuit $D$ (with AND, OR and NOT gates) on a quantum computer. The problem (see <a href="gates.html#intu-reversible">remark</a>) is that AND and OR are not reversible.
-The fix is to never overwrite anything. Each gate writes its output into a <strong>fresh qubit</strong> that starts as $\ket0$. The Toffoli gate computes AND this way:
+To prove $\mathsf{P}\subseteq\mathsf{BQP}$, we need to be able to simulate a normal Boolean circuit $D$ on a quantum computer. This means that we have to be able to replicate AND, OR and NOT. 
+The difficulty with this is that as we've seen in this <a href="gates.html#intu-reversible">remark</a>, all quantum computation is reversible since we don't ever lose information. However, AND and OR are not reversible.
+The way we can get around this is by never overwrite any of the qubits during the simulation. Instead, each gate will its output into a new qubit with initial state $\ket0$. For example, we'd compute AND with the Toffoli gate like this:
 $\TOF\ket{a,b,0} = \ket{a,b,a\wedge b}$.
 </p>
 
 <div class="box lem" id="lem-garbage">
   <div class="box-title"><span class="label">Lemma</span> <span class="name">(Reversible Simulation Lemma)</span></div>
-  <p>Let $D$ be a Boolean circuit with $n$ inputs and $s$ gates (AND, OR, NOT; fan-in at most 2; any fan-out), whose gates, in topological order, compute the bits $g_1(x),\dots,g_s(x)$.
+  <p>Let $D$ be a Boolean circuit with $n$ inputs and $s$ gates (AND, OR, NOT; fan-in at most 2), which computes $g_1(x),\dots,g_s(x)$.
   There is a circuit $R_D$ over $\{X,\CNOT,\TOF\}$ on $n+s$ qubits with at most $6s$ gates such that for every $x\in\{0,1\}^n$,
   $$R_D\ket{x}\ket{0^s} = \ket{x}\ket{g(x)},\qquad\text{where } g(x) = g_1(x)\,g_2(x)\cdots g_s(x).$$
-  Also, $R_D$ can be computed from $D$ in polynomial time.</p>
+  This $R_D$ can be computed in poly time.</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
-  (If a gate&rsquo;s two inputs are the same wire $a$, it just computes $a$, so we can use a single $\CNOT$ from $a$ into its fresh qubit. So we can assume each AND or OR gate reads two different wires.)
-  Give gate $i$ of $D$ its own qubit $n+i$, starting at $\ket0$. Go through the gates in topological order. When we reach gate $i$, its input wires (input bits or earlier gate qubits) already hold the right values. Then:
+  First if any AND or OR gate uses the same value $a$ on both of its inputs, the result is always just $a$. So, we can simulate this with a single $\CNOT$ from $a$ into a fresh qubit. For the rest of the proof, we will assume these two inputs are unique.
+  For each gate $i$ of $D$, we will map this to qubit $n+i$, starting at $\ket0$. Iterate through the gates in topological order. When we reach gate $i$, its input wires will already be correct since we've already processed them. Then:
   <ul>
-    <li>$\mathrm{NOT}(a)$: apply $\CNOT$ from $a$ to qubit $n+i$ (so it holds $a$), then $X$ on qubit $n+i$ (so it holds $\neg a$).</li>
-    <li>$\mathrm{AND}(a,b)$: apply $\TOF$ with controls $a,b$ and target $n+i$, which then holds $0\oplus(a\wedge b) = a\wedge b$.</li>
-    <li>$\mathrm{OR}(a,b) = \neg(\neg a\wedge\neg b)$: apply $X$ to $a$ and $b$, then $\TOF$ into $n+i$, then $X$ to $a$ and $b$ again (to restore them), then $X$ on $n+i$. That is $6$ gates.</li>
+    <li>$\mathrm{NOT}(a)$: apply $\CNOT$ from $a$ to qubit $n+i$ and $X$ on qubit $n+i$ which negates it.</li>
+    <li>$\mathrm{AND}(a,b)$: apply $\TOF$ with controls $a,b$ and target $n+i$. This computes $0\oplus(a\wedge b) = a\wedge b$.</li>
+    <li>$\mathrm{OR}(a,b) = \neg(\neg a\wedge\neg b)$: we already can compute each of these gates individually. We just need to apply $X$ to $a$ and $b$ then $\TOF$ into $n+i$ then $X$ to $a$ and $b$ again and then $X$ on $n+i$.</li>
   </ul>
-  Each step only permanently changes qubit $n+i$, and every wire it reads ends up unchanged. So by induction on $i$, after gate $i$ the register holds $x,\,g_1(x),\dots,g_i(x),\,0,\dots,0$.
-  Fan-out is free, because a wire can be used as a control any number of times. All the gates are classical, so on basis states this is exactly the classical computation.
+  At each step, we compute the right result without chaging the input wire. So, by induction on $i$, after gate $i$ the register holds $x,\,g_1(x),\dots,g_i(x),\,0,\dots,0$.
+  $X$, CNOT, and Toffoli each are classical gates since they send a basis state to a single basis state. So, we can always modle the register as just a string of bits.
   <span class="qed">&#8718;</span>
 </div>
 
 <p>
-For a single basis state, <a href="#lem-garbage">the Reversible Simulation Lemma</a> is enough. But quantum algorithms run circuits on <em>superpositions</em>, and then the extra bits $g(x)$, called &ldquo;garbage&rdquo;, cause problems. By linearity,
+Although the simulation strategy seen in <a href="#lem-garbage">the Reversible Simulation Lemma</a> works for a normal circuit, it will cause problems when we introduce randomness. This is because we are leaving evidence of the path our circuit took behind. We are creating these garbage bits since we always copy the results into a fresh qubit (seen how $\alpha_x\ket x$ is left in the result):
 $$R_D\Big(\sum_x\alpha_x\ket x\Big)\ket{0^s} = \sum_x\alpha_x\ket x\ket{g(x)} .$$
-Now the garbage is entangled with $x$. It records which path was taken, so by <a href="interference.html#rem-same-endpoint">the interference principle</a> it stops different values of $x$ from cancelling later.
-Bennett&rsquo;s trick from 1973 removes the garbage: compute, copy the answer, and then run the computation backwards.
+This garbage is entangled with $x$ so by <a href="interference.html#rem-same-endpoint">the interference principle</a> it stops different values of $x$ that took different paths from cancelling.
+We will use the Bennett&rsquo;s trick from 1973 removes the garbage. The trick is to compute and copy the answer and then run the computation backwards.
 </p>
 
 <div class="box lem" id="lem-bennett">
@@ -88,73 +88,69 @@ Bennett&rsquo;s trick from 1973 removes the garbage: compute, copy the answer, a
   with at most $12s+1$ gates and computable from $D$ in polynomial time, such that for all $x\in\{0,1\}^n$ and $b\in\{0,1\}$:
   $$B_D\,\ket{x}\ket{0^s}\ket{b} \;=\; \ket{x}\ket{0^s}\ket{b\oplus f(x)} .$$</p>
 </div>
-<figure class="circuit" data-wires="|x⟩;|0…0⟩;|0⟩;|b⟩" data-out="|x⟩;|0…0⟩;|0⟩;|b⊕f(x)⟩"
-  data-gates="BOX R_D 0 2, CNOT 2 3, BOX R_D^{-1} 0 2" data-alt="compute R_D, copy the output wire into b with a CNOT, then uncompute with R_D inverse">
-  <figcaption>Compute, copy, uncompute. The third wire is the qubit of gate $s$ (the output of $D$); the second wire stands for the other $s-1$ scratch qubits.</figcaption>
-</figure>
+<p>
+Why this is the equation we want.
+</p>
+<ul>
+  <li>The output qubit starts at $b=0$ and $0\oplus f(x) = f(x)$ so this is exactly the result we want.</li>
+  <li>No garbage is left since the scratch bits are set back to $0$.</li>
+  <li> The input stays the same keepign it reversible and without any hints of the computation path.</li>
+</ul>
+<p>
+So $B_D$ does exactly what a classical function call should do: it adds $f(x)$ to the output and leaves no other trace.
+</p>
 <div class="proof"><span class="proof-label">Proof.</span>
-  Let $B_D = R_D^{-1}\cdot \CNOT_{[n+s,\;n+s+1]}\cdot R_D$, where $R_D$ is from <a href="#lem-garbage">the Reversible Simulation Lemma</a> and $R_D^{-1}$ is the gates of $R_D$ in reverse order. (Each of $X$, CNOT and Toffoli is its own inverse, so this really is the inverse.)
+  Let $B_D = R_D^{-1}\cdot \CNOT_{[n+s,\;n+s+1]}\cdot R_D$, where $R_D$ is the quantum circuit we just constructed in <a href="#lem-garbage">the Reversible Simulation Lemma</a> and $R_D^{-1}$ is the gates of $R_D$ in reverse order. $X$, CNOT and Toffoli is its own inverse so this in total is the inverse.
   Follow a basis state through the three steps:
   $$\ket x\ket{0^s}\ket b\;\xrightarrow{\;R_D\;}\;\ket x\ket{g(x)}\ket b\;\xrightarrow{\;\CNOT\;}\;\ket x\ket{g(x)}\ket{b\oplus f(x)}\;\xrightarrow{\;R_D^{-1}\;}\;\ket x\ket{0^s}\ket{b\oplus f(x)}.$$
-  The first step is the Reversible Simulation Lemma ($R_D$ doesn&rsquo;t touch the last qubit). The second copies the last scratch bit, $g_s(x) = f(x)$, into the last qubit. In the third, $R_D^{-1}$ only acts on the first $n+s$ qubits,
-  and it sends $\ket x\ket{g(x)}$ back to $\ket x\ket{0^s}$, since $R_D$ sends $\ket x\ket{0^s}$ to $\ket x\ket{g(x)}$. The gate count is $6s+1+6s$.
+  The first step is the Reversible Simulation Lemma which just computes exactly the function, copying all results into fresh qubits. The second copies the last scratch bit $g_s(x) = f(x)$ into the last qubit. In the third, $R_D^{-1}$ only acts on the first $n+s$ qubits
+  and it is the inverse of the first step so all qubits but the final qubit are reset. The gate count is $6s+1+6s$.
   <span class="qed">&#8718;</span>
-</div>
-
-<div class="box intu" id="intu-bennett">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Why this works)</span></div>
-  <p>By linearity, Bennett&rsquo;s circuit acts on a superposition like this:
-  $$B_D\sum_{x,b}\alpha_{x,b}\ket x\ket{0^s}\ket b = \sum_{x,b}\alpha_{x,b}\ket x\ket{0^s}\ket{b\oplus f(x)} .$$
-  The scratch register is $\ket{0^s}$ in <em>every</em> branch, so it doesn&rsquo;t record anything, and different branches can still cancel later.
-  We couldn&rsquo;t just &ldquo;reset&rdquo; the garbage to $0$, because that is not reversible. Measuring it doesn&rsquo;t work either, because the measurement result is itself a record of which path was taken.</p>
 </div>
 
 <h2 id="inclusions">P &sube; BQP and BPP &sube; BQP</h2>
 <div class="box thm" id="thm-p-bqp">
   <div class="box-title"><span class="label">Theorem</span> <span class="name">($\mathsf{P}\subseteq\mathsf{BQP}$)</span></div>
-  <p>Every language in $\mathsf{P}$ is in $\mathsf{BQP}$. In fact, the circuits accept with probability exactly $1$ or $0$.</p>
+  <p>Every language in $\mathsf{P}$ is in $\mathsf{BQP}$.</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
   Let $L\in\mathsf{P}$. By the <a href="background.html#fact-tm-circuits">Efficient TM to Efficient Circuit theorem</a>, there is a polynomial-time uniform family of Boolean circuits $D_n$ of size $s(n) = \mathrm{poly}(n)$ that decide $L$ on inputs of length $n$.
-  Let $C_n = B_{D_n}$ from <a href="#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>, on $m = n+s+1$ qubits. $C_n$ only uses gates from $\mathcal G$, and it can be printed in polynomial time: first print $D_n$, then apply the polynomial-time constructions from the two lemmas above.
-  Running $C_n$ on $x$ starts at $\ket{x}\ket{0^s}\ket0$ and ends at the basis state $\ket{x}\ket{0^s}\ket{L(x)}$, where $L(x) = 1$ if $x\in L$ and $0$ otherwise. So $p_{C_n}(x) = 1$ if $x\in L$ and $0$ otherwise.
+  We then just showed that we can use this circuit to make a quantum circuit that simulates it. Let $C_n = B_{D_n}$ from <a href="#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>.
+  Running $C_n$ on $x$ results in the basis state $\ket{x}\ket{0^s}\ket{L(x)}$ which contains no garbage so $L(x) = 1$ if $x\in L$ and $0$ otherwise. So $p_{C_n}(x) = 1$ if $x\in L$ and $0$ otherwise.
   <span class="qed">&#8718;</span>
 </div>
 
-<p>For $\mathsf{BPP}$ we also need coin flips. As we saw at the <a href="interference.html#coins">end of the last chapter</a>, a Hadamard gate on a fresh qubit acts like a coin flip, as long as we never let its branches cancel.</p>
+<p>Now to compute randomized algorithms, we need to have some source of a coin flip. As we've seen, we can do this with Hadamard. We just need to not let it cancel itself out as we saw when we ran Hadamard twice.</p>
 
 <div class="box thm" id="thm-bpp-bqp">
   <div class="box-title"><span class="label">Theorem</span> <span class="name">($\mathsf{BPP}\subseteq\mathsf{BQP}$)</span></div>
-  <p>Every language in $\mathsf{BPP}$ is in $\mathsf{BQP}$. More precisely, for every polynomial-time PTM $M$ there is a polynomial-time uniform circuit family $\mathcal C = (C_0, C_1, \dots)$ over $\mathcal G$ with
+  <p>Every language in $\mathsf{BPP}$ is in $\mathsf{BQP}$. More precisely, for every poly time PTM $M$ there is a poly time uniform circuit family $\mathcal C = (C_0, C_1, \dots)$ over $\mathcal G$ with
   $p_{C_n}(x) = \Pr[M(x)\text{ accepts}]$ for every $x$.</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
-  Use the random-tape view (see the <a href="background.html#pp">Background Review</a>): there is a polynomial $r(n)$ and a deterministic polynomial-time TM $V(x,\rho)$, with $\rho\in\{0,1\}^{r(|x|)}$, such that $\Pr[M(x)\text{ accepts}] = \Pr_{\rho}[V(x,\rho)\text{ accepts}]$. Write $r = r(n)$.
-  By the <a href="background.html#fact-tm-circuits">Efficient TM to Efficient Circuit theorem</a> applied to $V$ on inputs of length $n+r$, there are uniform Boolean circuits $D_n$ of size $s = \mathrm{poly}(n)$ with $D_n(x,\rho) = V(x,\rho)$.
-  <p>Split the $m = n + r + s + 1$ qubits into four registers: input $x$ ($n$ qubits), coins ($r$), scratch ($s$) and answer ($1$). Let $C_n$ be:</p>
+  We will use the random tape view of an NTM. So, we will assume there is a polynomial $r(n)$ and a deterministic poly time TM $V(x,\rho)$, with $\rho\in\{0,1\}^{r(|x|)}$, such that $\Pr[M(x)\text{ accepts}] = \Pr_{\rho}[V(x,\rho)\text{ accepts}]$.
+  We can then apply the <a href="background.html#fact-tm-circuits">Efficient TM to Efficient Circuit theorem</a> on this TM $V$ to create a uniform Boolean circuits $D_n$ of size $s = \mathrm{poly}(n)$ with $D_n(x,\rho) = V(x,\rho)$.
+  <p>We will the $m = n + r + s + 1$ qubits into four different sections for simplicity: input $x$ ($n$ qubits), coins ($r$ qubits), scratch ($s$ qubits) and answer ($1$ qubit). Let $C_n$ be:</p>
   <ol>
-    <li>apply $H$ to each of the $r$ coin qubits;</li>
-    <li>apply $B_{D_n}$ (<a href="#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>), using &ldquo;input + coins&rdquo; as its $n+r$ input qubits.</li>
+    <li>Run Hadamard on each of the $r$ coin qubits</li>
+    <li>Get a quantum circuit $B_{D_n}$ from the (<a href="#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>). Then we will run this using the input and coint qubits as its $n+r$ input qubits.</li>
   </ol>
-  <figure class="circuit" data-wires="|x⟩;|0^{r}⟩;|0^{s}⟩;|0⟩" data-out="|x⟩;|ρ⟩;|0^{s}⟩;|V(x,ρ)⟩"
-    data-gates="BOX H^{⊗r} 1 1, BOX B_D 0 3, M 3" data-alt="Hadamards on the r coin qubits, then the clean reversible circuit for V, then measure the answer qubit"></figure>
-  <p>We follow the state. It starts as $\ket x\ket{0^r}\ket{0^s}\ket0$. By the <a href="gates.html#lem-hn">Uniform Superposition Lemma</a>, step 1 gives
+  <p> The state will start as $\ket x\ket{0^r}\ket{0^s}\ket0$. By the <a href="gates.html#lem-hn">Uniform Superposition Lemma</a>, step 1 computes
   $$\frac{1}{2^{r/2}}\sum_{\rho\in\{0,1\}^r}\ket x\ket\rho\ket{0^s}\ket0 .$$
-  By Bennett&rsquo;s Uncomputation Lemma and linearity, step 2 gives
+  Then since all quantum operations are linear, step 2 gives us
   $$\frac{1}{2^{r/2}}\sum_{\rho\in\{0,1\}^r}\ket x\ket\rho\ket{0^s}\ket{V(x,\rho)} .$$
-  Different values of $\rho$ give <em>different</em> basis states (they differ in the coin register), so each basis state $\ket{x\,\rho\,0^s\,V(x,\rho)}$ has amplitude exactly $2^{-r/2}$, and no two terms combine.
-  By the <a href="#def-accept">definition of acceptance probability</a>,
+  Note that since p is part of the state, no results will interfere since each branch in the tree has a different value of p so we have
   $$p_{C_n}(x) = \sum_{\rho:\,V(x,\rho)=1}\big(2^{-r/2}\big)^2 = \frac{\#\{\rho: V(x,\rho) = 1\}}{2^r} = \Pr[M(x)\text{ accepts}].$$
-  So the $\tfrac23$ / $\tfrac13$ guarantee of $M$ carries over to $C_n$. Uniformity follows as in the proof of <a href="#thm-p-bqp">$\mathsf{P}\subseteq\mathsf{BQP}$</a>.
+  So the quantum circuit accepts with the exact same probability that M accepts</a>.
   <span class="qed">&#8718;</span></p>
 </div>
-<p id="rem-coins-classical">The coins act like normal random bits because nothing ever applies $H$ to the coin register again. The coin register is a permanent record of which path was taken, so the $2^r$ branches never cancel. To get <em>more</em> power than $\mathsf{BPP}$, a quantum algorithm has to let branches cancel, and then removing garbage becomes essential.</p>
+<p id="rem-coins-classical">This source of randomness worked because we used a different qubit that had been applied with hadamard to get each bit of randomness.</p>
 
 <h2 id="summary">Summary</h2>
 <ul>
   <li>$\mathsf{BQP}$ is defined exactly like $\mathsf{BPP}$, but with a uniform family of quantum circuits over $\mathcal G$ instead of a PTM.</li>
-  <li>Toffoli gates let us make any classical circuit reversible, but this leaves garbage.</li>
-  <li>Bennett&rsquo;s trick (compute, copy, uncompute) removes the garbage, so classical computations can be used inside quantum algorithms. This gives $\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$.</li>
+  <li>Toffoli gates let us make any classical circuit reversible but this leaves garbage that doesn't allow for interference.</li>
+  <li>Bennett&rsquo;s trick removes the garbage.</li>
 </ul>
 
 </div></main>
