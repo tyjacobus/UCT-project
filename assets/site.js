@@ -8,22 +8,24 @@
   "use strict";
 
   // ------------------------------------------------------------------
-  // Site map (single source of truth for navigation)
+  // Site map (single source of truth for navigation). Edit here to add/rename chapters.
   // ------------------------------------------------------------------
+  var SCRIBE = "Tyler Jacobus";          // shown in each chapter banner
   var PAGES = [
-    { file: "index.html",        num: "",   title: "Overview and Roadmap",               part: "Start here" },
-    { file: "intro.html",        num: "1",  title: "Why Quantum Complexity?",            part: "Start here" },
-    { file: "background.html",   num: "2",  title: "Background Review",                  part: "Start here" },
-    { file: "states.html",       num: "3",  title: "Qubits and Quantum States",          part: "Lecture A: the model" },
-    { file: "gates.html",        num: "4",  title: "Unitary Gates and Circuits",         part: "Lecture A: the model" },
-    { file: "interference.html", num: "5",  title: "Quantum vs. Randomized Computation", part: "Lecture A: the model" },
-    { file: "bqp.html",          num: "6",  title: "BQP and Reversible Computation",     part: "Lecture A: the model" },
-    { file: "algorithms.html",   num: "7",  title: "Evidence of Power: Query Algorithms", part: "Lecture B: power and limits" },
-    { file: "pspace.html",       num: "8",  title: "Warm-up: BQP ⊆ PSPACE",         part: "Lecture B: power and limits" },
-    { file: "pp.html",           num: "9",  title: "Centerpiece: BQP ⊆ PP",         part: "Lecture B: power and limits", star: true },
-    { file: "conclusion.html",   num: "10", title: "Conclusion and References",          part: "Wrapping up" },
-    { file: "glossary.html",     num: "",   title: "Glossary and Notation",              part: "Reference" }
+    { file: "index.html",        title: "Overview and Roadmap" },
+    { file: "intro.html",        title: "Why Quantum Complexity?" },
+    { file: "background.html",   title: "Background Review" },
+    { file: "states.html",       title: "Qubits and Quantum States" },
+    { file: "gates.html",        title: "Unitary Gates and Circuits" },
+    { file: "interference.html", title: "Quantum vs. Randomized Computation" },
+    { file: "bqp.html",          title: "BQP and Reversible Computation" },
+    { file: "algorithms.html",   title: "Quantum Query Algorithms" },
+    { file: "pspace.html",       title: "BQP ⊆ PSPACE" },
+    { file: "pp.html",           title: "The Main Theorem: BQP ⊆ PP" },
+    { file: "conclusion.html",   title: "Conclusion and References" },
+    { file: "glossary.html",     title: "Index of Definitions" }
   ];
+  var ICON = '<svg width="18" height="16" viewBox="0 0 36 32" fill="currentColor" aria-hidden="true"><path d="M11 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm-1.5 2C5.4 11 2 14.4 2 18.5V23h3v8h10v-8.6l6.3-6.3a2 2 0 0 0-2.8-2.8L13 18.8V11h-3.5zM14 1v3h18v17H19l-3 3h19V1H14zm8 15h7v-3h-7v3z"/></svg>';
 
   function currentFile() {
     var p = location.pathname.split("/").pop();
@@ -43,86 +45,129 @@
   }
 
   // ------------------------------------------------------------------
-  // Layout: sidebar + table of contents + pager
+  // Layout: top bar + chapter sidebar (current chapter expands to its sections) + banner + pager
   // ------------------------------------------------------------------
   function buildLayout() {
     var main = document.querySelector("main");
     if (!main) return;
+    var content = main.querySelector(".content") || main;
+
+    var bar = el("header", { id: "topbar" },
+      '<button id="menu-btn" aria-label="Open chapters">☰</button>' +
+      '<a href="index.html" class="logo" title="Overview">Q</a>' +
+      '<a href="index.html" class="brand">Quantum Complexity</a>' +
+      '<a class="nav hide-sm" href="index.html">Notes</a>' +
+      '<a class="nav hide-sm" href="glossary.html">Definitions</a>' +
+      '<a class="nav hide-sm" href="conclusion.html#references">References</a><span class="spacer"></span>');
+    document.body.insertBefore(bar, document.body.firstChild);
+    bar.querySelector("#menu-btn").addEventListener("click", function () { document.body.classList.toggle("nav-open"); });
+
     var layout = el("div", { class: "layout" });
     main.parentNode.insertBefore(layout, main);
-    var side = el("nav", { id: "sidebar", "aria-label": "Site navigation" });
+    var side = el("nav", { id: "sidebar", "aria-label": "Chapters" });
     layout.appendChild(side);
     layout.appendChild(main);
-
-    var btn = el("button", { id: "menu-btn", "aria-label": "Open navigation" }, "☰ Contents");
-    btn.addEventListener("click", function () { document.body.classList.toggle("nav-open"); });
-    document.body.appendChild(btn);
     main.addEventListener("click", function () { document.body.classList.remove("nav-open"); });
 
-    var h = '<a class="site-title" href="index.html">Quantum Computation</a>' +
-            '<div class="site-sub">A complexity theory view &middot; for 15-455 students</div>';
-    var lastPart = null, list = "";
+    // number the sections of this chapter (CSS shows the numbers; we need them for the sidebar)
+    var heads = content.querySelectorAll("h2:not(.nonum)");
+    var html = '<div class="side-head">' + ICON + "Scribe Notes</div><ul>";
     PAGES.forEach(function (p, i) {
-      if (p.part !== lastPart) {
-        if (lastPart !== null) list += "</ol>";
-        list += '<div class="part">' + p.part + "</div><ol>";
-        lastPart = p.part;
-      }
-      var cls = (i === curIdx ? "current" : "") + (p.star ? " star" : "");
-      list += '<li class="' + cls.trim() + '"><a href="' + p.file + '"><span class="num">' + (p.num || "&middot;") +
-              "</span><span>" + p.title + "</span></a>" + (i === curIdx ? '<div class="toc" id="toc"></div>' : "") + "</li>";
+      html += '<li class="chap' + (i === curIdx ? " current" : "") + '"><a href="' + p.file + '">' + ICON + "<span>" + p.title + "</span></a>";
+      if (i === curIdx && heads.length) html += '<ul class="secs" id="secs"></ul>';
+      html += "</li>";
     });
-    list += "</ol>";
-    h += list;
-    h += '<div class="side-tools"><a href="glossary.html">&#128214; All definitions (glossary)</a>' +
-         '<a href="glossary.html#notation">&#8721; Notation table</a>' +
-         '<a href="pp.html#thm-main">&#9733; Jump to the centerpiece theorem</a></div>';
-    side.innerHTML = h;
-
-    // table of contents from the h2's of this page
-    var toc = document.getElementById("toc");
-    var heads = main.querySelectorAll("h2");
-    if (toc) {
-      heads.forEach(function (hd) {
+    html += '</ul><div class="side-foot"><a href="glossary.html">Index of definitions</a><a href="glossary.html#notation">Notation table</a><a href="pp.html#thm-main">Jump to the main theorem</a></div>';
+    side.innerHTML = html;
+    var secs = document.getElementById("secs");
+    if (secs) {
+      heads.forEach(function (hd, i) {
         if (!hd.id) hd.id = slug(hd.textContent);
-        var a = el("a", { href: "#" + hd.id }, hd.innerHTML.replace(/<span class="sec">.*?<\/span>/, ""));
-        toc.appendChild(a);
+        var a = el("a", { href: "#" + hd.id }, '<span class="n">' + (i + 1) + "</span><span>" + hd.innerHTML + "</span>");
+        var li = el("li"); li.appendChild(a); secs.appendChild(li);
       });
-      if (!heads.length) toc.remove();
-      // scroll-spy
-      var links = toc.querySelectorAll("a");
+      var links = secs.querySelectorAll("a");
       var spy = function () {
-        var y = window.scrollY + 90, active = null;
-        heads.forEach(function (hd, i) { if (hd.offsetTop <= y) active = i; });
+        var y = window.scrollY + 120, active = 0;
+        heads.forEach(function (hd, i) { if (hd.getBoundingClientRect().top + window.scrollY <= y) active = i; });
         links.forEach(function (a, i) { a.classList.toggle("active", i === active); });
       };
       window.addEventListener("scroll", spy, { passive: true });
       spy();
     }
 
+    // chapter banner: icon + "Scribe:" line
+    var banner = content.querySelector(".chapter-banner");
+    if (banner) {
+      banner.insertAdjacentHTML("afterbegin", ICON.replace('width="18" height="16"', 'width="58" height="52"'));
+      if (!banner.querySelector(".byline")) banner.insertAdjacentHTML("beforeend", '<div class="byline">Scribe: ' + SCRIBE + "</div>");
+    }
+
+    // right-hand tools
+    var tools = el("div", { id: "rtools" }, '<a id="expand-all">&#8964;&nbsp; Expand all</a><a href="glossary.html">Definitions</a>');
+    document.body.appendChild(tools);
+
     // pager
-    var content = main.querySelector(".content") || main;
-    var pager = el("nav", { class: "pager", "aria-label": "Previous and next page" });
+    var pager = el("nav", { class: "pager", "aria-label": "Previous and next chapter" });
     if (curIdx > 0) {
       var pv = PAGES[curIdx - 1];
-      pager.appendChild(el("a", { class: "prev", href: pv.file }, '<span class="dir">&larr; Previous</span>' + (pv.num ? pv.num + ". " : "") + pv.title));
+      pager.appendChild(el("a", { class: "prev", href: pv.file }, '<span class="dir">&larr; Previous chapter</span>' + pv.title));
     }
     if (curIdx >= 0 && curIdx < PAGES.length - 1) {
       var nx = PAGES[curIdx + 1];
-      pager.appendChild(el("a", { class: "next", href: nx.file }, '<span class="dir">Next &rarr;</span>' + (nx.num ? nx.num + ". " : "") + nx.title));
+      pager.appendChild(el("a", { class: "next", href: nx.file }, '<span class="dir">Next chapter &rarr;</span>' + nx.title));
     }
     content.appendChild(pager);
     content.appendChild(el("footer", { class: "site-foot" },
-      "Quantum Computation: A Complexity Theory View &middot; a 15-455 (CMU Undergraduate Complexity Theory) project. " +
-      'Sources for every result are listed on the <a href="conclusion.html#references">references</a> page.'));
+      "Quantum Computation: A Complexity Theory View &middot; a CS455 (CMU Undergraduate Complexity Theory) project. " +
+      'Sources for every result are listed under <a href="conclusion.html#references">References</a>.'));
 
     // make each box label a self-link
-    main.querySelectorAll(".box[id] > .box-title .label").forEach(function (lab) {
+    content.querySelectorAll(".box[id] > .box-title .label").forEach(function (lab) {
       var box = lab.closest(".box");
-      var a = el("a", { href: "#" + box.id, title: "Link to this item", style: "color:inherit;text-decoration:none" });
+      var a = el("a", { href: "#" + box.id, title: "Link to this block", style: "color:inherit;text-decoration:none" });
       lab.parentNode.insertBefore(a, lab);
       a.appendChild(lab);
     });
+  }
+
+  // ------------------------------------------------------------------
+  // Collapsible proofs and solutions (collapsed by default, like the course notes)
+  // ------------------------------------------------------------------
+  function setupProofs() {
+    var proofs = document.querySelectorAll(".content .proof");
+    proofs.forEach(function (pf) {
+      var lab = pf.querySelector(":scope > .proof-label");
+      var text = pf.getAttribute("data-label") || (lab ? lab.textContent.replace(/[.:]\s*$/, "") : "Proof");
+      if (lab) lab.remove();
+      var body = el("div", { class: "proof-body" });
+      while (pf.firstChild) body.appendChild(pf.firstChild);
+      var btn = el("button", { class: "proof-toggle", type: "button", "aria-expanded": "false" }, text);
+      pf.appendChild(btn); pf.appendChild(body);
+      pf.classList.add("collapsed");
+      btn.addEventListener("click", function () {
+        pf.classList.toggle("collapsed");
+        btn.setAttribute("aria-expanded", String(!pf.classList.contains("collapsed")));
+      });
+    });
+    var ea = document.getElementById("expand-all");
+    if (ea) {
+      if (!proofs.length) { ea.style.display = "none"; return; }
+      ea.addEventListener("click", function () {
+        var anyCollapsed = document.querySelector(".content .proof.collapsed");
+        document.querySelectorAll(".content .proof").forEach(function (pf) { pf.classList.toggle("collapsed", !anyCollapsed); });
+        ea.innerHTML = anyCollapsed ? "&#8963;&nbsp; Collapse all" : "&#8964;&nbsp; Expand all";
+      });
+    }
+    // open a proof if the URL points inside it
+    var openFor = function () {
+      if (!location.hash) return;
+      var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      var pf = t && t.closest && t.closest(".proof");
+      if (pf) pf.classList.remove("collapsed");
+    };
+    openFor();
+    window.addEventListener("hashchange", openFor);
   }
 
   // ------------------------------------------------------------------
@@ -138,6 +183,7 @@
     "\\Z": "\\mathbb{Z}",
     "\\cG": "\\mathcal{G}",
     "\\poly": "\\mathrm{poly}",
+    "\\Pr": "\\mathop{\\mathbf{Pr}}",
     "\\CNOT": "\\mathrm{CNOT}",
     "\\TOF": "\\mathrm{TOF}",
     "\\Follow": "\\textsc{Follow}"
@@ -324,7 +370,7 @@
         pv.innerHTML = "";
         if (fromFile) {
           var pg = PAGES.find(function (p) { return p.file === fromFile; });
-          pv.appendChild(el("div", { class: "pv-src" }, "From " + (pg ? (pg.num ? "Page " + pg.num + ": " : "") + pg.title : fromFile) + " (click the link to go there)"));
+          pv.appendChild(el("div", { class: "pv-src" }, "From the chapter \u201c" + (pg ? pg.title : fromFile) + "\u201d (click the link to go there)"));
         }
         if (node.tagName === "DT") {
           var dl = el("dl", { class: "gloss" });
@@ -343,7 +389,7 @@
     document.addEventListener("mouseover", function (e) {
       var a = e.target.closest && e.target.closest("a[href*='#']");
       if (e.target.closest && e.target.closest("#preview")) { clearTimeout(hideT); return; }
-      if (!a || a.closest("#sidebar") || a.closest(".pager") || a.closest(".box-title")) return;
+      if (!a || a.closest("#sidebar") || a.closest("#topbar") || a.closest("#rtools") || a.closest(".pager") || a.closest(".box-title")) return;
       clearTimeout(hideT); clearTimeout(showT);
       curLink = a;
       showT = setTimeout(function () { show(a); }, 220);
@@ -368,6 +414,7 @@
 
   function init() {
     buildLayout();
+    setupProofs();
     document.querySelectorAll("figure.circuit").forEach(drawCircuit);
     renderMath(document.body);
     setupPreviews();

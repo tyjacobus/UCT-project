@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3. Qubits and Quantum States | Quantum Computation</title>
+  <title>Qubits and Quantum States | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,19 +14,12 @@
 <body>
 <main><div class="content">
 
-<p class="page-kicker">Page 3 &middot; Lecture A: the model</p>
-<h1>Qubits and Quantum States</h1>
-<p class="subtitle">The "memory" of a quantum computer, and what you can and cannot read out of it.</p>
+<header class="chapter-banner"><h1>Qubits and Quantum States</h1></header>
 
-<div class="place">
-  <b>Where this page sits.</b> This is the first page of the model. It defines the <em>states</em> of a quantum computer; <a href="gates.html">Page 4</a> defines the <em>operations</em> on them.
-  <ul>
-    <li><b>You will learn:</b> qubits and Dirac notation, measurement, multi-qubit states, entanglement, and why $m$ qubits take $2^m$ numbers to describe.</li>
-    <li><b>Used later:</b> the notation $\ket z$ and $\braket{z}{\psi}$ (Definition 3.4), and the measurement rule (Definition 3.6) on every later page.</li>
-  </ul>
-</div>
+<p>In this chapter we model the memory of a quantum computer. Recall from Probabilistic Time Complexity 1 that a randomized computation can be described by a probability distribution over its configurations. A quantum computation is described by something similar, a vector of <em>amplitudes</em>. Here we define these vectors and explain what we are allowed to learn from them. The next chapter defines the operations on them.</p>
+<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>What is a qubit, and what does measuring it tell us?</p></div><div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>Why does describing $m$ qubits seem to require $2^m$ numbers?</p></div>
 
-<h2 id="qubit"><span class="sec">&sect;1</span>From bits to qubits</h2>
+<h2 id="qubit">From bits to qubits</h2>
 <p>
 It helps to describe a classical bit in a slightly roundabout way. A <em>random</em> bit that is $0$ with probability $p_0$ and $1$ with probability $p_1$
 can be written as a vector
@@ -36,7 +29,7 @@ A deterministic bit is the special case $(1,0)^T$ or $(0,1)^T$. A qubit is what 
 </p>
 
 <div class="box def" id="def-qubit">
-  <div class="box-title"><span class="label">Definition 3.1</span> <span class="name">(Qubit; Dirac notation)</span></div>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">(Qubit; Dirac notation)</span></div>
   <p>A <strong>qubit</strong> (the state of a single quantum bit) is a unit vector in $\C^2$. We name the two standard basis vectors
   $$\ket 0 = \begin{pmatrix}1\\0\end{pmatrix}, \qquad \ket 1 = \begin{pmatrix}0\\1\end{pmatrix},$$
   so a general qubit is
@@ -47,49 +40,49 @@ A deterministic bit is the special case $(1,0)^T$ or $(0,1)^T$. A qubit is what 
 <p>We can never look at the amplitudes directly. All we can do is <em>measure</em>:</p>
 
 <div class="box def" id="def-measure1">
-  <div class="box-title"><span class="label">Definition 3.2</span> <span class="name">(Measuring a qubit: the Born rule)</span></div>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">(Measuring a qubit: the Born rule)</span></div>
   <p>Measuring the qubit $\alpha\ket0+\beta\ket1$ gives outcome $0$ with probability $|\alpha|^2$ and outcome $1$ with probability $|\beta|^2$.
   Afterwards the qubit is in state $\ket 0$ or $\ket 1$ respectively, matching the outcome. (Measuring "collapses" the state.)</p>
 </div>
 
 <div class="box ex" id="ex-plusminus">
-  <div class="box-title"><span class="label">Example 3.3</span> <span class="name">($\ket+$ and $\ket-$)</span></div>
+  <div class="box-title"><span class="label">Example</span> <span class="name">($\ket+$ and $\ket-$)</span></div>
   <p>Two qubit states will come up constantly:
   $$\ket+ = \tfrac{1}{\sqrt2}\ket0 + \tfrac1{\sqrt2}\ket1, \qquad \ket- = \tfrac1{\sqrt2}\ket0 - \tfrac1{\sqrt2}\ket1.$$
   Measuring either one gives $0$ or $1$ with probability $\big(\tfrac1{\sqrt2}\big)^2 = \tfrac12$ each. As far as a direct measurement can tell, both are
-  just fair coins. But they are <strong>different states</strong>, and on <a href="gates.html#ex-hadamard">Page 4</a> we'll apply one gate ($H$) that turns $\ket+$ into $\ket0$ and $\ket-$ into $\ket1$,
+  just fair coins. But they are <strong>different states</strong>, and in <a href="gates.html#ex-hadamard">the <em>Unitary Gates and Circuits</em> chapter</a> we'll apply one gate ($H$) that turns $\ket+$ into $\ket0$ and $\ket-$ into $\ket1$,
   so the difference becomes perfectly visible. The sign of an amplitude is invisible to a measurement, but it is not meaningless:
   it changes what happens <em>later</em>. That is the whole game.</p>
 </div>
 
 <div class="box rem" id="rem-phase">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(global sign)</span></div>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(Global sign)</span></div>
   <p>Multiplying an entire state by $-1$ (or by any complex number of modulus 1) changes nothing observable, now or later, because every measurement probability is a squared magnitude
   and every later operation is linear. So $\ket\psi$ and $-\ket\psi$ are physically the same. Only <em>relative</em> signs between amplitudes matter, as in $\ket+$ versus $\ket-$.</p>
 </div>
 
-<h2 id="many"><span class="sec">&sect;2</span>Many qubits</h2>
+<h2 id="many">Many qubits</h2>
 <p>
 A classical $m$-bit register holds one string $z\in\{0,1\}^m$. A random register is a probability distribution over the $2^m$ strings. A quantum register is an
 amplitude vector over the $2^m$ strings:
 </p>
 
 <div class="box def" id="def-state">
-  <div class="box-title"><span class="label">Definition 3.4</span> <span class="name">($m$-qubit state; amplitude notation)</span></div>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">($m$-qubit state; amplitude notation)</span></div>
   <p>An <strong>$m$-qubit state</strong> is a unit vector in $\C^{2^m}$ whose coordinates are indexed by strings $z\in\{0,1\}^m$ (in lexicographic order).
   The standard basis vector for $z$ is written $\ket z$, and is called a <strong>computational basis state</strong>. A general state is
   $$\ket\psi = \sum_{z\in\{0,1\}^m}\alpha_z\ket z,\qquad \sum_z|\alpha_z|^2 = 1.$$
   We write $\braket{z}{\psi} := \alpha_z$ for <strong>the amplitude of $\ket z$ in $\ket\psi$</strong>. We number the qubits $1,\dots,m$ from left to right, and say that in the basis state
   $\ket z$, qubit $j$ holds the bit $z_j$.</p>
 </div>
-<p class="small muted">(Formally, $\bra z$ is the row vector $\ket z^\dagger$, so $\braket z\psi$ is the inner product of Definition 2.1. On this site you only need "the $z$-th coordinate.")</p>
+<p class="small muted">(Formally, $\bra z$ is the row vector $\ket z^\dagger$, so $\braket z\psi$ is the inner product of <a href="background.html#def-inner">the definition of inner product and norm</a>. On these notes you only need "the $z$-th coordinate.")</p>
 
 <p>
-How does this relate to single qubits? By the tensor product (<a href="background.html#def-tensor">Definition 2.2</a>). Since tensoring basis vectors gives basis vectors in lexicographic order
-(<a href="background.html#fact-tensor">Fact 2.3</a>), we get:
+How does this relate to single qubits? By the tensor product (see <a href="background.html#def-tensor">definition</a>). Since tensoring basis vectors gives basis vectors in lexicographic order
+(see <a href="background.html#fact-tensor">fact</a>), we get:
 </p>
 <div class="box fact" id="fact-product">
-  <div class="box-title"><span class="label">Fact 3.5</span> <span class="name">(Side by side = tensor product)</span></div>
+  <div class="box-title"><span class="label">Fact</span> <span class="name">(Side by side = tensor product)</span></div>
   <p>$\ket{z_1}\otimes\ket{z_2}\otimes\cdots\otimes\ket{z_m} = \ket{z_1z_2\cdots z_m}$. More generally, if qubits $1..k$ are in state $\ket\psi$ and qubits $k{+}1..m$ are independently in state $\ket\phi$,
   the whole register is in state $\ket\psi\otimes\ket\phi$. We often drop the $\otimes$ and write $\ket\psi\ket\phi$, so for example $\ket x\ket{0^{m-n}} = \ket{x0^{m-n}}$.</p>
 </div>
@@ -100,7 +93,7 @@ How does this relate to single qubits? By the tensor product (<a href="backgroun
 </div>
 
 <div class="box def" id="def-measure">
-  <div class="box-title"><span class="label">Definition 3.6</span> <span class="name">(Measuring several qubits, or just one)</span></div>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">(Measuring several qubits, or just one)</span></div>
   <p>Let $\ket\psi = \sum_z \alpha_z\ket z$.</p>
   <ul>
     <li>Measuring <strong>all</strong> $m$ qubits gives outcome $z$ with probability $|\alpha_z|^2$.</li>
@@ -113,21 +106,21 @@ How does this relate to single qubits? By the tensor product (<a href="backgroun
 <p>The second rule is consistent with the first: measuring qubit $j$ alone gives $1$ with the same probability as "measure everything and look at bit $j$."</p>
 
 <div class="box ex" id="ex-measure2">
-  <div class="box-title"><span class="label">Example 3.7</span></div>
+  <div class="box-title"><span class="label">Example</span> <span class="name">(Measuring one qubit at a time)</span></div>
   <p>Let $\ket\psi = \tfrac1{\sqrt3}\big(\ket{00}+\ket{01}+\ket{11}\big)$. Measuring both qubits gives $00$, $01$, $11$ with probability $1/3$ each, and never $10$.
   Measuring only qubit 1 gives $1$ with probability $|\alpha_{10}|^2+|\alpha_{11}|^2 = 0+\tfrac13 = \tfrac13$. Measuring only qubit 2 gives $1$ with probability $|\alpha_{01}|^2+|\alpha_{11}|^2 = \tfrac23$.</p>
 </div>
 
-<h2 id="entanglement"><span class="sec">&sect;3</span>Entanglement</h2>
+<h2 id="entanglement">Entanglement</h2>
 <p>Not every multi-qubit state is built by placing single qubits side by side.</p>
 <div class="box def" id="def-entangled">
-  <div class="box-title"><span class="label">Definition 3.8</span> <span class="name">(Product states and entanglement)</span></div>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">(Product states and entanglement)</span></div>
   <p>A two-qubit state $\ket\psi$ is a <strong>product state</strong> if $\ket\psi = \ket a\otimes\ket b$ for some single-qubit states $\ket a,\ket b$. Otherwise it is <strong>entangled</strong>.
   (The same definition applies to any split of a register into two parts.)</p>
 </div>
 
 <div class="box prop" id="prop-bell">
-  <div class="box-title"><span class="label">Proposition 3.9</span> <span class="name">(The Bell state is entangled)</span></div>
+  <div class="box-title"><span class="label">Proposition</span> <span class="name">(The Bell state is entangled)</span></div>
   <p>The <strong>Bell state</strong> $\ket{\Phi^+} = \tfrac1{\sqrt2}\ket{00} + \tfrac1{\sqrt2}\ket{11}$ is entangled.</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
@@ -139,51 +132,46 @@ How does this relate to single qubits? By the tensor product (<a href="backgroun
 </div>
 <p>
 What does entanglement look like operationally? Measuring both qubits of $\ket{\Phi^+}$ gives $00$ or $11$, each with probability $\tfrac12$. The two bits are random but <em>perfectly correlated</em>,
-and neither qubit on its own can be described by a single-qubit state. On <a href="gates.html#ex-bell">Page 4</a> we'll build $\ket{\Phi^+}$ from $\ket{00}$ with two gates.
-On <a href="interference.html#ex-whichpath">Page 5</a> we'll see the downside of entanglement for algorithm design: if your answer qubit is entangled with leftover "garbage," it can no longer interfere.
+and neither qubit on its own can be described by a single-qubit state. In <a href="gates.html#ex-bell">the <em>Unitary Gates and Circuits</em> chapter</a> we'll build $\ket{\Phi^+}$ from $\ket{00}$ with two gates.
+In <a href="interference.html#ex-whichpath">the <em>Quantum vs. Randomized Computation</em> chapter</a> we'll see the downside of entanglement for algorithm design: if your answer qubit is entangled with leftover "garbage," it can no longer interfere.
 </p>
 
-<h2 id="exponential"><span class="sec">&sect;4</span>Exponentially many amplitudes</h2>
+<h2 id="exponential">Exponentially many amplitudes</h2>
 <div class="box rem" id="rem-exp">
-  <div class="box-title"><span class="label">Remark 3.10</span> <span class="name">($2^m$ numbers, but only $m$ bits out)</span></div>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">($2^m$ numbers, but only $m$ bits out)</span></div>
   <p>A product state of $m$ qubits is described by $2m$ amplitudes. A general (entangled) state needs all $2^m$. With $m=300$ that is more numbers than there are atoms in the
   observable universe (about $10^{80}$). This is Feynman's observation: writing down the state of a quantum system on a classical computer seems to take exponential resources.</p>
   <p>Two caveats keep this from being "exponential power for free":</p>
   <ol>
     <li><strong>Output is tiny.</strong> A measurement returns a single $m$-bit string, sampled at random. You can't read the $2^m$ amplitudes. (Holevo's theorem makes this precise:
       $m$ qubits can be used to transmit at most $m$ classical bits of information; see Nielsen&ndash;Chuang, &sect;12.1.)</li>
-    <li><strong>Simulation doesn't need to store everything.</strong> On <a href="pspace.html">Page 8</a> we compute any single measurement probability <em>without</em> ever writing down the
-      $2^m$-entry vector, using only polynomial space. That is the first step toward the centerpiece theorem.</li>
+    <li><strong>Simulation doesn't need to store everything.</strong> In <a href="pspace.html">the <em>BQP &sube; PSPACE</em> chapter</a> we compute any single measurement probability <em>without</em> ever writing down the
+      $2^m$-entry vector, using only polynomial space. That is the first step toward the Main Theorem.</li>
   </ol>
 </div>
 
 <h2 id="exercises">Exercises</h2>
-<div class="exercise-q">
-  <span class="label">Exercise 3.A</span> Let $\ket\psi = \tfrac12\ket{00} - \tfrac12\ket{01} + \tfrac{1}{\sqrt2}\ket{11}$. Check that it is a unit vector. What is the probability that measuring qubit 2 gives $1$?
-  <details><summary>Show solution</summary><p>$\tfrac14+\tfrac14+\tfrac12 = 1$, so it is a unit vector. $\Pr[\text{qubit 2 reads }1] = |\alpha_{01}|^2 + |\alpha_{11}|^2 = \tfrac14+\tfrac12 = \tfrac34$. The minus sign plays no role in this measurement.</p></details>
-</div>
-<div class="exercise-q">
-  <span class="label">Exercise 3.B</span> Show that a two-qubit state $\sum_{z}\alpha_z\ket z$ is a product state if and only if $\alpha_{00}\alpha_{11} = \alpha_{01}\alpha_{10}$.
-  Use this to decide whether $\tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})$ and $\tfrac12(\ket{00}+\ket{01}+\ket{10}-\ket{11})$ are entangled.
-  <details><summary>Show solution</summary>
-    <p>If $\ket\psi = \ket a\otimes\ket b$ then $\alpha_{00}\alpha_{11} = a_0b_0a_1b_1 = \alpha_{01}\alpha_{10}$.
+<div class="box exercise" id="exer-3a">
+  <div class="box-title"><span class="label">Exercise</span></div>
+  <p>Let $\ket\psi = \tfrac12\ket{00} - \tfrac12\ket{01} + \tfrac{1}{\sqrt2}\ket{11}$. Check that it is a unit vector. What is the probability that measuring qubit 2 gives $1$?</p>
+  <div class="proof" data-label="Solution"><p>$\tfrac14+\tfrac14+\tfrac12 = 1$, so it is a unit vector. $\Pr[\text{qubit 2 reads }1] = |\alpha_{01}|^2 + |\alpha_{11}|^2 = \tfrac14+\tfrac12 = \tfrac34$. The minus sign plays no role in this measurement.</p></div>
+</div><div class="box exercise" id="exer-3b">
+  <div class="box-title"><span class="label">Exercise</span></div>
+  <p>Show that a two-qubit state $\sum_{z}\alpha_z\ket z$ is a product state if and only if $\alpha_{00}\alpha_{11} = \alpha_{01}\alpha_{10}$.
+  Use this to decide whether $\tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})$ and $\tfrac12(\ket{00}+\ket{01}+\ket{10}-\ket{11})$ are entangled.</p>
+  <div class="proof" data-label="Solution"><p>If $\ket\psi = \ket a\otimes\ket b$ then $\alpha_{00}\alpha_{11} = a_0b_0a_1b_1 = \alpha_{01}\alpha_{10}$.
     Conversely, suppose $\alpha_{00}\alpha_{11}=\alpha_{01}\alpha_{10}$. Then the matrix $\begin{pmatrix}\alpha_{00}&\alpha_{01}\\ \alpha_{10}&\alpha_{11}\end{pmatrix}$ has determinant $0$, so it has rank $1$
     (it is nonzero because $\ket\psi$ is a unit vector). So it equals $a\,b^T$ for some vectors $a,b$, which means $\alpha_{ij} = a_ib_j$. Rescale so that $\|a\| = 1$; then
-    $\|b\| = 1$ too, by Fact 2.3(4).</p>
+    $\|b\| = 1$ too, by <a href="background.html#fact-tensor">the property (4) of the tensor product</a>.</p>
     <p>The first state has $\tfrac14 = \tfrac14$, so it is a product state; in fact it is $\ket+\otimes\ket+$. The second has $\alpha_{00}\alpha_{11} = -\tfrac14 \ne \tfrac14 = \alpha_{01}\alpha_{10}$, so it is
-    <strong>entangled</strong>, even though it differs from a product state by a single sign. We'll meet it again in <a href="interference.html#ex-whichpath">Example 5.5</a>.</p>
-  </details>
-</div>
-
-<div class="box takeaways" id="takeaways">
-  <div class="box-title"><span class="label">Takeaways</span></div>
-  <ul>
+    <strong>entangled</strong>, even though it differs from a product state by a single sign. We'll meet it again in <a href="interference.html#ex-whichpath">the which-path example</a>.</p></div>
+</div><h2 id="summary">Summary</h2>
+<ul>
     <li>An $m$-qubit state is a unit vector of $2^m$ amplitudes $\braket z\psi$, one per classical string $z$.</li>
     <li>Measurement turns amplitudes into probabilities by squaring magnitudes: $\Pr[z] = |\braket z\psi|^2$.</li>
     <li>Signs are invisible to measurement right now ($\ket+$ vs. $\ket-$), but they change what happens later.</li>
     <li>Entangled states (such as the Bell state) are not products of single-qubit states. Describing general states takes $2^m$ numbers, but you only ever get $m$ bits out.</li>
   </ul>
-</div>
 
 </div></main>
 </body>

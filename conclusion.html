@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>10. Conclusion and References | Quantum Computation</title>
+  <title>Conclusion and References | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,99 +14,93 @@
 <body>
 <main><div class="content">
 
-<p class="page-kicker">Page 10 &middot; Wrapping up</p>
-<h1>Conclusion and References</h1>
-<p class="subtitle">What we proved, the ideas worth remembering, what is still open, and where everything came from.</p>
+<header class="chapter-banner"><h1>Conclusion and References</h1></header>
 
-<div class="place">
-  <b>Where this page sits.</b> This is the summary of the whole site, a list of everything we deliberately left out (with sources), and the bibliography.
-</div>
+<p>In this final chapter we summarize what we proved, list the main open problems, collect every detail we deliberately omitted together with a source for it, and give the full bibliography.</p>
 
-<h2 id="proved"><span class="sec">&sect;1</span>What we proved</h2>
+
+<h2 id="proved">What we proved</h2>
 <div class="chain" aria-label="P is contained in BPP, contained in BQP, contained in PP, contained in PSPACE">
   <div class="cls">$\mathsf{P}$</div>
-  <div class="sub"><span class="sym">$\subseteq$</span>455</div>
+  <div class="sub"><span class="sym">$\subseteq$</span>CS455</div>
   <div class="cls">$\mathsf{BPP}$</div>
-  <div class="sub"><span class="sym">$\subseteq$</span><a href="bqp.html#thm-bpp-bqp">Thm 6.7</a></div>
+  <div class="sub"><span class="sym">$\subseteq$</span><a href="bqp.html#thm-bpp-bqp">theorem</a></div>
   <div class="cls q">$\mathsf{BQP}$</div>
-  <div class="sub star"><span class="sym">$\subseteq$</span><a href="pp.html#thm-main">Thm 9.1 &#9733;</a></div>
+  <div class="sub star"><span class="sym">$\subseteq$</span><a href="pp.html#thm-main">Main Theorem</a></div>
   <div class="cls">$\mathsf{PP}$</div>
-  <div class="sub"><span class="sym">$\subseteq$</span><a href="background.html#prop-pp-pspace">Prop 2.6</a></div>
+  <div class="sub"><span class="sym">$\subseteq$</span><a href="background.html#prop-pp-pspace">proposition</a></div>
   <div class="cls">$\mathsf{PSPACE}$</div>
 </div>
 <div class="table-wrap"><table>
   <tr><th>Result</th><th>Where</th><th>Key idea</th></tr>
-  <tr><td>$\mathsf{P}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-p-bqp">Theorem 6.6</a></td><td>Toffoli makes circuits reversible; compute, copy, uncompute</td></tr>
-  <tr><td>$\mathsf{BPP}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-bpp-bqp">Theorem 6.7</a></td><td>A Hadamard on a fresh qubit is a coin, if its branches never interfere</td></tr>
-  <tr><td>Deutsch&ndash;Jozsa, Bernstein&ndash;Vazirani</td><td><a href="algorithms.html#thm-dj">Theorems 7.4</a>, <a href="algorithms.html#thm-bv">7.6</a></td><td>Phase kickback + Hadamard transform: one query reveals a global property</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td><td><a href="pspace.html#prop-exp">Proposition 8.1</a></td><td>Store the state (Schr&ouml;dinger)</td></tr>
-  <tr><td>Path-sum lemma</td><td><a href="pspace.html#lem-pathsum">Lemma 8.3</a></td><td>Amplitude = $2^{-h/2}\times$ (signed count of Hadamard paths)</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td><td><a href="pspace.html#thm-pspace">Theorem 8.6</a></td><td>Add paths one at a time, reusing space (Feynman)</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PP}$ &#9733;</td><td><a href="pp.html#thm-main">Theorem 9.1</a></td><td>Square = pairs of paths; $\mathsf{PP}$ decides the sign of a signed count</td></tr>
-  <tr><td>$\mathsf{BPP}\neq\mathsf{BQP}\Rightarrow\mathsf{P}\neq\mathsf{PSPACE}$</td><td><a href="pp.html#cor-consequences">Corollary 9.5</a></td><td>The sandwich leaves no room</td></tr>
+  <tr><td>$\mathsf{P}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-p-bqp">Theorem</a> in <em>BQP and Reversible Computation</em></td><td>Toffoli makes circuits reversible; compute, copy, uncompute</td></tr>
+  <tr><td>$\mathsf{BPP}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-bpp-bqp">Theorem</a> in <em>BQP and Reversible Computation</em></td><td>A Hadamard on a fresh qubit is a coin, if its branches never interfere</td></tr>
+  <tr><td>Deutsch&ndash;Jozsa, Bernstein&ndash;Vazirani</td><td><a href="algorithms.html#thm-dj">Theorems</a> in <em>Quantum Query Algorithms</em></td><td>Phase kickback + Hadamard transform: one query reveals a global property</td></tr>
+  <tr><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td><td><a href="pspace.html#prop-exp">Proposition</a> in <em>BQP &sube; PSPACE</em></td><td>Store the state (Schr&ouml;dinger)</td></tr>
+  <tr><td>Path-sum lemma</td><td><a href="pspace.html#lem-pathsum">Lemma</a> in <em>BQP &sube; PSPACE</em></td><td>Amplitude = $2^{-h/2}\times$ (signed count of Hadamard paths)</td></tr>
+  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td><td><a href="pspace.html#thm-pspace">Theorem</a> in <em>BQP &sube; PSPACE</em></td><td>Add paths one at a time, reusing space (Feynman)</td></tr>
+  <tr><td>$\mathsf{BQP}\subseteq\mathsf{PP}$ &#9733;</td><td><a href="pp.html#thm-main">Main Theorem</a></td><td>Square = pairs of paths; $\mathsf{PP}$ decides the sign of a signed count</td></tr>
+  <tr><td>$\mathsf{BPP}\neq\mathsf{BQP}\Rightarrow\mathsf{P}\neq\mathsf{PSPACE}$</td><td><a href="pp.html#cor-consequences">Corollary</a> in <em>The Main Theorem</em></td><td>The sandwich leaves no room</td></tr>
 </table></div>
 
-<h2 id="ideas"><span class="sec">&sect;2</span>Five ideas to remember</h2>
-<div class="box takeaways" id="takeaways">
-  <div class="box-title"><span class="label">The site in five ideas</span></div>
-  <ol>
-    <li><strong>Quantum = randomized with signs.</strong> Replace probabilities by amplitudes that can be negative, and stochastic matrices by unitary ones. Nothing else changes (<a href="interference.html">Page 5</a>).</li>
-    <li><strong>Interference is cancellation of paths, and it needs a shared endpoint.</strong> Any record of which path was taken, such as garbage or a measurement, destroys it. That is why we uncompute (<a href="interference.html#rem-same-endpoint">Remark 5.6</a>, <a href="bqp.html#lem-bennett">Lemma 6.5</a>).</li>
-    <li><strong>Classical gates don't branch; Hadamards do.</strong> So a path is a choice string $b\in\{0,1\}^h$, and following it is a classical polynomial-time computation (<a href="pspace.html#def-follow">Definition 8.2</a>).</li>
-    <li><strong>Amplitudes are signed counts, probabilities are signed counts of pairs.</strong> That makes quantum computation a special case of counting (<a href="pspace.html#cor-signed">Corollary 8.4</a>, <a href="pp.html#lem-twopath">Lemma 9.3</a>).</li>
+<h2 id="ideas">Five ideas to remember</h2>
+<ol>
+    <li><strong>Quantum = randomized with signs.</strong> Replace probabilities by amplitudes that can be negative, and stochastic matrices by unitary ones. Nothing else changes (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>).</li>
+    <li><strong>Interference is cancellation of paths, and it needs a shared endpoint.</strong> Any record of which path was taken, such as garbage or a measurement, destroys it. That is why we uncompute (<a href="interference.html#rem-same-endpoint">the interference principle</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>).</li>
+    <li><strong>Classical gates don't branch; Hadamards do.</strong> So a path is a choice string $b\in\{0,1\}^h$, and following it is a classical polynomial-time computation (see <a href="pspace.html#def-follow">definition</a>).</li>
+    <li><strong>Amplitudes are signed counts, probabilities are signed counts of pairs.</strong> That makes quantum computation a special case of counting (<a href="pspace.html#cor-signed">the Signed Counts Corollary</a>, <a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</li>
     <li><strong>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$.</strong> Quantum computers are at least as strong as randomized ones and at most as strong as counting machines. Proving them strictly stronger would separate $\mathsf{P}$ from $\mathsf{PSPACE}$.</li>
   </ol>
-</div>
 
-<h2 id="open"><span class="sec">&sect;3</span>What is still open</h2>
+<h2 id="open">What is still open</h2>
 <ul>
-  <li><strong>Is $\mathsf{BPP}\ne\mathsf{BQP}$?</strong> Widely believed, because of Shor's algorithm and the oracle separations of <a href="algorithms.html#fact-separations">Fact 7.8</a>. But by Corollary 9.5, a proof would imply $\mathsf{P}\neq\mathsf{PSPACE}$.</li>
+  <li><strong>Is $\mathsf{BPP}\ne\mathsf{BQP}$?</strong> Widely believed, because of Shor's algorithm and the <a href="algorithms.html#fact-separations">oracle separations</a>. But by <a href="pp.html#cor-consequences">the Consequences Corollary</a>, a proof would imply $\mathsf{P}\neq\mathsf{PSPACE}$.</li>
   <li><strong>Is $\mathsf{NP}\subseteq\mathsf{BQP}$?</strong> Believed false. The BBBV lower bound shows that "black-box" search can only be sped up quadratically, so a polynomial-time quantum algorithm for SAT would have to exploit structure in a way nobody knows how to do.</li>
-  <li><strong>Is $\mathsf{BQP}\subseteq\mathsf{PH}$?</strong> Unknown. False relative to an oracle (Raz&ndash;Tal). Our best general upper bounds are counting classes like $\mathsf{PP}$ (and the smaller $\mathsf{AWPP}$, <a href="pp.html#fact-beyond">Fact 9.6</a>).</li>
+  <li><strong>Is $\mathsf{BQP}\subseteq\mathsf{PH}$?</strong> Unknown. False relative to an oracle (Raz&ndash;Tal). Our best general upper bounds are counting classes like $\mathsf{PP}$ (and the smaller $\mathsf{AWPP}$, <a href="pp.html#fact-beyond">the facts on further results</a>).</li>
   <li><strong>Sampling and "quantum advantage" experiments.</strong> For <em>sampling</em> problems (output a sample from a distribution, rather than decide a language), there is stronger complexity-theoretic evidence. If a classical machine could sample exactly from the output distributions of certain simple quantum circuits, then the polynomial hierarchy would collapse.
-    The argument uses $\mathsf{PostBQP}=\mathsf{PP}$ (Fact 9.6) and Toda's theorem. See Aaronson&ndash;Arkhipov (2011) and Bremner&ndash;Jozsa&ndash;Shepherd (2011). This is the theory behind recent "quantum advantage" experiments.</li>
+    The argument uses $\mathsf{PostBQP}=\mathsf{PP}$ (see <a href="pp.html#fact-beyond">fact</a>) and Toda's theorem. See Aaronson&ndash;Arkhipov (2011) and Bremner&ndash;Jozsa&ndash;Shepherd (2011). This is the theory behind recent "quantum advantage" experiments.</li>
   <li><strong>Can large quantum computers be built?</strong> The <em>threshold theorem</em> of quantum error correction says that a polynomial-size quantum computation can be carried out reliably on noisy hardware, provided the noise per gate is below a constant threshold.
     So in principle the answer is yes, and the remaining challenge is engineering (Nielsen&ndash;Chuang, Ch. 10).</li>
 </ul>
 
-<h2 id="omitted"><span class="sec">&sect;4</span>Everything we omitted, and where to find it</h2>
-<p>The proofs of the main results on this site are complete. The following supporting facts were stated without proof, because they are either standard 455 material or beyond two lectures' scope:</p>
+<h2 id="omitted">Everything we omitted, and where to find it</h2>
+<p>The proofs of the main results on these notes are complete. The following supporting facts were stated without proof, because they are either standard CS455 material or beyond two lectures' scope:</p>
 <div class="table-wrap"><table>
   <tr><th>Omitted item</th><th>Used for</th><th>Source</th></tr>
-  <tr><td>TMs &rarr; uniform circuits (<a href="background.html#fact-tm-circuits">Fact 2.8</a>)</td><td>Theorems 6.6, 6.7</td><td>455 (Cook&ndash;Levin); Sipser &sect;9.3; Arora&ndash;Barak Ch. 6 [S13, AB09]</td></tr>
-  <tr><td>Hadamard + Toffoli is universal (<a href="gates.html#fact-universal">Fact 4.12</a>)</td><td>Justifying our choice of gate set; Remark 6.3</td><td>[Shi03, Aha03, BV97, DN06]</td></tr>
-  <tr><td>Deferred measurement</td><td>Measuring only at the end (Pages 4, 6)</td><td>[NC10, &sect;4.4]</td></tr>
-  <tr><td>Error reduction for $\mathsf{BQP}$ (<a href="bqp.html#rem-robust">Remark 6.3</a>)</td><td>Robustness of the definition (not used in any proof)</td><td>[BV97; AB09, Ch. 10]</td></tr>
-  <tr><td>Holevo's theorem (<a href="states.html#rem-exp">Remark 3.10</a>)</td><td>Intuition only</td><td>[NC10, &sect;12.1]</td></tr>
-  <tr><td>Simon, Shor, Grover, BBBV, Raz&ndash;Tal (<a href="algorithms.html#fact-separations">Fact 7.8</a>)</td><td>Context and evidence</td><td>[Sim97, Sho97, Gro96, BBBV97, RT22]</td></tr>
-  <tr><td>Fortnow&ndash;Rogers, Aaronson (<a href="pp.html#fact-beyond">Fact 9.6</a>)</td><td>Context beyond Theorem 9.1</td><td>[FR99, Aar05, Wat08]</td></tr>
+  <tr><td>TMs &rarr; uniform circuits (see <a href="background.html#fact-tm-circuits">theorem</a>)</td><td>$\mathsf{P},\mathsf{BPP}\subseteq\mathsf{BQP}$</td><td>CS455 (Cook&ndash;Levin); Sipser &sect;9.3; Arora&ndash;Barak Ch. 6 [S13, AB09]</td></tr>
+  <tr><td>Hadamard + Toffoli is universal (see <a href="gates.html#fact-universal">theorem</a>)</td><td>Justifying our choice of gate set; <a href="bqp.html#rem-robust">the robustness remark</a></td><td>[Shi03, Aha03, BV97, DN06]</td></tr>
+  <tr><td>Deferred measurement</td><td>Measuring only at the end (gates and $\mathsf{BQP}$ chapters)</td><td>[NC10, &sect;4.4]</td></tr>
+  <tr><td>Error reduction for $\mathsf{BQP}$ (see <a href="bqp.html#rem-robust">remark</a>)</td><td>Robustness of the definition (not used in any proof)</td><td>[BV97; AB09, Ch. 10]</td></tr>
+  <tr><td>Holevo's theorem (see <a href="states.html#rem-exp">remark</a>)</td><td>Intuition only</td><td>[NC10, &sect;12.1]</td></tr>
+  <tr><td>Simon, Shor, Grover, BBBV, Raz&ndash;Tal (see <a href="algorithms.html#fact-separations">fact</a>)</td><td>Context and evidence</td><td>[Sim97, Sho97, Gro96, BBBV97, RT22]</td></tr>
+  <tr><td>Fortnow&ndash;Rogers, Aaronson (see <a href="pp.html#fact-beyond">fact</a>)</td><td>Context beyond <a href="pp.html#thm-main">the Main Theorem</a></td><td>[FR99, Aar05, Wat08]</td></tr>
 </table></div>
 
-<h2 id="references"><span class="sec">&sect;5</span>References</h2>
-<p class="small muted">The bracketed tags are used in the table above. Each entry notes what this site used it for.</p>
+<h2 id="references">References</h2>
+<p class="small muted">The bracketed tags are used in the table above. Each entry notes what these notes used it for.</p>
 <h3>Textbooks and notes</h3>
 <ul>
   <li>[AB09] S. Arora and B. Barak. <em>Computational Complexity: A Modern Approach.</em> Cambridge University Press, 2009. Chapter 6 (circuits), Chapter 10 (quantum computation). <span class="muted">Overall structure of the BQP material; BQP &sube; PSPACE.</span></li>
   <li>[NC10] M. A. Nielsen and I. L. Chuang. <em>Quantum Computation and Quantum Information</em>, 10th anniversary edition. Cambridge University Press, 2010. <span class="muted">Gates, deferred measurement, Holevo, Grover, error correction.</span></li>
-  <li>[S13] M. Sipser. <em>Introduction to the Theory of Computation</em>, 3rd edition. Cengage, 2013. <span class="muted">455 background: circuits, BPP, PSPACE.</span></li>
-  <li>[O'D15] R. O'Donnell and J. Wright. <em>15-859BB: Quantum Computation and Information</em>, CMU, Fall 2015. Lecture notes at <a href="https://www.cs.cmu.edu/~odonnell/quantum15/">cs.cmu.edu/~odonnell/quantum15</a>. <span class="muted">The "randomized computation with negative probabilities" viewpoint of Page 5.</span></li>
+  <li>[S13] M. Sipser. <em>Introduction to the Theory of Computation</em>, 3rd edition. Cengage, 2013. <span class="muted">CS455 background: circuits, BPP, PSPACE.</span></li>
+  <li>[O'D15] R. O'Donnell and J. Wright. <em>15-859BB: Quantum Computation and Information</em>, CMU, Fall 2015. Lecture notes at <a href="https://www.cs.cmu.edu/~odonnell/quantum15/">cs.cmu.edu/~odonnell/quantum15</a>. <span class="muted">The "randomized computation with negative probabilities" viewpoint of <a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>.</span></li>
   <li>[Wat08] J. Watrous. Quantum computational complexity. In <em>Encyclopedia of Complexity and Systems Science</em>, Springer, 2009. arXiv:0804.3401. <span class="muted">Survey; BQP &sube; PP via GapP.</span></li>
   <li>[Aar13] S. Aaronson. <em>Quantum Computing Since Democritus.</em> Cambridge University Press, 2013. <span class="muted">Further reading; intuition for PostBQP = PP.</span></li>
 </ul>
 <h3>Original papers</h3>
 <ul>
-  <li>[ADH97] L. M. Adleman, J. DeMarrais and M.-D. A. Huang. Quantum computability. <em>SIAM Journal on Computing</em> 26(5):1524&ndash;1540, 1997. <span class="muted">The centerpiece theorem, BQP &sube; PP.</span></li>
+  <li>[ADH97] L. M. Adleman, J. DeMarrais and M.-D. A. Huang. Quantum computability. <em>SIAM Journal on Computing</em> 26(5):1524&ndash;1540, 1997. <span class="muted">The Main Theorem, BQP &sube; PP.</span></li>
   <li>[Aar05] S. Aaronson. Quantum computing, postselection, and probabilistic polynomial-time. <em>Proceedings of the Royal Society A</em> 461:3473&ndash;3482, 2005. <span class="muted">PostBQP = PP.</span></li>
   <li>[Aha03] D. Aharonov. A simple proof that Toffoli and Hadamard are quantum universal. arXiv:quant-ph/0301040, 2003.</li>
   <li>[AA11] S. Aaronson and A. Arkhipov. The computational complexity of linear optics. <em>STOC</em> 2011; <em>Theory of Computing</em> 9:143&ndash;252, 2013.</li>
   <li>[BBBV97] C. H. Bennett, E. Bernstein, G. Brassard and U. Vazirani. Strengths and weaknesses of quantum computing. <em>SIAM Journal on Computing</em> 26(5):1510&ndash;1523, 1997.</li>
-  <li>[Ben73] C. H. Bennett. Logical reversibility of computation. <em>IBM Journal of Research and Development</em> 17(6):525&ndash;532, 1973. <span class="muted">Uncomputation, Lemma 6.5.</span></li>
+  <li>[Ben73] C. H. Bennett. Logical reversibility of computation. <em>IBM Journal of Research and Development</em> 17(6):525&ndash;532, 1973. <span class="muted">Uncomputation, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>.</span></li>
   <li>[BJS11] M. J. Bremner, R. Jozsa and D. J. Shepherd. Classical simulation of commuting quantum computations implies collapse of the polynomial hierarchy. <em>Proceedings of the Royal Society A</em> 467:459&ndash;472, 2011.</li>
-  <li>[BV97] E. Bernstein and U. Vazirani. Quantum complexity theory. <em>SIAM Journal on Computing</em> 26(5):1411&ndash;1473, 1997 (preliminary version STOC 1993). <span class="muted">Definition of BQP; BQP &sube; PSPACE; Theorem 7.6.</span></li>
-  <li>[DHHMNO05] C. M. Dawson, H. L. Haselgrove, A. P. Hines, D. Mortimer, M. A. Nielsen and T. J. Osborne. Quantum computing and polynomial equations over the finite field $\mathbb Z_2$. <em>Quantum Information and Computation</em> 5(2):102&ndash;112, 2005. <span class="muted">Path sums for Hadamard + Toffoli circuits (Lemma 8.3).</span></li>
+  <li>[BV97] E. Bernstein and U. Vazirani. Quantum complexity theory. <em>SIAM Journal on Computing</em> 26(5):1411&ndash;1473, 1997 (preliminary version STOC 1993). <span class="muted">Definition of BQP; BQP &sube; PSPACE; <a href="algorithms.html#thm-bv">the Bernstein&ndash;Vazirani theorem</a>.</span></li>
+  <li>[DHHMNO05] C. M. Dawson, H. L. Haselgrove, A. P. Hines, D. Mortimer, M. A. Nielsen and T. J. Osborne. Quantum computing and polynomial equations over the finite field $\mathbb Z_2$. <em>Quantum Information and Computation</em> 5(2):102&ndash;112, 2005. <span class="muted">Path sums for Hadamard + Toffoli circuits (see <a href="pspace.html#lem-pathsum">lemma</a>).</span></li>
   <li>[DJ92] D. Deutsch and R. Jozsa. Rapid solution of problems by quantum computation. <em>Proceedings of the Royal Society of London A</em> 439:553&ndash;558, 1992.</li>
   <li>[DN06] C. M. Dawson and M. A. Nielsen. The Solovay&ndash;Kitaev algorithm. <em>Quantum Information and Computation</em> 6(1):81&ndash;95, 2006.</li>
-  <li>[FFK94] S. Fenner, L. Fortnow and S. Kurtz. Gap-definable counting classes. <em>Journal of Computer and System Sciences</em> 48(1):116&ndash;148, 1994. <span class="muted">GapP (Lemma 9.2).</span></li>
+  <li>[FFK94] S. Fenner, L. Fortnow and S. Kurtz. Gap-definable counting classes. <em>Journal of Computer and System Sciences</em> 48(1):116&ndash;148, 1994. <span class="muted">GapP (see <a href="pp.html#lem-gap">lemma</a>).</span></li>
   <li>[Fey82] R. P. Feynman. Simulating physics with computers. <em>International Journal of Theoretical Physics</em> 21:467&ndash;488, 1982.</li>
   <li>[FR99] L. Fortnow and J. Rogers. Complexity limitations on quantum computation. <em>Journal of Computer and System Sciences</em> 59(2):240&ndash;252, 1999.</li>
   <li>[Gil77] J. Gill. Computational complexity of probabilistic Turing machines. <em>SIAM Journal on Computing</em> 6(4):675&ndash;695, 1977. <span class="muted">Definition of PP.</span></li>
