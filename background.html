@@ -6,25 +6,23 @@
   <title>Background Review | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=4">
+  <link rel="stylesheet" href="assets/site.css?v=5">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=4"></script>
+  <script defer src="assets/site.js?v=5"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>Background Review</h1></header>
 
-<p>This chapter is a reference. Most of what we need (Turing machines, $\mathsf{P}$, $\mathsf{NP}$, $\mathsf{PSPACE}$, $\mathsf{EXP}$, reusing space, Boolean circuits and $\mathsf{BPP}$) was covered in CS455, and we only recall it briefly. The parts that go beyond the course are complex vectors, tensor products and the class $\mathsf{PP}$. Feel free to skim now and come back when a later chapter links here.</p>
-<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>What is the class $\mathsf{PP}$, and why is it a natural home for "counting" problems?</p></div>
-
+<p>This chapter reviews the background we need. Most of it (Turing machines, $\mathsf{P}$, $\mathsf{NP}$, $\mathsf{PSPACE}$, $\mathsf{EXP}$, Boolean circuits and $\mathsf{BPP}$) was covered in CS455, so we only recall it briefly. The new parts are complex vectors, tensor products and the class $\mathsf{PP}$. You can skim this chapter now and come back to it when a later chapter links here.</p>
 <h2 id="linear-algebra">Complex vectors and inner products</h2>
 <p>
 A <strong>complex number</strong> is $\alpha = a + bi$ with $a,b\in\R$ and $i^2=-1$. Its <strong>conjugate</strong> is $\bar\alpha = a - bi$,
-and its <strong>modulus</strong> is $|\alpha| = \sqrt{a^2+b^2}$. The one identity we really use is
+and its <strong>modulus</strong> is $|\alpha| = \sqrt{a^2+b^2}$. The only identity we really need is
 $$|\alpha|^2 = \alpha\,\bar\alpha .$$
-For a real number, $|\alpha|^2 = \alpha^2$. That will be the only case we need for the main theorem: our gate set
+For a real number this is just $|\alpha|^2 = \alpha^2$. That is the only case we need for the main theorem, because our gate set
 (see <a href="gates.html#def-gateset">definition</a>) only produces real amplitudes.
 </p>
 
@@ -35,12 +33,12 @@ For a real number, $|\alpha|^2 = \alpha^2$. That will be the only case we need f
   $$\langle u, v\rangle = u^\dagger v = \sum_{i=1}^N \overline{u_i}\, v_i, \qquad \|v\| = \sqrt{\langle v,v\rangle} = \Big(\sum_{i=1}^N |v_i|^2\Big)^{1/2}.$$
   A <strong>unit vector</strong> has $\|v\|=1$. The standard basis vectors $e_1,\dots,e_N$ are orthonormal: $\langle e_i, e_j\rangle = 1$ if $i=j$ and $0$ otherwise.</p>
 </div>
-<p>For real vectors, all of this is the ordinary dot product and Euclidean length from your linear algebra course.</p>
+<p>For real vectors, this is just the usual dot product and length.</p>
 
 <h2 id="tensor">Tensor products</h2>
 <p>
-Quantum computing uses the tensor product to "put systems side by side." If one system is described by a vector in $\C^N$ and another by a
-vector in $\C^M$, the pair is described by a vector in $\C^{NM}$, with one coordinate for every <em>pair</em> of indices.
+Quantum computing uses the tensor product to put systems side by side. If one system is described by a vector in $\C^N$ and another by a
+vector in $\C^M$, the two together are described by a vector in $\C^{NM}$, with one coordinate for every <em>pair</em> of indices.
 </p>
 <div class="box def" id="def-tensor">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Tensor (Kronecker) product)</span></div>
@@ -77,12 +75,11 @@ vector in $\C^M$, the pair is described by a vector in $\C^{NM}$, with one coord
 
 <h2 id="pp">Randomized classes: BPP and PP</h2>
 <p>
-Recall from Probabilistic Time Complexity 1 that a probabilistic TM (PTM) is a TM with additional coin-flip states, and that it can equivalently be viewed
-through the <em>random-tape view</em>: a deterministic TM $M(x,r)$ that takes the random bits $r$ as a second input. We will only care about polynomial-time,
-always-halting PTMs, and without loss of generality we assume that on inputs of length $n$ the machine reads exactly $p(n)$ random bits for some polynomial $p$
-(pad with unused bits if needed). Then
+Recall from Probabilistic Time Complexity 1 that a probabilistic TM (PTM) is a TM with extra coin-flip states. We can also use the <em>random-tape view</em>:
+a deterministic TM $M(x,r)$ that gets the random bits $r$ as a second input. We only care about polynomial-time PTMs that always halt,
+and we can assume that on inputs of length $n$ the machine reads exactly $p(n)$ random bits for some polynomial $p$ (by adding unused bits if needed). Then
 $$\Pr[M(x)\text{ accepts}] = \Pr_{r\sim\{0,1\}^{p(|x|)}}[M(x,r)\text{ accepts}],$$
-which is simply the fraction of random strings $r$ that lead to acceptance.
+which is just the fraction of random strings $r$ that make $M$ accept.
 </p>
 
 <div class="box def" id="def-bpp">
@@ -95,7 +92,7 @@ which is simply the fraction of random strings $r$ that lead to acceptance.
 </div>
 
 <p>
-The next class is not covered in CS455. It drops the requirement that there be a <em>gap</em> between yes-instances and no-instances.
+The next class is not covered in CS455. It is like $\mathsf{BPP}$, except that it does not require a <em>gap</em> between yes-instances and no-instances.
 </p>
 <div class="box def" id="def-pp">
   <div class="box-title"><span class="label">Definition</span> <span class="name">($\mathsf{PP}$, probabilistic polynomial time; Gill 1977)</span></div>
@@ -103,16 +100,16 @@ The next class is not covered in CS455. It drops the requirement that there be a
   $$\forall x\in L,\quad \Pr[M(x)\text{ accepts}] > \tfrac12, \qquad\qquad \forall x\notin L,\quad \Pr[M(x)\text{ accepts}]\le\tfrac12 .$$</p>
 </div>
 
-<p>Recall that achieving error exactly $\tfrac12$ is trivial: the algorithm that returns $\mathrm{Bern}(1/2)$ does it. A $\mathsf{PP}$ machine has to do just a tiny bit better than that, and only on yes-instances.</p>
+<p>Recall that getting error exactly $\tfrac12$ is easy: just output $\mathrm{Bern}(1/2)$. A $\mathsf{PP}$ machine only has to do a tiny bit better than that, and only on yes-instances.</p>
 
 <div class="box intu" id="intu-pp">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">($\mathsf{PP}$ is majority vote with no margin)</span></div>
-  <p>A $\mathsf{BPP}$ machine must be right with a <em>noticeable</em> margin, so you can run it a few times and trust the majority. A
-  $\mathsf{PP}$ machine only has to tip the balance by the smallest possible amount, perhaps a single random string out of $2^{p(n)}$.
-  You can't detect such a bias by sampling. What a $\mathsf{PP}$ machine really does is decide whether an exponentially large
-  <strong>count</strong> (of accepting random strings) is above a threshold. The canonical $\mathsf{PP}$-complete problem is
+  <div class="box-title"><span class="label">Remark</span> <span class="name">($\mathsf{PP}$ is a majority vote with no margin)</span></div>
+  <p>A $\mathsf{BPP}$ machine has to be right by a <em>noticeable</em> margin, so we can run it a few times and take the majority. A $\mathsf{PP}$ machine
+  only has to be right by the smallest possible margin, maybe a single random string out of $2^{p(n)}$. We can't detect a margin that small by sampling.
+  Instead, a $\mathsf{PP}$ machine really decides whether an exponentially large <strong>count</strong> (the number of accepting random strings) is above a threshold.
+  The standard $\mathsf{PP}$-complete problem is
   $$\mathrm{MAJSAT} = \{\langle\varphi\rangle : \text{more than half of all assignments satisfy the Boolean formula } \varphi\}.$$
-  $\mathsf{PP}$ is a very powerful class: by Toda&rsquo;s theorem, the whole polynomial hierarchy is contained in $\mathsf{P}^{\mathsf{PP}}$.</p>
+  $\mathsf{PP}$ is very powerful. By Toda&rsquo;s theorem, the whole polynomial hierarchy is contained in $\mathsf{P}^{\mathsf{PP}}$.</p>
 </div>
 
 <div class="box prop" id="prop-pp-pspace">
@@ -121,7 +118,7 @@ The next class is not covered in CS455. It drops the requirement that there be a
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
   <p>If $M$ solves $L$ with error $\tfrac13$, the same $M$ witnesses $L\in\mathsf{PP}$, since $\ge \tfrac23$ implies $>\tfrac12$ and $\le\tfrac13$ implies $\le\tfrac12$.</p>
-  <p>For $\mathsf{PP}\subseteq\mathsf{PSPACE}$, let $L\in\mathsf{PP}$ via $M(x,r)$ with $r\in\{0,1\}^{p(|x|)}$. We define $M'$ as follows (compare with the proof of the trivial derandomization $\mathsf{BPP}\subseteq\mathsf{EXP}$):</p>
+  <p>For $\mathsf{PP}\subseteq\mathsf{PSPACE}$, let $L\in\mathsf{PP}$ via $M(x,r)$ with $r\in\{0,1\}^{p(|x|)}$. We define $M'$ as follows (this is like the proof of trivial derandomization, $\mathsf{BPP}\subseteq\mathsf{EXP}$):</p>
   <div class="pseudo">
     <div><b>def</b> $M'(x)$:</div>
     <div class="i1">$\mathit{count} \gets 0$</div>
@@ -136,7 +133,7 @@ The next class is not covered in CS455. It drops the requirement that there be a
 </div>
 
 <div class="box exercise" id="exer-2a">
-  <div class="box-title"><span class="label">Exercise</span> <span class="name">(A first taste of the abstain trick)</span></div>
+  <div class="box-title"><span class="label">Exercise</span> <span class="name">($\mathsf{NP}\subseteq\mathsf{PP}$)</span></div>
   <p>Show that $\mathsf{NP}\subseteq\mathsf{PP}$.
   Hint: on input a formula $\varphi$ with $k$ variables, pick a random assignment $a$ and one extra random bit $c$.</p>
   <div class="proof" data-label="Solution"><p>Let $M$ pick $a\in\{0,1\}^k$ and $c\in\{0,1\}$ uniformly at random. If $\varphi(a)=1$, accept. Otherwise accept if and only if $c=0$, so on these branches $M$
@@ -144,16 +141,16 @@ The next class is not covered in CS455. It drops the requirement that there be a
     $$\Pr[M(\varphi)\text{ accepts}] = \frac{s}{2^k} + \Big(1-\frac{s}{2^k}\Big)\cdot\frac12 = \frac12 + \frac{s}{2^{k+1}},$$
     which is $>\tfrac12$ if and only if $s\ge1$, that is, if and only if $\varphi\in\mathrm{SAT}$. Since $\mathrm{SAT}$ is $\mathsf{NP}$-complete under polynomial-time reductions
     (Reductions &amp; Completeness 1), and $\mathsf{PP}$ is closed under them, $\mathsf{NP}\subseteq\mathsf{PP}$.
-    The same trick (accept on some branches, reject on others, and flip a fair coin on the rest so they contribute exactly $\tfrac12$) is the engine of the proof of the Main Theorem:
+    We will use the same trick (accept on some branches, reject on others, and flip a fair coin on the rest so they count as exactly $\tfrac12$) in the proof of the Main Theorem:
     see <a href="pp.html#lem-gap">the Signed Counting Lemma</a>.</p></div>
 </div>
 
 <h2 id="uniform">Uniform circuit families</h2>
 <p>
 Recall from Boolean Circuits 1 that a Boolean circuit $C_n$ with $n$ inputs is a straight-line program of AND, OR and NOT instructions, and that a
-<em>circuit family</em> $\mathcal C = (C_0, C_1, C_2,\dots)$ has one circuit for each input length. In Boolean Circuits 2 we saw the power of such a
-<em>non-uniform</em> model: any sparse language, even an undecidable one, can be hard-coded into a circuit family, which is why $\mathsf{P}\subsetneq\mathsf{P}/\mathsf{poly}$.
-To use circuits as a model of <em>algorithms</em>, we must forbid this, and require that the circuits be easy to construct.
+<em>circuit family</em> $\mathcal C = (C_0, C_1, C_2,\dots)$ has one circuit for each input length. In Boolean Circuits 2 we saw that this model is
+<em>non-uniform</em>: any sparse language, even an undecidable one, can be hard-coded into a circuit family. That is why $\mathsf{P}\subsetneq\mathsf{P}/\mathsf{poly}$.
+To use circuits as a model of <em>algorithms</em>, we have to rule this out by requiring that the circuits be easy to construct.
 </p>
 <div class="box def" id="def-uniform">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Polynomial-time uniform circuit family)</span></div>
@@ -161,7 +158,7 @@ To use circuits as a model of <em>algorithms</em>, we must forbid this, and requ
   outputs a description of $C_n$ (the list of its gates and the wires each gate acts on) in time polynomial in $n$. In particular, $C_n$ has $\mathrm{poly}(n)$ gates.</p>
 </div>
 <p>
-The same definition will apply to quantum circuits (see <a href="bqp.html#def-bqp">the definition of $\mathsf{BQP}$</a>). The only thing that changes is which gates are allowed.
+We will use the same definition for quantum circuits (see <a href="bqp.html#def-bqp">the definition of $\mathsf{BQP}$</a>). The only difference is which gates are allowed.
 The circuit families we get from Turing machines are uniform:
 </p>
 
@@ -172,18 +169,18 @@ The circuit families we get from Turing machines are uniform:
 </div>
 <div class="box omit" id="omit-tm-circuits">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(Omitted details)</span></div>
-  <p>This is the Efficient TM to Efficient Circuit theorem from Boolean Circuits 1 ($\mathsf{P}\subseteq\mathsf{P}/\mathsf{poly}$), together with the observation that
+  <p>This is the Efficient TM to Efficient Circuit theorem from Boolean Circuits 1 ($\mathsf{P}\subseteq\mathsf{P}/\mathsf{poly}$), plus the observation that
   its circuits can be <em>printed</em> efficiently. Each cell of the $t(N)\times t(N)$ computation tableau is computed from the cells above it by a constant-size circuit,
-  and the wiring is so regular that a TM can output $D_N$ in time $\mathrm{poly}(N)$. See Sipser, <em>Introduction to the Theory of Computation</em> (3rd ed.), Section 9.3,
+  and the wiring is regular enough that a TM can output $D_N$ in time $\mathrm{poly}(N)$. See Sipser, <em>Introduction to the Theory of Computation</em> (3rd ed.), Section 9.3,
   or Arora&ndash;Barak, <em>Computational Complexity: A Modern Approach</em>, Chapter 6.</p>
 </div>
 
 <h2 id="summary">Summary</h2>
 <ul>
-    <li>$\langle u,v\rangle = \sum_i \overline{u_i}v_i$ and $\|v\|^2 = \sum_i |v_i|^2$. Quantum states will be unit vectors in this norm.</li>
-    <li>$u\otimes v$ has one coordinate $u_iv_j$ for every pair $(i,j)$. Tensoring basis vectors gives basis vectors, and $(A\otimes B)(u\otimes v) = Au\otimes Bv$.</li>
-    <li>$\mathsf{PP}$ = "accept with probability $>1/2$ exactly on yes-instances," with no gap required. It is really a class about comparing exponentially large counts, and it sits inside $\mathsf{PSPACE}$.</li>
-  </ul>
+  <li>Quantum states will be unit vectors, where $\|v\|^2 = \sum_i |v_i|^2$.</li>
+  <li>$u\otimes v$ has one coordinate $u_iv_j$ for every pair $(i,j)$. The tensor product of two basis vectors is a basis vector, and $(A\otimes B)(u\otimes v) = Au\otimes Bv$.</li>
+  <li>$\mathsf{PP}$ means &ldquo;accept with probability more than $\tfrac12$ exactly on yes-instances&rdquo;, with no gap required. It is really about comparing exponentially large counts, and it is contained in $\mathsf{PSPACE}$.</li>
+</ul>
 
 </div></main>
 </body>

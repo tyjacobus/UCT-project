@@ -6,17 +6,17 @@
   <title>Conclusion and References | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=4">
+  <link rel="stylesheet" href="assets/site.css?v=5">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=4"></script>
+  <script defer src="assets/site.js?v=5"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>Conclusion and References</h1></header>
 
-<p>In this final chapter we summarize what we proved, list the main open problems, collect every detail we deliberately omitted together with a source for it, and give the full bibliography.</p>
+<p>In this last chapter we look back at what we proved and at what is still open. We also list everything we skipped, with a place to read about it, and give the full list of references.</p>
 
 
 <h2 id="proved">What we proved</h2>
@@ -44,22 +44,22 @@
 
 <h2 id="ideas">Five ideas to remember</h2>
 <ol>
-    <li><strong>Quantum = randomized with signs.</strong> Replace probabilities by amplitudes that can be negative, and stochastic matrices by unitary ones. Nothing else changes (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>).</li>
-    <li><strong>Interference is cancellation of paths, and it needs a shared endpoint.</strong> Any record of which path was taken, such as garbage or a measurement, destroys it. That is why we uncompute (<a href="interference.html#rem-same-endpoint">the interference principle</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>).</li>
+    <li><strong>Quantum = randomized with signs.</strong> Swap probabilities for amplitudes that can be negative, and stochastic matrices for unitary ones. Everything else stays the same (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>).</li>
+    <li><strong>Interference is cancellation of paths, and it needs a shared endpoint.</strong> If anything records which path was taken, like leftover garbage or a measurement, the interference goes away. That is why we uncompute (<a href="interference.html#rem-same-endpoint">the interference principle</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>).</li>
     <li><strong>Classical gates don't branch; Hadamards do.</strong> So a path is a choice string $b\in\{0,1\}^h$, and following it is a classical polynomial-time computation (see <a href="pspace.html#def-follow">definition</a>).</li>
     <li><strong>Amplitudes are signed counts, probabilities are signed counts of pairs.</strong> That makes quantum computation a special case of counting (<a href="pspace.html#cor-signed">the Signed Counts Corollary</a>, <a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</li>
-    <li><strong>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$.</strong> Quantum computers are at least as strong as randomized ones and at most as strong as counting machines. Proving them strictly stronger would separate $\mathsf{P}$ from $\mathsf{PSPACE}$.</li>
+    <li><strong>$\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$.</strong> Quantum computers are at least as strong as randomized ones and at most as strong as counting machines. Proving they are strictly stronger than randomized ones would also prove $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
   </ol>
 
 <h2 id="open">What is still open</h2>
 <ul>
-  <li><strong>Is $\mathsf{BPP}\ne\mathsf{BQP}$?</strong> Widely believed, because of Shor&rsquo;s algorithm and the <a href="intro.html#fact-separations">oracle separations</a>. But by <a href="pp.html#cor-consequences">the Consequences Corollary</a>, a proof would imply $\mathsf{P}\neq\mathsf{PSPACE}$.</li>
-  <li><strong>Is $\mathsf{NP}\subseteq\mathsf{BQP}$?</strong> Believed false. Black-box search can only be sped up quadratically (Grover; Bennett et al.), so a polynomial-time quantum algorithm for SAT would have to exploit structure in a way nobody knows how to do.</li>
-  <li><strong>Is $\mathsf{BQP}\subseteq\mathsf{PH}$?</strong> Unknown, and false relative to an oracle (Raz&ndash;Tal). Our best general upper bounds are counting classes like $\mathsf{PP}$ (see <a href="pp.html#fact-beyond">the further results</a>).</li>
+  <li><strong>Is $\mathsf{BPP}\ne\mathsf{BQP}$?</strong> Most people believe so, because of Shor&rsquo;s algorithm and the <a href="intro.html#fact-separations">oracle separations</a>. But by <a href="pp.html#cor-consequences">the Consequences Corollary</a>, a proof would imply $\mathsf{P}\neq\mathsf{PSPACE}$.</li>
+  <li><strong>Is $\mathsf{NP}\subseteq\mathsf{BQP}$?</strong> Most people believe not. Quantum computers can only speed up black-box search quadratically (Grover; Bennett et al.), so a fast quantum algorithm for SAT would have to use the structure of SAT in a way nobody knows how to.</li>
+  <li><strong>Is $\mathsf{BQP}\subseteq\mathsf{PH}$?</strong> Nobody knows, and it is false relative to an oracle (Raz&ndash;Tal). The best upper bounds we have are counting classes like $\mathsf{PP}$ (see <a href="pp.html#fact-beyond">the further results</a>).</li>
 </ul>
 
 <h2 id="omitted">Everything we omitted, and where to find it</h2>
-<p>The proofs of the main results on these notes are complete. The following supporting facts were stated without proof, because they are either standard CS455 material or beyond two lectures' scope:</p>
+<p>The proofs of the main results in these notes are complete. The facts below were stated without proof, either because they are standard CS455 material or because they would take more than two lectures to cover:</p>
 <div class="table-wrap"><table>
   <tr><th>Omitted item</th><th>Used for</th><th>Source</th></tr>
   <tr><td>TMs &rarr; uniform circuits (see <a href="background.html#fact-tm-circuits">theorem</a>)</td><td>$\mathsf{P},\mathsf{BPP}\subseteq\mathsf{BQP}$</td><td>CS455 (Cook&ndash;Levin); Sipser &sect;9.3; Arora&ndash;Barak Ch. 6 [S13, AB09]</td></tr>
@@ -72,7 +72,7 @@
 </table></div>
 
 <h2 id="references">References</h2>
-<p class="small muted">The bracketed tags are used in the table above. Each entry notes what these notes used it for.</p>
+<p class="small muted">The tags in brackets match the table above. Each entry says what we used it for.</p>
 <h3>Textbooks and notes</h3>
 <ul>
   <li>[AB09] S. Arora and B. Barak. <em>Computational Complexity: A Modern Approach.</em> Cambridge University Press, 2009. Chapter 6 (circuits), Chapter 10 (quantum computation). <span class="muted">Overall structure of the BQP material; BQP &sube; PSPACE.</span></li>

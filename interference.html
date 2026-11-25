@@ -6,41 +6,39 @@
   <title>Quantum vs. Randomized Computation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=4">
+  <link rel="stylesheet" href="assets/site.css?v=5">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=4"></script>
+  <script defer src="assets/site.js?v=5"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>Quantum vs. Randomized Computation</h1></header>
 
-<p>We now put randomized and quantum computation in the same linear-algebraic framework, so that the one difference between them becomes visible: signs. This is the conceptual core of the model. The &ldquo;sum over paths&rdquo; picture we develop here is exactly what we will make algorithmic in the last two technical chapters.</p>
-<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>What, precisely, can a quantum computer do that a randomized one cannot?</p></div><div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>When can two computation paths cancel each other out?</p></div>
-
+<p>In this chapter we describe randomized and quantum computation in the same way, using vectors and matrices. Written like this, the only real difference between them is that quantum amplitudes can be negative. We also introduce the &ldquo;sum over paths&rdquo; view of a computation, which is the main idea behind both of our upper-bound proofs.</p>
 <h2 id="randomized">Randomized computation is linear algebra too</h2>
 <p>
-Think of a randomized algorithm on an $m$-bit memory. At any moment its state is a <em>probability distribution</em> over $\{0,1\}^m$, that is, a vector $p\in\R^{2^m}$
-with $p_z\ge0$ and $\sum_z p_z = 1$. Each step updates the distribution linearly: if from memory contents $z$ the step moves to $z'$ with probability $M_{z',z}$, then the new
+Think of a randomized algorithm on an $m$-bit memory. At any moment its state is a <em>probability distribution</em> over $\{0,1\}^m$, which is a vector $p\in\R^{2^m}$
+with $p_z\ge0$ and $\sum_z p_z = 1$. Each step changes the distribution linearly: if the step moves from memory contents $z$ to $z'$ with probability $M_{z',z}$, then the new
 distribution is $Mp$.
 </p>
 <div class="box def" id="def-stochastic">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Stochastic matrix)</span></div>
-  <p>A real matrix $M$ is <strong>stochastic</strong> if all its entries are nonnegative and each column sums to $1$. Exactly these matrices map every probability vector to a probability vector.
+  <p>A real matrix $M$ is <strong>stochastic</strong> if all its entries are nonnegative and each column sums to $1$. These are exactly the matrices that turn every probability vector into a probability vector.
   The basic randomized gate is the <strong>coin flip</strong>
   $$F = \begin{pmatrix}\tfrac12&\tfrac12\\[2pt]\tfrac12&\tfrac12\end{pmatrix},$$
-  which replaces a bit by a fresh random bit. Classical gates (permutation matrices) are stochastic too.</p>
+  which replaces a bit with a new random bit. Classical gates (permutation matrices) are also stochastic.</p>
 </div>
 
-<p>Side by side, the two models look almost identical:</p>
+<p>Side by side, the two models look almost the same:</p>
 <div class="table-wrap"><table>
   <tr><th></th><th>Randomized</th><th>Quantum</th></tr>
   <tr><td>State of $m$ bits</td><td>probability vector $p\in\R^{2^m}$</td><td>amplitude vector $\ket\psi\in\C^{2^m}$</td></tr>
   <tr><td>Entries</td><td>$p_z\ge 0$</td><td>$\braket z\psi$ any sign (any complex number)</td></tr>
   <tr><td>Normalization</td><td>$\sum_z p_z = 1$ (1-norm)</td><td>$\sum_z|\braket z\psi|^2 = 1$ (2-norm)</td></tr>
   <tr><td>Operations</td><td>stochastic matrices</td><td>unitary matrices</td></tr>
-  <tr><td>"Basic randomness" gate</td><td>coin flip $F$</td><td>Hadamard $H$</td></tr>
+  <tr><td>Basic &ldquo;random&rdquo; gate</td><td>coin flip $F$</td><td>Hadamard $H$</td></tr>
   <tr><td>Probability of seeing $z$</td><td>$p_z$</td><td>$|\braket z\psi|^2$</td></tr>
 </table></div>
 
@@ -50,21 +48,21 @@ distribution is $Mp$.
     <div>
       <p><strong>Randomized.</strong> Start with the bit $0$, i.e. $p = (1,0)^T$.<br>
       $Fp = (\tfrac12,\tfrac12)^T$, and $F(Fp) = (\tfrac12,\tfrac12)^T$.<br>
-      Once randomness is created, more coin flips can never remove it.</p>
+      Once we add randomness, more coin flips can never remove it.</p>
     </div>
     <div>
       <p><strong>Quantum.</strong> Start with $\ket0$.<br>
-      $H\ket0 = \ket+$, which looks like a fair coin if measured.<br>
+      $H\ket0 = \ket+$, which looks like a fair coin if we measure it.<br>
       But $H\ket+ = \ket 0$ (see <a href="gates.html#ex-hadamard">example</a>): the outcome is $0$ <em>with certainty</em>.</p>
     </div>
   </div>
-  <p>The quantum "coin" was flipped twice and came back deterministic. Where did the randomness go? The next section answers this by tracking paths.</p>
+  <p>The quantum &ldquo;coin&rdquo; was flipped twice and the result is no longer random. The next section explains where the randomness went by following each path of the computation.</p>
 </div>
 
 <h2 id="paths">Sum over paths</h2>
 <p>
-A computation that applies $U_1$, then $U_2$, ..., then $U_T$ to a basis state $\ket x$ can be pictured as a tree: from $x$ it branches to every $z_1$ with $(U_1)_{z_1,x}\ne0$,
-from each $z_1$ to every $z_2$, and so on. The final entries are sums over root-to-leaf paths. This is nothing but matrix multiplication written out:
+A computation that applies $U_1$, then $U_2$, and so on up to $U_T$, to a basis state $\ket x$ can be drawn as a tree. From $x$ it branches to every $z_1$ with $(U_1)_{z_1,x}\ne0$,
+from each $z_1$ to every $z_2$, and so on. Each final entry is a sum over root-to-leaf paths. This is just matrix multiplication written out:
 </p>
 <div class="box lem" id="lem-paths">
   <div class="box-title"><span class="label">Lemma</span> <span class="name">(Sum-over-Paths Lemma)</span></div>
@@ -77,13 +75,13 @@ from each $z_1$ to every $z_2$, and so on. The final entries are sums over root-
   $(U_T\cdot U_{T-1}\cdots U_1)_{y,x} = \sum_{z_{T-1}}(U_T)_{y,z_{T-1}}\,(U_{T-1}\cdots U_1)_{z_{T-1},x}$. Expand the second factor using the induction hypothesis.
   <span class="qed">&#8718;</span>
 </div>
-<p><a href="#lem-paths">The Sum-over-Paths Lemma</a> holds for <em>any</em> matrices. What differs between the two models is what the weights look like:</p>
+<p><a href="#lem-paths">The Sum-over-Paths Lemma</a> works for <em>any</em> matrices. The two models differ in what the weights look like:</p>
 <ul>
-  <li><strong>Randomized</strong> ($U_t$ stochastic): the weight of a path is the probability of taking it, and the lemma is just the law of total probability:
-    $\Pr[\text{end at } y] = \sum_{\text{paths}}\Pr[\text{path}]$. Every term is $\ge0$, so contributions <em>only accumulate</em>.</li>
-  <li><strong>Quantum</strong> ($U_t$ unitary, applied to $\ket x$): the lemma gives the <em>amplitude</em> $\amp{y}{C}{x}$ as a sum of path weights, and weights can be negative. Then
+  <li><strong>Randomized</strong> ($U_t$ stochastic): the weight of a path is the probability of taking it, so the lemma is just the law of total probability:
+    $\Pr[\text{end at } y] = \sum_{\text{paths}}\Pr[\text{path}]$. Every term is $\ge0$, so the terms can only add up.</li>
+  <li><strong>Quantum</strong> ($U_t$ unitary, applied to $\ket x$): the lemma gives the <em>amplitude</em> $\amp{y}{C}{x}$ as a sum of path weights, and these weights can be negative. Then
   $$\Pr[\text{see } y] = \Big|\sum_{\text{paths } x\to y}\text{weight}(\text{path})\Big|^2,\qquad\text{which is }\textbf{not}\text{ the same as}\quad \sum_{\text{paths}}|\text{weight}|^2 .$$
-  Paths with opposite signs <strong>cancel</strong> (destructive interference), and paths with equal signs <strong>reinforce</strong> (constructive interference).</li>
+  Paths with opposite signs <strong>cancel</strong> each other (destructive interference), and paths with the same sign <strong>add up</strong> (constructive interference). This is called <em>interference</em>.</li>
 </ul>
 
 <div class="box ex" id="ex-hh-paths">
@@ -127,62 +125,63 @@ from each $z_1$ to every $z_2$, and so on. The final entries are sums over root-
     </svg>
     <figcaption>Each edge is labeled with an entry of $H$ (from <a href="gates.html#lem-hadamard">the Hadamard Formula</a>). The only negative edge is $1\to1$.</figcaption>
   </figure>
-  <p>Collect the four paths by their endpoint:
+  <p>Group the four paths by where they end:
   $$\amp{0}{HH}{0} = \tfrac12 + \tfrac12 = 1,\qquad \amp{1}{HH}{0} = \tfrac12 - \tfrac12 = 0 .$$
   For the coin $F$, the same tree has every edge weighted $\tfrac12$, every path weighted $+\tfrac14$, and each endpoint gets $\tfrac14+\tfrac14 = \tfrac12$.
-  <strong>The trees are identical. Only the sign on one edge differs, and that sign makes the paths to $\ket1$ cancel.</strong></p>
+  <strong>The two trees are the same except for the sign on one edge, and that sign is what makes the paths to $\ket1$ cancel.</strong></p>
 </div>
 
 <div class="box intu" id="intu-design">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(How to think about quantum algorithms)</span></div>
-  <p>A quantum algorithm is a way of choreographing cancellations. It branches into exponentially many paths, just like a randomized algorithm, but it arranges the signs so that paths leading to <em>wrong</em> answers cancel. Looking ahead, the Sum-over-Paths Lemma also suggests how to <em>simulate</em> a quantum computer classically: add up the path weights one at a time. That is the idea behind both upper bounds in these notes.</p>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(How quantum algorithms work)</span></div>
+  <p>A quantum algorithm branches into exponentially many paths, just like a randomized algorithm, but it sets up the signs so that the paths leading to <em>wrong</em> answers cancel out. The Sum-over-Paths Lemma also hints at how to <em>simulate</em> a quantum computer on a normal computer: add up the path weights one at a time. That is the idea behind both upper bounds in these notes.</p>
 </div>
 
 <h2 id="which-path">Interference needs paths that end in the same place</h2>
 <p>
-Cancellation is fragile. Here is the most important way to destroy it, and it will matter in every later chapter.
+Cancellation is easy to break. Here is the most important way it can break, and it will matter in every later chapter.
 </p>
 <div class="box ex" id="ex-whichpath">
-  <div class="box-title"><span class="label">Example</span> <span class="name">("Which-path" information kills interference)</span></div>
-  <p>Take the circuit $H, H$ on qubit 1 from the <a href="#ex-hh">coin-versus-Hadamard example</a>, but between the two $H$'s add a CNOT that copies qubit 1 into a second qubit:</p>
+  <div class="box-title"><span class="label">Example</span> <span class="name">(&ldquo;Which-path&rdquo; information stops interference)</span></div>
+  <p>Take the circuit $H, H$ on qubit 1 from the <a href="#ex-hh">coin-versus-Hadamard example</a>, and add a CNOT between the two $H$ gates that copies qubit 1 into a second qubit:</p>
   <figure class="circuit" data-wires="|0⟩;|0⟩" data-gates="H 0, SLICE ψ_1, CNOT 0 1, SLICE ψ_2, H 0, SLICE ψ_3, M 0" data-alt="H on qubit 1, CNOT from qubit 1 to qubit 2, H on qubit 1, measure qubit 1"></figure>
   <p>
   $\ket{\psi_1} = \tfrac1{\sqrt2}(\ket{00}+\ket{10})$, and $\ket{\psi_2} = \tfrac1{\sqrt2}(\ket{00}+\ket{11})$ (a Bell state). Applying $H$ to qubit 1 (see <a href="gates.html#def-apply">definition</a>):
   $$\ket{\psi_3} = \tfrac12\big(\ket{00} + \ket{10}\big) + \tfrac12\big(\ket{01} - \ket{11}\big).$$
-  Now $\Pr[\text{qubit 1 reads }1] = \tfrac14+\tfrac14 = \tfrac12$. Without the CNOT, the answer was $0$ with certainty!
+  Now $\Pr[\text{qubit 1 reads }1] = \tfrac14+\tfrac14 = \tfrac12$. Without the CNOT, qubit 1 was always $0$.
   </p>
-  <p>The path picture explains why. The two paths into "qubit 1 $=1$" are still there with weights $+\tfrac12$ and $-\tfrac12$, but they now end at <em>different</em> basis states, $\ket{10}$ and $\ket{11}$,
-  because qubit 2 recorded which branch was taken. <a href="#lem-paths">The Sum-over-Paths Lemma</a> adds up weights only for paths ending at the <em>same</em> string $y$, so these two never meet and never cancel.</p>
+  <p>The paths explain why. The two paths that lead to &ldquo;qubit 1 $=1$&rdquo; still have weights $+\tfrac12$ and $-\tfrac12$, but now they end at <em>different</em> basis states, $\ket{10}$ and $\ket{11}$,
+  because qubit 2 recorded which branch was taken. <a href="#lem-paths">The Sum-over-Paths Lemma</a> only adds up weights of paths that end at the <em>same</em> string $y$, so these two paths never cancel.</p>
 </div>
 
 <div class="box rem" id="rem-same-endpoint">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(The interference principle)</span></div>
-  <p>Two paths interfere only if they end in the <strong>same basis state of the entire register</strong>. Any record of which branch was taken, in any qubit, even one we never look at,
-  separates the paths and prevents cancellation. Measuring a qubit in the middle of the computation has exactly the same effect, because the measurement outcome is such a record.
-  (This is the principle of deferred measurement from <a href="gates.html">the <em>Unitary Gates and Circuits</em> chapter</a> seen from the other side.)</p>
-  <p>This is why we will need to &ldquo;uncompute&rdquo; scratch work (<a href="bqp.html#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>), and why, in the proof of the Main Theorem, a pair of paths contributes only when both end at the same string (<a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</p>
+  <p>Two paths can only cancel if they end in the <strong>same basis state of the whole register</strong>. Any record of which branch was taken, in any qubit, even one we never look at,
+  keeps the paths apart and stops them from cancelling. Measuring a qubit in the middle of the computation has the same effect, because the measurement result is such a record.</p>
+  <p>This is why we will need to &ldquo;uncompute&rdquo; scratch work (<a href="bqp.html#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>), and why, in the proof of the Main Theorem, a pair of paths only counts when both end at the same string (<a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</p>
 </div>
 
 <h2 id="coins">Coins are a special case</h2>
 <p>
-<a href="#rem-same-endpoint">The interference principle</a> also tells us how a quantum computer can <em>imitate</em> a coin flip: apply $H$ to a fresh qubit in state $\ket0$, and afterwards use that qubit only as a <em>control</em>
-(never apply another $H$ to it). Its value is then permanently recorded in the register, so its two branches can never interfere, and it behaves exactly like a fair random bit.
-We'll turn this into the proof that $\mathsf{BPP}\subseteq\mathsf{BQP}$ in <a href="bqp.html#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a>.
+<a href="#rem-same-endpoint">The interference principle</a> also tells us how a quantum computer can <em>imitate</em> a coin flip. Apply $H$ to a fresh qubit in state $\ket0$, and after that only use the qubit as a <em>control</em>
+(never apply another $H$ to it). Its value stays recorded in the register, so its two branches can never cancel, and it acts exactly like a fair random bit.
+We use this idea in the <a href="bqp.html#thm-bpp-bqp">proof that $\mathsf{BPP}\subseteq\mathsf{BQP}$</a>.
 </p>
 
 <h2 id="exercises">Exercises</h2>
 <div class="box exercise" id="exer-5a">
   <div class="box-title"><span class="label">Exercise</span></div>
   <p>Use paths to compute $HZH\ket0$. Which paths cancel?</p>
-  <div class="proof" data-label="Solution"><p>Paths $0\to z_1\to z_1\to z_2$ ($Z$ doesn't branch; it multiplies by $(-1)^{z_1}$). The weights are
+  <div class="proof" data-label="Solution"><p>The paths are $0\to z_1\to z_1\to z_2$ ($Z$ doesn't split the computation, it just multiplies by $(-1)^{z_1}$). The weights are
     $0\to0\to0$: $+\tfrac12$; $\;0\to1\to0$: $(+\tfrac1{\sqrt2})(-1)(+\tfrac1{\sqrt2}) = -\tfrac12$; $\;0\to0\to1$: $+\tfrac12$; $\;0\to1\to1$: $(+\tfrac1{\sqrt2})(-1)(-\tfrac1{\sqrt2}) = +\tfrac12$.
     So the amplitude of $\ket0$ is $0$ (cancellation) and the amplitude of $\ket1$ is $1$: $HZH\ket0 = \ket1$, consistent with $HZH = X$ (see <a href="gates.html#exer-4a">exercise</a>).</p></div>
-</div><h2 id="summary">Summary</h2>
+</div>
+
+<h2 id="summary">Summary</h2>
 <ul>
-    <li>Randomized = nonnegative weights, quantum = signed weights. Everything else in the framework is the same.</li>
-    <li><strong>Sum over paths:</strong> amplitude = sum of path weights. Probabilities add up; amplitudes add up and <em>then</em> get squared.</li>
-    <li>$HH\ket0=\ket0$ because the two paths to $\ket1$ have weights $+\tfrac12$ and $-\tfrac12$.</li>
-  </ul>
+  <li>Randomized computation uses nonnegative weights and quantum computation uses signed weights. Everything else is the same.</li>
+  <li>An amplitude is a sum of path weights. Probabilities just add up, but amplitudes add up and are <em>then</em> squared, so paths can cancel.</li>
+  <li>Paths only cancel if they end at the same basis state. Any record of which path was taken stops the cancellation.</li>
+</ul>
 
 </div></main>
 </body>

@@ -6,20 +6,18 @@
   <title>The Main Theorem: BQP ⊆ PP | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=4">
+  <link rel="stylesheet" href="assets/site.css?v=5">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=4"></script>
-  <script defer src="assets/explorer.js?v=4"></script>
+  <script defer src="assets/site.js?v=5"></script>
+  <script defer src="assets/explorer.js?v=5"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PP}$</h1></header>
 
-<p>In this chapter we prove the main theorem of these notes, $\mathsf{BQP}\subseteq\mathsf{PP}$, due to Adleman, DeMarrais and Huang. It sharpens the previous chapter&rsquo;s $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ and completes the sandwich $\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$. We will use <a href="background.html#def-pp">the definition of $\mathsf{PP}$</a> from the Background Review, <a href="bqp.html#def-bqp">the definition of $\mathsf{BQP}$</a>, <a href="pspace.html#def-follow">the procedure $\mathrm{Follow}$</a> and <a href="pspace.html#lem-pathsum">the Path-Sum Lemma</a>. Hover over any of these links for a reminder.</p>
-<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>A $\mathsf{PP}$ machine can only add up nonnegative probabilities. How can it reproduce the cancellations of a quantum computer?</p></div>
-
+<p>In this chapter we prove the main theorem of these notes, $\mathsf{BQP}\subseteq\mathsf{PP}$, due to Adleman, DeMarrais and Huang. It sharpens the previous chapter&rsquo;s $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ and completes the sandwich $\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}$. We will use <a href="background.html#def-pp">the definition of $\mathsf{PP}$</a> from the Background Review, <a href="bqp.html#def-bqp">the definition of $\mathsf{BQP}$</a>, <a href="pspace.html#def-follow">the procedure $\mathrm{Follow}$</a> and <a href="pspace.html#lem-pathsum">the Path-Sum Lemma</a>. You can hover over any of these links to see it again.</p>
 <h2 id="statement">The theorem</h2>
 <div class="box thm centerpiece" id="thm-main">
   <div class="box-title"><span class="label">Theorem</span> <span class="name">(Main Theorem; Adleman, DeMarrais and Huang 1997)</span></div>
@@ -29,12 +27,12 @@
   In particular, $\Pr[M(x)\text{ accepts}]>\tfrac12$ if and only if $p_{C_n}(x)>\tfrac12$.</p>
 </div>
 <p>
-Formula $(\star)$ is a good way to remember the theorem. The $\mathsf{PP}$ machine reproduces the quantum circuit's bias toward accepting, $p_{C_n}(x)-\tfrac12$, but shrunk by the exponential factor $2^h$.
-$\mathsf{PP}$ doesn't care how small the bias is, only which way it points.
+Formula $(\star)$ is the easiest way to remember the theorem. The $\mathsf{PP}$ machine leans toward accepting in the same direction as the quantum circuit, but by an amount that is exponentially smaller (divided by $2^h$).
+That is fine, because $\mathsf{PP}$ only cares which way the machine leans, not by how much.
 </p>
 <p>
-Why is this stronger than <a href="pspace.html#thm-pspace">the theorem $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a>? Because $\mathsf{PP}\subseteq\mathsf{PSPACE}$ (see <a href="background.html#prop-pp-pspace">proposition</a>), and $\mathsf{PP}$ is not believed to be all of $\mathsf{PSPACE}$. Conceptually, it says that
-<strong>quantum computation is a special kind of counting</strong>. <a href="pspace.html#thm-pspace">The theorem $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a> only said that a quantum computation can be <em>replayed</em> in polynomial space.
+Why is this stronger than <a href="pspace.html#thm-pspace">the theorem $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a>? Because $\mathsf{PP}\subseteq\mathsf{PSPACE}$ (see <a href="background.html#prop-pp-pspace">proposition</a>), and $\mathsf{PP}$ is not believed to be all of $\mathsf{PSPACE}$. It also tells us something new about what quantum computers are doing:
+<strong>quantum computation is a special kind of counting</strong>. The previous chapter only showed that a quantum computation can be <em>replayed</em> in polynomial space.
 </p>
 
 <h2 id="obstacle">Why this is plausible, and the one obstacle</h2>
@@ -87,7 +85,7 @@ So the $\mathsf{PP}$ machine should guess <em>two</em> paths $b,b'$ at once, and
   $M$ runs in polynomial time. If $f(x)>0$ it accepts with probability $>\tfrac12$, and if $f(x)\le0$ with probability $\le\tfrac12$. So $M$ witnesses $\{x:f(x)>0\}\in\mathsf{PP}$ (see <a href="background.html#def-pp">definition</a>).
   <span class="qed">&#8718;</span>
 </div>
-<p>So a PTM can only add nonnegative amounts to its acceptance probability, but measuring relative to $\tfrac12$ (accept $=+1$, reject $=-1$, fair coin $=0$) lets it handle signs. This is how the negative numbers of quantum computation get into a classical machine. Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994), and you saw the same trick in <a href="background.html#exer-2a">the exercise showing $\mathsf{NP}\subseteq\mathsf{PP}$</a>.</p>
+<p>A probability can never be negative. But if we measure everything relative to $\tfrac12$ (accept counts as $+1$, reject as $-1$, and a fair coin flip as $0$), a PTM can add up positive and negative terms. This is how the negative numbers of quantum computation get into a classical machine. Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994), and you saw the same trick in <a href="background.html#exer-2a">the exercise showing $\mathsf{NP}\subseteq\mathsf{PP}$</a>.</p>
 
 <h2 id="two-path">Step 2: the two-path formula</h2>
 <p>
@@ -115,9 +113,8 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
 </div>
 <div class="box intu" id="intu-twopath">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(Why it works)</span></div>
-  <p>Think of $\amp yCz^2$ as "the number of ways to pick two histories that both end at $y$," counted with signs. Pairs of histories that end in different places cancel out of the total, not because of any cleverness,
-  but because different basis states are orthogonal: they never add to the same amplitude. That is why the $\mathsf{PP}$ machine can safely abstain on them.
-  The circuit's real work, interference among histories with the <em>same</em> endpoint, is captured exactly by the signs $(-1)^{\varphi(b)+\varphi(b')}$.</p>
+  <p>Think of $\amp yCz^2$ as counting the ways to pick two paths that both end at $y$, with signs. Two paths that end in different places never add to the same amplitude, so they have nothing to do with each other. That is why the $\mathsf{PP}$ machine can safely abstain on those pairs.
+  All of the interesting interference happens between paths with the <em>same</em> endpoint, and the signs $(-1)^{\varphi(b)+\varphi(b')}$ keep track of it exactly.</p>
 </div>
 
 <h2 id="proof">Step 3: proof of the theorem</h2>
@@ -148,7 +145,7 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
   <div class="i2"><b>if</b> $\varphi\oplus\varphi'\oplus 1\oplus w_m = 0$: accept <b>else</b>: reject</div>
 </div>
 <p>The last test says: accept if and only if (sign of $b$) $\times$ (sign of $b'$) $\times$ ($+1$ if $w$ accepts, $-1$ if not) $=+1$.</p>
-<p>In one sentence: <strong>guess two histories of the quantum computer. If they end in different places, flip a coin. If they end in the same place, accept if and only if their signs agree with each other exactly when the endpoint is accepting.</strong></p>
+<p>In words: <strong>guess two paths of the quantum circuit. If they end in different places, flip a coin. If they end in the same place, multiply their two signs, flip the result if the endpoint rejects, and accept if you get $+1$.</strong></p>
 
 <h2 id="example">A worked example, and an explorer</h2>
 <div class="box ex" id="ex-pp-hh">
@@ -169,9 +166,9 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
 
 <div class="box intu" id="intu-whisper">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(A whisper of a bias, and why this doesn't give $\mathsf{BQP}\subseteq\mathsf{BPP}$)</span></div>
-  <p>The quantum circuit is right with probability at least $\tfrac23$, a bias of at least $\tfrac16$ away from $\tfrac12$. The $\mathsf{PP}$ machine has bias $(2p-1)/2^{h+1}$, which can be as small as about $\tfrac{1}{3}\cdot 2^{-(h+1)}$.
-  To detect such a bias by repeated sampling you would need about $4^h$ runs. So this simulation is a <strong>counting</strong> argument, not an efficient randomized algorithm. That's no accident:
-  the exponentially many cancellations that a quantum computer gets for free are paid for here by the extra power of $\mathsf{PP}$, which can decide a majority with no margin at all.</p>
+  <p>The quantum circuit is right with probability at least $\tfrac23$, so it is at least $\tfrac16$ away from $\tfrac12$. The $\mathsf{PP}$ machine is only $|2p-1|/2^{h+1}$ away from $\tfrac12$, which can be as small as about $\tfrac13\cdot 2^{-(h+1)}$.
+  To notice a difference that small by running $M$ over and over, you would need about $4^h$ runs. So this is a <strong>counting</strong> argument, not a fast randomized algorithm.
+  The cancellations that a quantum computer gets for free are paid for by the extra power of $\mathsf{PP}$, which can decide a majority even when it wins by a single vote.</p>
 </div>
 
 <div class="box rem" id="rem-proof-notes">
@@ -196,8 +193,8 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
   <span class="qed">&#8718;</span>
 </div>
 <p>
-Part 3 is the punchline of these notes. <strong>An unconditional proof that quantum computers are more powerful than classical ones would separate $\mathsf{P}$ from $\mathsf{PSPACE}$</strong>, which is one of the major open problems of CS455.
-So the evidence for quantum advantage necessarily comes in conditional forms: oracle separations and specific problems (see <a href="intro.html#fact-separations">the evidence in the introduction</a>) such as factoring that we believe are hard classically.
+Part 3 is the punchline of these notes. <strong>Proving that quantum computers are more powerful than classical ones would also prove $\mathsf{P}\ne\mathsf{PSPACE}$</strong>, which is one of the biggest open problems in complexity theory.
+So for now, the evidence for quantum advantage has to come in other forms: oracle separations and specific problems (see <a href="intro.html#fact-separations">the evidence in the introduction</a>) such as factoring that we believe are hard classically.
 </p>
 
 <div class="box rem" id="fact-beyond">

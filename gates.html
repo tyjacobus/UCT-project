@@ -6,24 +6,23 @@
   <title>Unitary Gates and Circuits | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=4">
+  <link rel="stylesheet" href="assets/site.css?v=5">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=4"></script>
+  <script defer src="assets/site.js?v=5"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>Unitary Gates and Circuits</h1></header>
 
-<p>In the last chapter we defined quantum states. In this chapter we define the operations a quantum computer may apply to them, and we put them together into <em>quantum circuits</em>. The most important formula of these notes appears here: the action of the Hadamard gate on a basis state. It is the heart of the path-sum argument we will use to prove the main theorem.</p>
-<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>Which operations are allowed on a quantum state, and why?</p></div><div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>Which gates branch the computation, and which do not?</p></div>
+<p>In the last chapter we defined quantum states. In this chapter we define the operations a quantum computer can apply to them, and we combine these operations into <em>quantum circuits</em>. We also prove the Hadamard Formula, which describes what the Hadamard gate does to a basis state. We will use it in almost every later proof.</p>
 
 <h2 id="unitary">Why operations must be unitary</h2>
 <p>
-The rules of quantum mechanics say that (between measurements) a state evolves by a <strong>linear</strong> map. That map must send every state to a state,
-so it must preserve the norm of every vector. Linear algebra tells us exactly which matrices do that.
+In quantum mechanics, a state changes by a <strong>linear</strong> map. That map has to turn every state into a state, so it has to keep the norm of every vector equal to $1$. The matrices that do this are exactly the unitary ones.
 </p>
+
 <div class="box def" id="def-unitary">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Unitary matrix)</span></div>
   <p>A square complex matrix $U$ is <strong>unitary</strong> if $U^\dagger U = I$. Equivalently, the columns of $U$ are orthonormal, and $U^{-1} = U^\dagger$.
@@ -35,13 +34,13 @@ so it must preserve the norm of every vector. Linear algebra tells us exactly wh
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
   ($\Leftarrow$) $\|Uv\|^2 = (Uv)^\dagger(Uv) = v^\dagger U^\dagger U v = v^\dagger v = \|v\|^2$.
-  ($\Rightarrow$) This is a standard linear-algebra exercise: taking $v = e_i$, $v=e_i+e_j$ and $v = e_i+\mathrm{i}\,e_j$ shows that the columns of $U$ are orthonormal.
+  ($\Rightarrow$) This is a standard linear algebra exercise: plugging in $v = e_i$, $v=e_i+e_j$ and $v = e_i+\mathrm{i}\,e_j$ shows that the columns of $U$ are orthonormal.
   <span class="qed">&#8718;</span>
 </div>
 <div class="box intu" id="intu-reversible">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(Quantum computation is reversible)</span></div>
-  <p>Every unitary has an inverse ($U^\dagger$), so a quantum computer can never "forget" information. The classical AND gate maps both $01$ and $00$ to $0$, so it has no inverse
-  and can't be a quantum gate as it stands. This looks like a serious handicap. Can quantum computers even simulate classical ones? <a href="bqp.html">The <em>BQP and Reversible Computation</em> chapter</a> shows how to get around it.</p>
+  <p>Every unitary has an inverse ($U^\dagger$), so a quantum computer can never &ldquo;forget&rdquo; information. The classical AND gate sends both $00$ and $01$ to $0$, so it has no inverse
+  and can&rsquo;t be used as a quantum gate directly. This raises the question of whether quantum computers can even simulate classical ones. We answer it in <a href="bqp.html">the <em>BQP and Reversible Computation</em> chapter</a>.</p>
 </div>
 
 <h2 id="single">Single-qubit gates</h2>
@@ -50,13 +49,13 @@ so it must preserve the norm of every vector. Linear algebra tells us exactly wh
   <p>$$X = \begin{pmatrix}0&1\\1&0\end{pmatrix},\quad Z = \begin{pmatrix}1&0\\0&-1\end{pmatrix},\quad H = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.$$
   On basis states, for $a\in\{0,1\}$: $X\ket a = \ket{1-a}$ (the NOT gate), and $Z\ket a = (-1)^a\ket a$.</p>
 </div>
-<p>Each of these is unitary. For $H$, for instance, the columns $\tfrac1{\sqrt2}(1,1)^T$ and $\tfrac1{\sqrt2}(1,-1)^T$ are orthonormal. The most important one by far is $H$, so let's record its action in a form we'll quote again and again.</p>
+<p>Each of these is unitary. For example, the columns of $H$, $\tfrac1{\sqrt2}(1,1)^T$ and $\tfrac1{\sqrt2}(1,-1)^T$, are orthonormal. The most important of the three is $H$, so we write down exactly what it does:</p>
 
 <div class="box lem" id="lem-hadamard">
   <div class="box-title"><span class="label">Lemma</span> <span class="name">(Hadamard Formula)</span></div>
   <p>For every bit $a\in\{0,1\}$,
   $$H\ket a = \frac{1}{\sqrt2}\sum_{c\in\{0,1\}}(-1)^{a\cdot c}\ket c .$$
-  In words: $H$ sends a bit to an equal superposition of both possible output bits, with amplitude $\pm\tfrac1{\sqrt2}$. The sign is <strong>negative exactly when the input bit and the output bit are both 1</strong>.</p>
+  In words: $H$ turns a bit into an equal mix of both possible output bits, each with amplitude $\pm\tfrac1{\sqrt2}$. The sign is <strong>negative only when the input bit and the output bit are both 1</strong>.</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
   Read off the columns of $H$: $H\ket0 = \tfrac{1}{\sqrt2}(\ket0+\ket1)$ and $H\ket1 = \tfrac1{\sqrt2}(\ket0-\ket1)$. The only minus sign is at $a=c=1$.
@@ -64,30 +63,30 @@ so it must preserve the norm of every vector. Linear algebra tells us exactly wh
 </div>
 
 <div class="box ex" id="ex-hadamard">
-  <div class="box-title"><span class="label">Example</span> <span class="name">($H$ undoes itself, and the first cancellation)</span></div>
-  <p>From <a href="#lem-hadamard">the Hadamard Formula</a>, $H\ket0 = \ket+$ and $H\ket1 = \ket-$ (see <a href="states.html#ex-plusminus">the $\ket{\pm}$ example</a>). Now apply $H$ to $\ket+$ and use linearity:
+  <div class="box-title"><span class="label">Example</span> <span class="name">($H$ undoes itself)</span></div>
+  <p>By <a href="#lem-hadamard">the Hadamard Formula</a>, $H\ket0 = \ket+$ and $H\ket1 = \ket-$ (see <a href="states.html#ex-plusminus">the $\ket{\pm}$ example</a>). Now apply $H$ to $\ket+$ and use linearity:
   $$H\ket+ = \tfrac1{\sqrt2}\big(H\ket0 + H\ket1\big) = \tfrac12\big(\ket0 + \ket1 + \ket0 - \ket1\big) = \ket 0.$$
-  The two contributions to $\ket1$ have opposite signs and <strong>cancel</strong>, while the two contributions to $\ket0$ add up. Similarly $H\ket- = \ket1$.
-  So $HH = I$, and $H$ tells $\ket+$ and $\ket-$ apart perfectly, even though measuring them directly gives identical fair coin flips. Keep this example in mind. It is the simplest instance of
-  <em>interference</em>, which <a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a> is about.</p>
+  The two $\ket1$ terms have opposite signs and <strong>cancel</strong>, while the two $\ket0$ terms add up. In the same way, $H\ket- = \ket1$.
+  So $HH = I$, and $H$ can tell $\ket+$ and $\ket-$ apart perfectly, even though measuring them directly gives the same fair coin flip. This is the simplest example of
+  <em>interference</em>, which is the topic of <a href="interference.html">the next chapter</a>.</p>
 </div>
 
 <h2 id="registers">Applying a gate to some qubits of a register</h2>
 <p>
-A circuit on $m$ qubits applies small gates (acting on $1$, $2$ or $3$ qubits) to a few qubits at a time. The cleanest way to say what this does is on basis states: the gate acts on the bits it touches,
-and every other bit comes along unchanged.
+A circuit on $m$ qubits applies small gates (on $1$, $2$ or $3$ qubits) to a few qubits at a time. The easiest way to say what this does is on basis states: the gate acts on the bits it touches,
+and every other bit stays the same.
 </p>
 <div class="box def" id="def-apply">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Applying a $k$-qubit gate to chosen qubits)</span></div>
   <p>Let $G$ be a $2^k\times2^k$ unitary (a <strong>$k$-qubit gate</strong>) and let $j_1,\dots,j_k$ be distinct qubit positions in $\{1,\dots,m\}$.
-  For $z\in\{0,1\}^m$ and $c\in\{0,1\}^k$, write $z[j\gets c]$ for the string $z$ with positions $j_1,\dots,j_k$ overwritten by $c_1,\dots,c_k$.
-  Then "$G$ applied to qubits $j_1,\dots,j_k$" is the $2^m\times 2^m$ matrix $G_{[j_1,\dots,j_k]}$ defined on basis states by
+  For $z\in\{0,1\}^m$ and $c\in\{0,1\}^k$, write $z[j\gets c]$ for the string $z$ with positions $j_1,\dots,j_k$ replaced by $c_1,\dots,c_k$.
+  Then &ldquo;$G$ applied to qubits $j_1,\dots,j_k$&rdquo; is the $2^m\times 2^m$ matrix $G_{[j_1,\dots,j_k]}$ defined on basis states by
   $$G_{[j_1,\dots,j_k]}\ket z = \sum_{c\in\{0,1\}^k}\amp{c}{G}{z_{j_1}\cdots z_{j_k}}\,\ket{z[j\gets c]},$$
-  and extended linearly. Here $\amp cG u$ is the amplitude of $\ket c$ in $G\ket u$ (that is, the $(c,u)$ entry of $G$).</p>
+  and extended linearly. Here $\amp cG u$ is the amplitude of $\ket c$ in $G\ket u$ (the $(c,u)$ entry of $G$).</p>
 </div>
 <p>
 For example, if $m=2$, then $G_{[1]} = G\otimes I$ and $G_{[2]} = I\otimes G$, by <a href="background.html#fact-tensor">the properties of the tensor product</a>. In general $G_{[j_1,\dots,j_k]}$ is $G\otimes I$ with the qubits reordered, so it is unitary.
-As a small example, $H$ applied to qubit 1 of $\ket{10}$ gives $\tfrac1{\sqrt2}\big(\ket{00} - \ket{10}\big)$: the first bit branches according to <a href="#lem-hadamard">the Hadamard Formula</a> and the second bit is carried along.
+For instance, applying $H$ to qubit 1 of $\ket{10}$ gives $\tfrac1{\sqrt2}\big(\ket{00} - \ket{10}\big)$: the first bit splits according to <a href="#lem-hadamard">the Hadamard Formula</a> and the second bit stays the same.
 </p>
 
 <h2 id="multi">CNOT, Toffoli, and classical gates</h2>
@@ -95,7 +94,7 @@ As a small example, $H$ applied to qubit 1 of $\ket{10}$ gives $\tfrac1{\sqrt2}\
   <div class="box-title"><span class="label">Definition</span> <span class="name">(CNOT and Toffoli)</span></div>
   <p>For bits $a,b,c$ (where $\oplus$ is XOR):
   $$\CNOT\ket{a,b} = \ket{a,\;b\oplus a}, \qquad \TOF\ket{a,b,c} = \ket{a,\;b,\;c\oplus(a\wedge b)}.$$
-  CNOT ("controlled NOT") flips the <em>target</em> bit $b$ exactly when the <em>control</em> bit $a$ is $1$. Toffoli ("controlled-controlled NOT") flips $c$ exactly when both controls are $1$.
+  CNOT (&ldquo;controlled NOT&rdquo;) flips the <em>target</em> bit $b$ when the <em>control</em> bit $a$ is $1$. Toffoli flips $c$ when both control bits are $1$.
   Both are their own inverses.</p>
 </div>
 <figure>
@@ -105,90 +104,91 @@ As a small example, $H$ applied to qubit 1 of $\ket{10}$ gives $\tfrac1{\sqrt2}\
   </div>
 </figure>
 
-<p>$X$, CNOT and TOF have something in common that $H$ lacks: they send each basis state to a single basis state.</p>
+<p>$X$, CNOT and Toffoli have something in common that $H$ does not: they send each basis state to a single basis state.</p>
 <div class="box def" id="def-perm">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Classical gate)</span></div>
   <p>A $k$-qubit gate $G$ is <strong>classical</strong> (or a <em>permutation gate</em>) if there is a permutation $\pi$ of $\{0,1\}^k$ with $G\ket u = \ket{\pi(u)}$ for every $u$.
-  Its matrix is a permutation matrix, which is automatically unitary. $X$, CNOT and TOF are classical gates; $H$ is not.</p>
+  Its matrix is a permutation matrix, which is always unitary. $X$, CNOT and Toffoli are classical gates. $H$ is not.</p>
 </div>
 <p>
-The reason to single out classical gates: when you apply one to a basis state, the computation <strong>does not branch</strong>. Applied to qubits of $\ket z$, a classical gate produces exactly one basis state,
-which you can compute by running ordinary reversible bit operations on $z$. In our circuits, all branching (and so all interference) comes from Hadamard gates.
-This observation is what makes the simulations in the last two technical chapters work.
+This matters because a classical gate applied to a basis state <strong>does not split</strong> the computation. It gives exactly one basis state, which we can find by running normal reversible bit operations.
+So in our circuits, all splitting (and therefore all interference) comes from Hadamard gates.
+This is what makes the simulations in the $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ and Main Theorem chapters work.
 </p>
 
 <div class="box ex" id="ex-bell">
   <div class="box-title"><span class="label">Example</span> <span class="name">(Creating a Bell state)</span></div>
   <figure class="circuit" data-wires="|0⟩;|0⟩" data-gates="SLICE ψ_0, H 0, SLICE ψ_1, CNOT 0 1, SLICE ψ_2" data-alt="Bell state circuit: H on qubit 1, then CNOT from qubit 1 to qubit 2"></figure>
-  <p>Start in $\ket{\psi_0}=\ket{00}$. Apply $H$ to qubit 1 (<a href="#lem-hadamard">the Hadamard Formula</a> and <a href="#def-apply">the definition of applying a gate to chosen qubits</a>):
+  <p>Start with $\ket{\psi_0}=\ket{00}$. Applying $H$ to qubit 1 gives
   $$\ket{\psi_1} = \tfrac1{\sqrt2}\big(\ket{00} + \ket{10}\big).$$
-  Apply CNOT with control qubit 1 and target qubit 2, which flips the second bit of each basis state whose first bit is $1$:
+  Then apply CNOT with control qubit 1 and target qubit 2. This flips the second bit of each basis state whose first bit is $1$:
   $$\ket{\psi_2} = \tfrac1{\sqrt2}\big(\ket{00} + \ket{11}\big) = \ket{\Phi^+}.$$
-  Two gates turned a product state into the <a href="states.html#prop-bell">entangled Bell state</a>. The $H$ created a superposition, and the CNOT <em>copied</em> the first qubit's basis value into the second.
-  (Copying basis values is fine. In <a href="interference.html#ex-whichpath">the <em>Quantum vs. Randomized Computation</em> chapter</a> we'll see that it has a price.)</p>
+  Two gates turned a product state into the <a href="states.html#prop-bell">entangled Bell state</a>. The $H$ created a superposition, and the CNOT <em>copied</em> the first qubit&rsquo;s value into the second.
+  (Copying basis values like this is allowed, but in <a href="interference.html#ex-whichpath">the next chapter</a> we will see that it has a cost.)</p>
 </div>
 
 <h2 id="circuits">Quantum circuits and our gate set</h2>
 <div class="box def" id="def-circuit">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Quantum circuit)</span></div>
-  <p>A <strong>quantum circuit</strong> $C$ on $m$ qubits over a finite gate set is a sequence of gates $g_1,\dots,g_T$. Each $g_t$ is a gate from the set together with a list of distinct qubits it acts on.
-  Let $U_t$ be the $2^m\times2^m$ unitary of $g_t$ applied to those qubits (<a href="#def-apply">the definition of applying a gate to chosen qubits</a>). The circuit computes the unitary
+  <p>A <strong>quantum circuit</strong> $C$ on $m$ qubits over a finite gate set is a sequence of gates $g_1,\dots,g_T$. Each $g_t$ is a gate from the set, together with a list of distinct qubits it acts on.
+  Let $U_t$ be the $2^m\times2^m$ unitary of $g_t$ applied to those qubits (see <a href="#def-apply">definition</a>). The circuit computes the unitary
   $$C = U_T\,U_{T-1}\cdots U_1,$$
-  so $g_1$ is applied first. (We use the letter $C$ for both the circuit and its unitary.) $T$ is the <strong>size</strong> of the circuit, and $h$ denotes the number of its gates that are Hadamard gates.
+  so $g_1$ is applied first. (We use $C$ for both the circuit and its unitary.) $T$ is the <strong>size</strong> of the circuit, and $h$ is the number of its gates that are Hadamard gates.
   For basis strings $x, y\in\{0,1\}^m$, $\amp yCx$ is <strong>the amplitude of $\ket y$ in $C\ket x$</strong>.</p>
 </div>
 <p>
-In diagrams, time flows left to right, each wire is a qubit, and qubit 1 is on top. We only ever <strong>measure at the end</strong> of a circuit. This loses no generality:
-the <em>principle of deferred measurement</em> says that any intermediate measurement can be postponed to the end (by copying the measured qubit's value into a fresh qubit with a CNOT)
-without changing the distribution of outcomes. See Nielsen&ndash;Chuang, &sect;4.4.
+In circuit diagrams, time goes from left to right, each wire is a qubit, and qubit 1 is at the top. We only <strong>measure at the end</strong> of a circuit. This doesn&rsquo;t lose anything:
+the <em>principle of deferred measurement</em> says that any measurement in the middle of a circuit can be moved to the end (by first copying the measured qubit into a fresh qubit with a CNOT)
+without changing the probabilities of the outcomes. See Nielsen&ndash;Chuang, &sect;4.4.
 </p>
 
 <div class="box def" id="def-gateset">
   <div class="box-title"><span class="label">Definition</span> <span class="name">(Our gate set $\mathcal G$)</span></div>
-  <p>Throughout these notes, quantum circuits use the gate set
+  <p>In these notes, quantum circuits use the gate set
   $$\mathcal G = \{\,H,\;X,\;\CNOT,\;\TOF\,\}.$$
-  Every gate in $\mathcal G$ except $H$ is classical (<a href="#def-perm">the definition of classical gates</a>), and every matrix entry is in $\{0,\pm1,\pm\tfrac1{\sqrt2}\}$. In particular, <strong>all amplitudes produced by circuits over $\mathcal G$ are real numbers</strong>.</p>
+  Every gate in $\mathcal G$ except $H$ is classical (see <a href="#def-perm">definition</a>), and every matrix entry is in $\{0,\pm1,\pm\tfrac1{\sqrt2}\}$. In particular, <strong>circuits over $\mathcal G$ only produce real amplitudes</strong>.</p>
 </div>
 <p>
-Why this choice? It is about as simple as possible and makes the proofs of $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ and $\mathsf{BQP}\subseteq\mathsf{PP}$ clean. It is also no restriction at all, as far as complexity is concerned:
+We use this gate set because it is simple and it keeps the proofs of $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ and $\mathsf{BQP}\subseteq\mathsf{PP}$ clean. It also doesn&rsquo;t lose any power:
 </p>
 <div class="box fact" id="fact-universal">
   <div class="box-title"><span class="label">Fact</span> <span class="name">(Hadamard + Toffoli is universal; Shi 2003, Aharonov 2003)</span></div>
-  <p>Let $\mathcal G'$ be any standard universal gate set (for example, one containing $S$, the "$\pi/8$" gate $T$, or rotations with efficiently computable complex entries).
-  Every circuit over $\mathcal G'$ with $T$ gates can be simulated by a circuit over $\mathcal G$ with $\mathrm{poly}(T,\log(1/\varepsilon))$ gates (and some extra qubits) whose acceptance probability differs by at most $\varepsilon$.</p>
+  <p>Let $\mathcal G'$ be any standard universal gate set (for example, one with complex-valued gates like the phase gate $S$ or the &ldquo;$\pi/8$&rdquo; gate $T$).
+  Every circuit over $\mathcal G'$ with $T$ gates can be simulated by a circuit over $\mathcal G$ with $\mathrm{poly}(T,\log(1/\varepsilon))$ gates (and some extra qubits) whose acceptance probability is within $\varepsilon$ of the original.</p>
 </div>
 <div class="box omit" id="omit-universal">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(Omitted details)</span></div>
-  <p>We use this theorem only to argue that our definition of $\mathsf{BQP}$ is the standard one. Its proof combines a trick for simulating complex amplitudes with real ones (Bernstein&ndash;Vazirani 1997) with the Solovay&ndash;Kitaev theorem on efficient approximation; see Shi (2003), Aharonov (2003) and Dawson&ndash;Nielsen (2006).</p>
+  <p>We only use this fact to argue that our definition of $\mathsf{BQP}$ matches the standard one. Its proof combines a trick for simulating complex amplitudes with real ones (Bernstein&ndash;Vazirani 1997) with the Solovay&ndash;Kitaev theorem on efficient approximation. See Shi (2003), Aharonov (2003) and Dawson&ndash;Nielsen (2006).</p>
 </div>
-
-<p id="signs">This has a striking interpretation: for complexity purposes, <strong>complex numbers are not needed</strong>. Real amplitudes, and in fact just the signs $\pm$ together with the scaling $1/\sqrt2$, already give the full power of quantum computation. Randomized computation is the same picture with all signs $+$, as we will see in the next chapter.</p>
+<p id="signs">This means that, for complexity purposes, <strong>we do not need complex numbers</strong>. Real amplitudes, and really just the signs $\pm$ together with the factor $1/\sqrt2$, already give all the power of quantum computation. As we will see in the next chapter, randomized computation is the same picture where every sign is $+$.</p>
 
 <h2 id="hadamard-transform">Many coins at once</h2>
-<p>Applying $H$ to each of $n$ qubits is written $H^{\otimes n}$ (it equals $H\otimes\cdots\otimes H$). We will need its action on $\ket{0^n}$:</p>
+<p>Applying $H$ to each of $n$ qubits is written $H^{\otimes n}$ (it equals $H\otimes\cdots\otimes H$). We will need what it does to $\ket{0^n}$:</p>
 <div class="box lem" id="lem-hn">
   <div class="box-title"><span class="label">Lemma</span> <span class="name">(Uniform Superposition Lemma)</span></div>
   <p>$$H^{\otimes n}\ket{0^n} = \frac{1}{2^{n/2}}\sum_{y\in\{0,1\}^n}\ket y .$$</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
-  By the side-by-side fact and <a href="background.html#fact-tensor">property (3) of the tensor product</a>, $H^{\otimes n}\ket{0^n} = H\ket0\otimes\cdots\otimes H\ket0 = \ket+^{\otimes n}$.
+  By the <a href="states.html#fact-product">side-by-side fact</a> and <a href="background.html#fact-tensor">property (3) of the tensor product</a>, $H^{\otimes n}\ket{0^n} = H\ket0\otimes\cdots\otimes H\ket0 = \ket+^{\otimes n}$.
   Expanding $\big(\tfrac1{\sqrt2}(\ket0+\ket1)\big)^{\otimes n}$ by bilinearity gives one term $2^{-n/2}\ket{y_1\cdots y_n}$ for each $y\in\{0,1\}^n$.
   <span class="qed">&#8718;</span>
 </div>
-<p>So $n$ Hadamards turn $\ket{0^n}$ into $n$ &ldquo;quantum coins&rdquo;: measuring would give a uniformly random $n$-bit string.</p>
+<p>So $n$ Hadamard gates turn $\ket{0^n}$ into $n$ &ldquo;quantum coins&rdquo;: measuring them would give a uniformly random $n$-bit string.</p>
 
 <h2 id="exercises">Exercises</h2>
 <div class="box exercise" id="exer-4a">
   <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Verify that $HXH = Z$ and $HZH = X$. (So $Z$ is available in our gate set even though it isn't listed.)</p>
-  <div class="proof" data-label="Solution"><p>On basis states: $HXH\ket a$. Let's do $a=0$: $H\ket0 = \ket+$, $X\ket+ = \ket+$, and $H\ket+ = \ket0 = Z\ket0$. For $a=1$: $H\ket1 = \ket-$, $X\ket- = \tfrac1{\sqrt2}(\ket1-\ket0) = -\ket-$, and $H(-\ket-) = -\ket1 = Z\ket1$.
+  <p>Check that $HXH = Z$ and $HZH = X$. (So we can make $Z$ from our gate set even though it isn&rsquo;t in it.)</p>
+  <div class="proof" data-label="Solution"><p>Check on basis states. For $a=0$: $H\ket0 = \ket+$, $X\ket+ = \ket+$, and $H\ket+ = \ket0 = Z\ket0$. For $a=1$: $H\ket1 = \ket-$, $X\ket- = \tfrac1{\sqrt2}(\ket1-\ket0) = -\ket-$, and $H(-\ket-) = -\ket1 = Z\ket1$.
   Then $HZH = H(HXH)H = X$, since $HH=I$.</p></div>
-</div><h2 id="summary">Summary</h2>
+</div>
+
+<h2 id="summary">Summary</h2>
 <ul>
-    <li>Quantum operations are unitary, which means norm-preserving and therefore reversible.</li>
-    <li>$H\ket a = \tfrac1{\sqrt2}\sum_c(-1)^{ac}\ket c$. Hadamard gates <em>branch</em>, with a minus sign exactly on the $1\to1$ branch.</li>
-    <li>Classical gates ($X$, CNOT, Toffoli) permute basis states, so they never branch.</li>
-  </ul>
+  <li>Quantum operations are unitary. That means they keep norms the same, and they are always reversible.</li>
+  <li>$H\ket a = \tfrac1{\sqrt2}\sum_c(-1)^{ac}\ket c$. Hadamard gates split the computation in two, with a minus sign only on the $1\to1$ branch.</li>
+  <li>Classical gates ($X$, CNOT, Toffoli) just rearrange basis states, so they never split the computation.</li>
+</ul>
 
 </div></main>
 </body>
