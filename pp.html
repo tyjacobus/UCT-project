@@ -6,11 +6,11 @@
   <title>The Main Theorem: BQP ⊆ PP | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
-  <script defer src="assets/explorer.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
+  <script defer src="assets/explorer.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -54,17 +54,15 @@ The way around the square is algebra you already know: $\big(\sum_b a_b\big)^2 =
 So the $\mathsf{PP}$ machine should guess <em>two</em> paths $b,b'$ at once, and each pair contributes the product of the two signs. Two more points make this work:
 </p>
 <ul>
-  <li><strong>Only pairs with the same endpoint count.</strong> When we expand $\sum_y A_y^2$, a pair $(b,b')$ contributes only if both paths end at the same $y$. Pairs that end in different places contribute $0$, so the machine must "abstain" on them.
-    (This is <a href="interference.html#rem-same-endpoint">the interference principle</a> again: paths with different endpoints don't interfere.)</li>
-  <li><strong>Accept minus reject in one sum.</strong> Rather than comparing $p$ with a threshold, we use $2p-1 = p - (1-p)$, which is "probability of accepting minus probability of rejecting." It is a single signed sum
-    in which outcomes with $y_m=0$ get an extra minus sign.</li>
+  <li><strong>Only pairs with the same endpoint count.</strong> When we expand $\sum_y A_y^2$, a pair $(b,b')$ contributes only if both paths end at the same $y$, so the machine must &ldquo;abstain&rdquo; on all other pairs. (This is <a href="interference.html#rem-same-endpoint">the interference principle</a> again.)</li>
+  <li><strong>Accept minus reject in one sum.</strong> Instead of comparing $p$ with $\tfrac12$, we compute $2p-1 = p-(1-p)$, a single signed sum in which rejecting outcomes ($y_m=0$) get an extra minus sign.</li>
 </ul>
 
 <p>The proof has three steps:</p>
 <ol class="roadmap">
-  <li><strong>The <a href="#lem-gap">Signed Counting Lemma</a> (signed counting is in $\mathsf{PP}$).</strong> If $f(x)$ is a sum of exponentially many terms in $\{-1,0,+1\}$, each computable in polynomial time, then some PTM accepts with probability exactly $\tfrac12 + f(x)/2^{q+1}$. The trick: flip a fair coin on the $0$ terms ("abstain").</li>
-  <li><strong>The <a href="#lem-twopath">Two-Path Lemma</a>.</strong> $2p_C(x)-1 = 2^{-h}\sum_{b,b'}v(b,b')$, where $v(b,b')\in\{-1,0,+1\}$ is computed from $\mathrm{Follow}(z,b)$ and $\mathrm{Follow}(z,b')$.</li>
-  <li><strong>Combine.</strong> Apply <a href="#lem-gap">the Signed Counting Lemma</a> to the sum from <a href="#lem-twopath">the Two-Path Lemma</a> to get $(\star)$. The $\mathsf{BQP}$ promise $p\ge\tfrac23$ or $p\le\tfrac13$ then puts $\Pr[M(x)\text{ accepts}]$ on the correct side of $\tfrac12$.</li>
+  <li><strong>The <a href="#lem-gap">Signed Counting Lemma</a> (signed counting is in $\mathsf{PP}$).</strong> A PTM can decide the sign of any efficiently computable sum of $\pm1$ and $0$ terms.</li>
+  <li><strong>The <a href="#lem-twopath">Two-Path Lemma</a>.</strong> The quantum bias $2p_C(x)-1$ is such a sum, over pairs of paths.</li>
+  <li><strong>Combine.</strong> Together they give $(\star)$.</li>
 </ol>
 
 <h2 id="gap-lemma">Step 1: signed counting is in PP</h2>
@@ -89,12 +87,7 @@ So the $\mathsf{PP}$ machine should guess <em>two</em> paths $b,b'$ at once, and
   $M$ runs in polynomial time. If $f(x)>0$ it accepts with probability $>\tfrac12$, and if $f(x)\le0$ with probability $\le\tfrac12$. So $M$ witnesses $\{x:f(x)>0\}\in\mathsf{PP}$ (see <a href="background.html#def-pp">definition</a>).
   <span class="qed">&#8718;</span>
 </div>
-<div class="box intu" id="intu-gap">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Intuition)</span></div>
-  <p>A PTM can only add <em>nonnegative</em> amounts to its acceptance probability. <a href="#lem-gap">The Signed Counting Lemma</a> gets signs anyway by measuring everything relative to $\tfrac12$: accepting counts as $+1$, rejecting as $-1$, and a fair coin flip as $0$.
-  This is how negative numbers, the essential ingredient of quantum computation (see <a href="gates.html#intu-signs">remark</a>), get into a classical probabilistic machine. You saw the same trick in <a href="background.html#exer-2a">the exercise showing $\mathsf{NP}\subseteq\mathsf{PP}$</a>.
-  Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994).</p>
-</div>
+<p>So a PTM can only add nonnegative amounts to its acceptance probability, but measuring relative to $\tfrac12$ (accept $=+1$, reject $=-1$, fair coin $=0$) lets it handle signs. This is how the negative numbers of quantum computation get into a classical machine. Functions of the form $f$ are called $\mathsf{GapP}$ functions (Fenner, Fortnow and Kurtz 1994), and you saw the same trick in <a href="background.html#exer-2a">the exercise showing $\mathsf{NP}\subseteq\mathsf{PP}$</a>.</p>
 
 <h2 id="two-path">Step 2: the two-path formula</h2>
 <p>
@@ -182,15 +175,11 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
 </div>
 
 <div class="box rem" id="rem-proof-notes">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Notes on the proof)</span></div>
-  <ol>
-    <li><strong>Unbounded error.</strong> The proof never used the gap between $\tfrac23$ and $\tfrac13$, only that $p\ne\tfrac12$ goes the right way. So any language with $x\in L\iff p_{C_n}(x)>\tfrac12$ (no gap required) is also in $\mathsf{PP}$ (<a href="#exer-9a">the unbounded-error exercise</a>).</li>
-    <li><strong>Real amplitudes.</strong> We used $|a|^2 = a^2$, which holds because circuits over $\mathcal G$ have real amplitudes. For gate sets with complex entries, <a href="gates.html#fact-universal">the universality theorem for Hadamard + Toffoli</a> lets us switch to $\mathcal G$ first. Alternatively, write $|a|^2 = a\bar a$ and expand into pairs exactly as here, which is how Adleman, DeMarrais and Huang handle algebraic amplitudes.</li>
-    <li><strong>The proof relativizes.</strong> If circuits may also use an oracle gate $\ket{u}\ket{c}\mapsto\ket u\ket{c\oplus A(u)}$, $\mathrm{Follow}$ treats it like any other classical gate by querying $A$. So $\mathsf{BQP}^A\subseteq\mathsf{PP}^A$ for every oracle $A$ (<a href="#exer-9c">the relativization exercise</a>).</li>
-  </ol>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(Where we used real amplitudes)</span></div>
+  <p>We used $|a|^2 = a^2$, which holds because circuits over $\mathcal G$ have real amplitudes. For gate sets with complex entries, the <a href="gates.html#fact-universal">universality theorem</a> lets us switch to $\mathcal G$ first. Alternatively, write $|a|^2 = a\bar a$ and expand into pairs exactly as here, which is how Adleman, DeMarrais and Huang handle general amplitudes.</p>
 </div>
 
-<h2 id="consequences">Consequences and further results</h2>
+<h2 id="consequences">Consequences</h2>
 <div class="box cor" id="cor-consequences">
   <div class="box-title"><span class="label">Corollary</span> <span class="name">(Consequences)</span></div>
   <ol>
@@ -208,22 +197,12 @@ Fix a circuit $C$ over $\mathcal G$ on $m$ qubits with $h$ Hadamard gates and an
 </div>
 <p>
 Part 3 is the punchline of these notes. <strong>An unconditional proof that quantum computers are more powerful than classical ones would separate $\mathsf{P}$ from $\mathsf{PSPACE}$</strong>, which is one of the major open problems of CS455.
-So the evidence for quantum advantage necessarily comes in conditional forms: query separations (<a href="algorithms.html">the <em>Quantum Query Algorithms</em> chapter</a>), and specific problems such as factoring that we believe are hard classically.
+So the evidence for quantum advantage necessarily comes in conditional forms: oracle separations and specific problems (see <a href="intro.html#fact-separations">the evidence in the introduction</a>) such as factoring that we believe are hard classically.
 </p>
 
-<div class="box fact" id="fact-beyond">
-  <div class="box-title"><span class="label">Fact</span> <span class="name">(What else is known)</span></div>
-  <ol>
-    <li><strong>Fortnow&ndash;Rogers (1999).</strong> $\mathsf{BQP}$ is <em>low</em> for $\mathsf{PP}$: $\mathsf{PP}^{\mathsf{BQP}} = \mathsf{PP}$. They also place $\mathsf{BQP}$ inside a smaller counting class, $\mathsf{AWPP}\subseteq\mathsf{PP}$. A $\mathsf{PP}$ machine gains nothing from a quantum subroutine.</li>
-    <li><strong>Aaronson (2005).</strong> $\mathsf{PostBQP} = \mathsf{PP}$: quantum polynomial time <em>with postselection</em> (the ability to condition on an event of exponentially small probability) is exactly $\mathsf{PP}$.
-      Since $\mathsf{BQP}\subseteq\mathsf{PostBQP}$ trivially, this gives a second proof of <a href="#thm-main">the Main Theorem</a>, and it explains why $\mathsf{PP}$ is the natural ceiling.</li>
-    <li><strong>BQP vs. the polynomial hierarchy.</strong> It is open whether $\mathsf{BQP}\subseteq\mathsf{PH}$. Relative to an oracle it is false (Raz&ndash;Tal; <a href="algorithms.html#fact-separations">the known separations</a>), so a proof would have to be non-relativizing.</li>
-  </ol>
-</div>
-<div class="box omit" id="omit-beyond">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Omitted details)</span></div>
-  <p>We do not prove <a href="#fact-beyond">the facts on further results</a>. See L. Fortnow and J. Rogers, "Complexity limitations on quantum computation," <em>J. Comput. Syst. Sci.</em> 59(2), 1999; S. Aaronson, "Quantum computing, postselection, and probabilistic polynomial-time," <em>Proc. R. Soc. A</em> 461, 2005;
-  and J. Watrous, "Quantum computational complexity" (survey, 2008), which also presents <a href="#thm-main">the Main Theorem</a> in $\mathsf{GapP}$ language.</p>
+<div class="box rem" id="fact-beyond">
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(Further results, without proof)</span></div>
+  <p>Fortnow and Rogers (1999) strengthened the Main Theorem: $\mathsf{BQP}$ is <em>low</em> for $\mathsf{PP}$, that is, $\mathsf{PP}^{\mathsf{BQP}}=\mathsf{PP}$. Aaronson (2005) showed that $\mathsf{PP}$ is exactly quantum polynomial time <em>with postselection</em>, which explains why $\mathsf{PP}$ is the natural ceiling. Whether $\mathsf{BQP}\subseteq\mathsf{PH}$ is open. See the survey of Watrous (2008) and the <a href="conclusion.html#references">References</a>.</p>
 </div>
 
 <h2 id="exercises">Exercises</h2>
@@ -232,23 +211,14 @@ So the evidence for quantum advantage necessarily comes in conditional forms: qu
   <p>Let $\mathcal C = (C_0,C_1,\dots)$ be uniform over $\mathcal G$, and let $L = \{x: p_{C_n}(x)>\tfrac12\}$. Show that $L\in\mathsf{PP}$.</p>
   <div class="proof" data-label="Solution"><p>By $(\star)$, $\Pr[M(x)\text{ accepts}]>\tfrac12\iff 2p_{C_n}(x)-1>0\iff x\in L$. The proof of <a href="#thm-main">the Main Theorem</a> never used the constants $\tfrac23,\tfrac13$ except to reach this equivalence.
   (With a little more work one can show the converse, so "unbounded-error quantum polynomial time" equals $\mathsf{PP}$ for reasonable gate sets.)</p></div>
-</div><div class="box exercise" id="exer-9b">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Why doesn't this proof show $\mathsf{BQP}\subseteq\mathsf{BPP}$? Be quantitative.</p>
-  <div class="proof" data-label="Solution"><p>$M$'s bias is $|2p-1|/2^{h+1}\ge\tfrac13\cdot2^{-(h+1)}$, which is only exponentially small in general. To tell bias $+\varepsilon$ from $-\varepsilon$ by sampling, you need $\Omega(1/\varepsilon^2)$ samples, which here is $\Omega(4^h)$.
-  That is exponential, since $h$ is typically polynomial in $n$.</p></div>
-</div><div class="box exercise" id="exer-9c">
-  <div class="box-title"><span class="label">Exercise</span> <span class="name">(Relativization)</span></div>
-  <p>Let $A\subseteq\{0,1\}^*$ be any language, and allow quantum circuits to contain the gate $O_A\ket u\ket c = \ket u\ket{c\oplus A(u)}$ on $k+1$ qubits, for any $k$. Show $\mathsf{BQP}^A\subseteq\mathsf{PP}^A$.</p>
-  <div class="proof" data-label="Solution"><p>$O_A$ is a classical gate (see <a href="gates.html#def-perm">definition</a>), so the path-sum lemma still holds with one more case in $\mathrm{Follow}$: "if $g_t = O_A$ on qubits $j_1..j_k, j$: $w_j\gets w_j\oplus A(w_{j_1}\cdots w_{j_k})$." The induction step for classical gates is unchanged.
-  A polynomial-time machine with oracle $A$ can run this $\mathrm{Follow}$, so $v$ is polynomial-time computable relative to $A$, and <a href="#lem-gap">the Signed Counting Lemma</a> holds relative to $A$ with the same proof.</p></div>
-</div><h2 id="summary">Summary</h2>
+</div>
+
+<h2 id="summary">Summary</h2>
 <ol>
     <li><strong>Amplitude = signed count of paths</strong> (see <a href="pspace.html#lem-pathsum">lemma</a>).</li>
     <li><strong>Probability = square = signed count of <em>pairs</em> of paths with the same endpoint</strong> (<a href="#lem-twopath">the Two-Path Lemma</a>). Pairs with different endpoints contribute nothing, because they never interfere.</li>
     <li><strong>$\mathsf{PP}$ decides the sign of any signed count</strong>, by accepting on $+1$, rejecting on $-1$, and flipping a coin on $0$ (<a href="#lem-gap">the Signed Counting Lemma</a>).</li>
-    <li>So a $\mathsf{PP}$ machine accepts with probability exactly $\tfrac12+\frac{2p-1}{2^{h+1}}$: the same bias as the quantum computer, shrunk exponentially but with the same sign.</li>
-    <li>Consequence: proving $\mathsf{BPP}\neq\mathsf{BQP}$ unconditionally would prove $\mathsf{P}\neq\mathsf{PP}$, and hence $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
+    <li>So $M$ accepts with probability exactly $\tfrac12+\frac{2p-1}{2^{h+1}}$: the quantum bias, shrunk exponentially but with the same sign. Consequently, proving $\mathsf{BPP}\ne\mathsf{BQP}$ would prove $\mathsf{P}\ne\mathsf{PSPACE}$.</li>
   </ol>
 
 </div></main>

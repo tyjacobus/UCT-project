@@ -6,10 +6,10 @@
   <title>Glossary and Notation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -35,13 +35,12 @@
   <tr><td>$\ket\psi\ket\phi$</td><td>shorthand for $\ket\psi\otimes\ket\phi$</td><td><a href="states.html#fact-product">The "side by side = tensor product" fact</a></td></tr>
   <tr><td>$G_{[j_1,\dots,j_k]}$</td><td>gate $G$ applied to qubits $j_1,\dots,j_k$</td><td><a href="gates.html#def-apply">The definition of applying a gate to chosen qubits</a></td></tr>
   <tr><td>$z[j\gets c]$</td><td>$z$ with the bits at positions $j$ overwritten by $c$</td><td><a href="gates.html#def-apply">The definition of applying a gate to chosen qubits</a></td></tr>
-  <tr><td>$a\oplus b$; $x\cdot y$</td><td>XOR; $\sum_i x_iy_i \bmod 2$</td><td><a href="gates.html#def-cnot">The definition of CNOT and Toffoli</a>, <a href="gates.html#lem-hn">the Hadamard Transform Lemma</a></td></tr>
+  <tr><td>$a\oplus b$</td><td>XOR</td><td><a href="gates.html#def-cnot">The definition of CNOT and Toffoli</a>, <a href="gates.html#lem-hn">the Hadamard Transform Lemma</a></td></tr>
   <tr><td>$\amp yCx$</td><td>the amplitude of $\ket y$ in $C\ket x$</td><td><a href="gates.html#def-circuit">The definition of a quantum circuit</a></td></tr>
   <tr><td>$\mathcal G$</td><td>$\{H, X, \CNOT, \TOF\}$, our gate set</td><td><a href="gates.html#def-gateset">The definition of our gate set $\mathcal G$</a></td></tr>
-  <tr><td>$H^{\otimes n}$</td><td>Hadamard on each of $n$ qubits</td><td><a href="gates.html#lem-hn">The Hadamard Transform Lemma</a></td></tr>
+  <tr><td>$H^{\otimes n}$</td><td>Hadamard on each of $n$ qubits</td><td><a href="gates.html#lem-hn">Uniform Superposition Lemma</a></td></tr>
   <tr><td>$z = x0^{m-n}$</td><td>initial basis string when running a circuit on $x$</td><td><a href="bqp.html#def-accept">The definition of acceptance probability</a></td></tr>
   <tr><td>$p_C(x)$</td><td>probability that $C$ accepts $x$ (last qubit reads $1$)</td><td><a href="bqp.html#def-accept">The definition of acceptance probability</a></td></tr>
-  <tr><td>$O_f$</td><td>oracle gate $\ket x\ket b\mapsto\ket x\ket{b\oplus f(x)}$</td><td><a href="algorithms.html#def-oracle">The definition of oracle gates</a></td></tr>
   <tr><td>$b\in\{0,1\}^h$</td><td>choice string: which branch each Hadamard takes (a "path")</td><td><a href="pspace.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
   <tr><td>$\mathrm{Follow}(z,b) = (w,\varphi)$</td><td>endpoint $w(z,b)$ and sign bit $\varphi(z,b)$ of path $b$</td><td><a href="pspace.html#def-follow">The definition of $\mathrm{Follow}$</a></td></tr>
   <tr><td>$A_y$</td><td>signed count: #positive paths to $y$ $-$ #negative paths to $y$</td><td><a href="pspace.html#cor-signed">The Signed Counts Corollary</a></td></tr>
@@ -56,7 +55,7 @@
   <dt id="gl-amplitude">Amplitude</dt>
   <dd>A coordinate of a quantum state; $\braket z\psi$. <span class="where"><a href="states.html#def-qubit">the definition of a qubit</a>, <a href="states.html#def-state">the definition of an $m$-qubit state</a></span></dd>
   <dt id="gl-bell">Bell state $\ket{\Phi^+}$</dt>
-  <dd>$\tfrac1{\sqrt2}(\ket{00}+\ket{11})$, an entangled state. <span class="where"><a href="states.html#prop-bell">the proposition that the Bell state is entangled</a>, <a href="gates.html#ex-bell">the Bell-state example</a></span></dd>
+  <dd>$\tfrac1{\sqrt2}(\ket{00}+\ket{11})$, an entangled state. <span class="where"><a href="states.html#prop-bell">Bell state</a>, <a href="gates.html#ex-bell">the Bell-state example</a></span></dd>
   <dt id="gl-bpp">BPP</dt>
   <dd>Bounded-error probabilistic polynomial time. <span class="where"><a href="background.html#def-bpp">the definition of $\mathsf{BPP}$</a></span></dd>
   <dt id="gl-bqp">BQP</dt>
@@ -77,16 +76,14 @@
   <dd>$G_{[j_1..j_k]}$ acts on the chosen bits and carries the rest along. <span class="where"><a href="gates.html#def-apply">the definition of applying a gate to chosen qubits</a></span></dd>
   <dt id="gl-hadamard">Hadamard gate $H$; Hadamard formula</dt>
   <dd>$H\ket a = \tfrac{1}{\sqrt2}\sum_c(-1)^{ac}\ket c$. <span class="where"><a href="gates.html#def-1q">the definition of the single-qubit gates</a>, <a href="gates.html#lem-hadamard">the Hadamard Formula</a></span></dd>
-  <dt id="gl-hn">Hadamard transform</dt>
-  <dd>$H^{\otimes n}\ket x = 2^{-n/2}\sum_y(-1)^{x\cdot y}\ket y$. <span class="where"><a href="gates.html#lem-hn">the Hadamard Transform Lemma</a></span></dd>
+  <dt id="gl-hn">Uniform superposition</dt>
+  <dd>$H^{\otimes n}\ket{0^n} = 2^{-n/2}\sum_y\ket y$. <span class="where"><a href="gates.html#lem-hn">the Uniform Superposition Lemma</a></span></dd>
   <dt id="gl-inner">Inner product, norm, conjugate transpose</dt>
   <dd><span class="where"><a href="background.html#def-inner">the definition of inner product and norm</a></span></dd>
   <dt id="gl-interference">Interference</dt>
   <dd>Cancellation (destructive) or reinforcement (constructive) of path weights that end at the same basis state. <span class="where"><a href="interference.html#lem-paths">the Sum-over-Paths Lemma</a>, <a href="interference.html#rem-same-endpoint">the interference principle</a></span></dd>
   <dt id="gl-measure">Measurement (Born rule)</dt>
   <dd>Outcome $z$ with probability $|\braket z\psi|^2$; one qubit: $\sum_{z_j=1}|\braket z\psi|^2$. <span class="where"><a href="states.html#def-measure1">the Born rule</a>, <a href="states.html#def-measure">the measurement rule</a></span></dd>
-  <dt id="gl-oracle">Oracle gate, query algorithm</dt>
-  <dd><span class="where"><a href="algorithms.html#def-oracle">the definition of oracle gates</a>; phase kickback: <a href="algorithms.html#lem-kickback">the Phase Kickback Lemma</a></span></dd>
   <dt id="gl-pathsum">Path-sum lemma</dt>
   <dd>$C\ket z = 2^{-h/2}\sum_b(-1)^{\varphi(z,b)}\ket{w(z,b)}$. <span class="where"><a href="pspace.html#lem-pathsum">the Path-Sum Lemma</a></span></dd>
   <dt id="gl-pp">PP</dt>
@@ -109,7 +106,7 @@
   <dd><span class="where"><a href="background.html#def-uniform">the definition of uniform circuit families</a></span></dd>
   <dt id="gl-unitary">Unitary matrix</dt>
   <dd>$U^\dagger U = I$; equivalently norm-preserving. <span class="where"><a href="gates.html#def-unitary">the definition of a unitary matrix</a>, <a href="gates.html#fact-unitary">the fact that unitary means norm-preserving</a></span></dd>
-  <dt id="gl-x-z-s">$X$, $Z$, $S$ gates</dt>
+  <dt id="gl-x-z-s">$X$ and $Z$ gates</dt>
   <dd><span class="where"><a href="gates.html#def-1q">the definition of the single-qubit gates</a></span></dd>
 </dl>
 
@@ -117,18 +114,13 @@
 <div class="table-wrap"><table>
   <tr><th>Item</th><th>Statement</th></tr>
   <tr><td><a href="background.html#prop-pp-pspace">The proposition $\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$</a></td><td>$\mathsf{BPP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$</td></tr>
-  <tr><td><a href="states.html#prop-bell">The proposition that the Bell state is entangled</a></td><td>The Bell state is entangled</td></tr>
   <tr><td><a href="gates.html#fact-unitary">The fact that unitary means norm-preserving</a></td><td>Unitary $\iff$ norm-preserving</td></tr>
   <tr><td><a href="gates.html#lem-hadamard">The Hadamard Formula</a></td><td>Hadamard formula</td></tr>
   <tr><td><a href="gates.html#fact-universal">The universality theorem for Hadamard + Toffoli</a></td><td>$\{H,\TOF\}$ is universal (cited)</td></tr>
-  <tr><td><a href="gates.html#lem-hn">The Hadamard Transform Lemma</a></td><td>Hadamard transform</td></tr>
+  <tr><td><a href="gates.html#lem-hn">The Uniform Superposition Lemma</a></td><td>$H^{\otimes n}\ket{0^n}$ is uniform</td></tr>
   <tr><td><a href="interference.html#lem-paths">The Sum-over-Paths Lemma</a></td><td>Sum over paths</td></tr>
   <tr><td><a href="bqp.html#lem-garbage">The Reversible Simulation Lemma</a>, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a></td><td>Reversible simulation; clean computation</td></tr>
   <tr><td><a href="bqp.html#thm-p-bqp">The theorem $\mathsf{P}\subseteq\mathsf{BQP}$</a>, <a href="bqp.html#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a></td><td>$\mathsf{P}\subseteq\mathsf{BQP}$; $\mathsf{BPP}\subseteq\mathsf{BQP}$</td></tr>
-  <tr><td><a href="algorithms.html#lem-kickback">The Phase Kickback Lemma</a>, <a href="algorithms.html#lem-charsum">the Character Sum Lemma</a></td><td>Phase kickback; character sum</td></tr>
-  <tr><td><a href="algorithms.html#thm-dj">The Deutsch&ndash;Jozsa theorem</a>, <a href="algorithms.html#prop-dj-lb">the deterministic lower bound</a></td><td>Deutsch&ndash;Jozsa; deterministic lower bound</td></tr>
-  <tr><td><a href="algorithms.html#thm-bv">The Bernstein&ndash;Vazirani theorem</a>, <a href="algorithms.html#prop-bv-lb">the randomized lower bound for Bernstein&ndash;Vazirani</a></td><td>Bernstein&ndash;Vazirani; randomized lower bound</td></tr>
-  <tr><td><a href="pspace.html#prop-exp">The proposition $\mathsf{BQP}\subseteq\mathsf{EXP}$</a></td><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td></tr>
   <tr><td><a href="pspace.html#lem-pathsum">The Path-Sum Lemma</a>, <a href="pspace.html#cor-signed">the Signed Counts Corollary</a></td><td>Path-sum lemma; amplitudes are signed counts</td></tr>
   <tr><td><a href="pspace.html#thm-pspace">The theorem $\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a></td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td></tr>
   <tr><td><a href="pp.html#thm-main">The Main Theorem</a> &#9733;</td><td>$\mathsf{BQP}\subseteq\mathsf{PP}$</td></tr>

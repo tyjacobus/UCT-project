@@ -6,10 +6,10 @@
   <title>Quantum vs. Randomized Computation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -135,10 +135,7 @@ from each $z_1$ to every $z_2$, and so on. The final entries are sums over root-
 
 <div class="box intu" id="intu-design">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(How to think about quantum algorithms)</span></div>
-  <p>A quantum algorithm is a way of choreographing cancellations. It branches into exponentially many paths, just like a randomized algorithm, but it arranges the signs so that paths leading to
-  <em>wrong</em> answers cancel and paths leading to <em>right</em> answers reinforce. A randomized algorithm can't do this, because its weights are all nonnegative.</p>
-  <p>Now look ahead to the upper bounds. <a href="#lem-paths">The Sum-over-Paths Lemma</a> says an amplitude is "just" a sum of path weights. A classical machine can add up exponentially many path weights one at a time, without storing the state.
-  That idea gives $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ (<a href="pspace.html">the <em>BQP &sube; PSPACE</em> chapter</a>), and a more careful version gives $\mathsf{BQP}\subseteq\mathsf{PP}$ (<a href="pp.html">the <em>Main Theorem</em> chapter</a>).</p>
+  <p>A quantum algorithm is a way of choreographing cancellations. It branches into exponentially many paths, just like a randomized algorithm, but it arranges the signs so that paths leading to <em>wrong</em> answers cancel. Looking ahead, the Sum-over-Paths Lemma also suggests how to <em>simulate</em> a quantum computer classically: add up the path weights one at a time. That is the idea behind both upper bounds in these notes.</p>
 </div>
 
 <h2 id="which-path">Interference needs paths that end in the same place</h2>
@@ -163,11 +160,7 @@ Cancellation is fragile. Here is the most important way to destroy it, and it wi
   <p>Two paths interfere only if they end in the <strong>same basis state of the entire register</strong>. Any record of which branch was taken, in any qubit, even one we never look at,
   separates the paths and prevents cancellation. Measuring a qubit in the middle of the computation has exactly the same effect, because the measurement outcome is such a record.
   (This is the principle of deferred measurement from <a href="gates.html">the <em>Unitary Gates and Circuits</em> chapter</a> seen from the other side.)</p>
-  <p>Two consequences come later:</p>
-  <ol>
-    <li>When a quantum algorithm runs a classical subroutine, it must <strong>erase its scratch work</strong> ("uncompute"), or the garbage will act as a which-path record. See <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>.</li>
-    <li>In the proof of the Main Theorem, a <strong>pair</strong> of paths contributes to the acceptance probability only when both paths end at the same string. See <a href="pp.html#lem-twopath">the Two-Path Lemma</a>.</li>
-  </ol>
+  <p>This is why we will need to &ldquo;uncompute&rdquo; scratch work (<a href="bqp.html#lem-bennett">Bennett&rsquo;s Uncomputation Lemma</a>), and why, in the proof of the Main Theorem, a pair of paths contributes only when both end at the same string (<a href="pp.html#lem-twopath">the Two-Path Lemma</a>).</p>
 </div>
 
 <h2 id="coins">Coins are a special case</h2>
@@ -184,17 +177,11 @@ We'll turn this into the proof that $\mathsf{BPP}\subseteq\mathsf{BQP}$ in <a hr
   <div class="proof" data-label="Solution"><p>Paths $0\to z_1\to z_1\to z_2$ ($Z$ doesn't branch; it multiplies by $(-1)^{z_1}$). The weights are
     $0\to0\to0$: $+\tfrac12$; $\;0\to1\to0$: $(+\tfrac1{\sqrt2})(-1)(+\tfrac1{\sqrt2}) = -\tfrac12$; $\;0\to0\to1$: $+\tfrac12$; $\;0\to1\to1$: $(+\tfrac1{\sqrt2})(-1)(-\tfrac1{\sqrt2}) = +\tfrac12$.
     So the amplitude of $\ket0$ is $0$ (cancellation) and the amplitude of $\ket1$ is $1$: $HZH\ket0 = \ket1$, consistent with $HZH = X$ (see <a href="gates.html#exer-4a">exercise</a>).</p></div>
-</div><div class="box exercise" id="exer-5b">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Show that a matrix that is both stochastic and unitary must be a permutation matrix. ("The only operations that are both randomized and quantum are reversible classical ones.")</p>
-  <div class="proof" data-label="Solution"><p>Each column $c$ has nonnegative real entries with $\sum_i c_i = 1$ and $\sum_i c_i^2 = 1$. Since $0\le c_i\le1$, we have $c_i^2\le c_i$, with equality only if $c_i\in\{0,1\}$. Summing, $1 = \sum c_i^2\le\sum c_i = 1$, so equality holds everywhere and
-    each column is a standard basis vector. Columns of a unitary are orthonormal, so they are <em>distinct</em> basis vectors. That makes it a permutation matrix.</p></div>
 </div><h2 id="summary">Summary</h2>
 <ul>
     <li>Randomized = nonnegative weights, quantum = signed weights. Everything else in the framework is the same.</li>
     <li><strong>Sum over paths:</strong> amplitude = sum of path weights. Probabilities add up; amplitudes add up and <em>then</em> get squared.</li>
     <li>$HH\ket0=\ket0$ because the two paths to $\ket1$ have weights $+\tfrac12$ and $-\tfrac12$.</li>
-    <li>Paths interfere only if they end at the same full basis string. Leftover records (garbage, measurements) destroy interference.</li>
   </ul>
 
 </div></main>

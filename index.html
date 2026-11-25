@@ -6,10 +6,10 @@
   <title>Quantum Computation: A Complexity Theory View</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -54,7 +54,6 @@ On the other hand, a sum over paths with signs is exactly the kind of thing a cl
 <ol>
   <li>Compute with qubits, unitary gates and measurements, and explain <em>exactly</em> how a quantum circuit differs from a randomized one. The difference is signs, and the cancellation they allow.</li>
   <li>State the definition of $\mathsf{BQP}$ precisely and prove $\mathsf{P} \subseteq \mathsf{BPP} \subseteq \mathsf{BQP}$, using reversible computation and Bennett&rsquo;s uncomputation trick.</li>
-  <li>Analyze the Deutsch&ndash;Jozsa and Bernstein&ndash;Vazirani algorithms, and say what kind of evidence they give that $\mathsf{BQP}$ is more powerful than $\mathsf{BPP}$.</li>
   <li>Prove that amplitudes are <em>signed counts of paths</em> (the <a href="pspace.html#lem-pathsum">Path-Sum Lemma</a>), and use it to show $\mathsf{BQP} \subseteq \mathsf{PSPACE}$.</li>
   <li>Prove the Main Theorem $\mathsf{BQP} \subseteq \mathsf{PP}$, and explain why the proof needs <em>pairs</em> of paths.</li>
 </ol>
@@ -62,8 +61,8 @@ On the other hand, a sum over paths with signs is exactly the kind of thing a cl
 <h2 id="roadmap">Roadmap</h2>
 <p>
 The chapters are meant to be read in order, using the sidebar on the left. Together they are about two CS455 lectures&rsquo; worth of material.
-The first lecture (Qubits through $\mathsf{BQP}$ and Reversible Computation) builds the model and ends with the definition of $\mathsf{BQP}$ and its first inclusions.
-The second lecture (Quantum Query Algorithms through the Main Theorem) asks how powerful the model is, from below (algorithms) and from above (simulations), and ends with the proof of the Main Theorem.
+The first lecture (Qubits through $\mathsf{BQP}$ and Reversible Computation) builds the model and ends with the definition of $\mathsf{BQP}$ and the lower bound $\mathsf{BPP}\subseteq\mathsf{BQP}$.
+The second lecture ($\mathsf{BQP}\subseteq\mathsf{PSPACE}$ and the Main Theorem) proves the upper bounds.
 </p>
 
 <ol class="outline">
@@ -74,13 +73,11 @@ The second lecture (Quantum Query Algorithms through the Main Theorem) asks how 
   <li><h4><a href="states.html">Qubits and Quantum States</a></h4>
     <p>Qubits as unit vectors, Dirac notation, measurement, multi-qubit states via tensor products, entanglement (the Bell state), and why $m$ qubits need $2^m$ numbers to describe.</p></li>
   <li><h4><a href="gates.html">Unitary Gates and Circuits</a></h4>
-    <p>Why operations must be unitary; the gates $X$, $Z$, $S$, $H$, CNOT and Toffoli with worked examples; the definition of a quantum circuit and of our gate set $\mathcal G$; and the <a href="gates.html#lem-hadamard">Hadamard Formula</a> that every later chapter uses.</p></li>
+    <p>Why operations must be unitary; the gates $X$, $Z$, $H$, CNOT and Toffoli with worked examples; the definition of a quantum circuit and of our gate set $\mathcal G$; and the <a href="gates.html#lem-hadamard">Hadamard Formula</a> that every later chapter uses.</p></li>
   <li><h4><a href="interference.html">Quantum vs. Randomized Computation</a></h4>
     <p>Randomized computation as stochastic matrices, quantum computation as unitary matrices. Flipping a coin twice versus applying $H$ twice. The <a href="interference.html#lem-paths">Sum-over-Paths Lemma</a>, and two ways to destroy interference.</p></li>
   <li><h4><a href="bqp.html">$\mathsf{BQP}$ and Reversible Computation</a></h4>
     <p>The definition of $\mathsf{BQP}$. Reversible computing with Toffoli gates, garbage, and Bennett&rsquo;s uncomputation trick, giving $\mathsf{P}\subseteq\mathsf{BQP}$ and $\mathsf{BPP}\subseteq\mathsf{BQP}$.</p></li>
-  <li><h4><a href="algorithms.html">Quantum Query Algorithms</a></h4>
-    <p>Oracles and phase kickback; the Deutsch&ndash;Jozsa and Bernstein&ndash;Vazirani algorithms with matching classical lower bounds; a guided tour (without proofs) of Simon, Shor, Grover and the oracle separations.</p></li>
   <li><h4><a href="pspace.html">$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</a></h4>
     <p>Schr&ouml;dinger-style simulation ($\mathsf{BQP}\subseteq\mathsf{EXP}$) versus Feynman-style simulation. The <a href="pspace.html#lem-pathsum">Path-Sum Lemma</a>: every amplitude is $2^{-h/2}$ times a signed count of paths. Then $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ by reusing space.</p></li>
   <li><h4><a href="pp.html">The Main Theorem: $\mathsf{BQP}\subseteq\mathsf{PP}$</a></h4>
@@ -88,8 +85,6 @@ The second lecture (Quantum Query Algorithms through the Main Theorem) asks how 
   <li><h4><a href="conclusion.html">Conclusion and References</a></h4>
     <p>What is open (is $\mathsf{BPP} \ne \mathsf{BQP}$? is $\mathsf{NP}\subseteq\mathsf{BQP}$?), why proving quantum advantage unconditionally would separate $\mathsf{P}$ from $\mathsf{PSPACE}$, every omitted detail with its source, and all references.</p></li>
 </ol>
-<p>If you are short on time, the shortest route to the Main Theorem is: Qubits and Quantum States, Unitary Gates and Circuits, Quantum vs. Randomized Computation, the <a href="bqp.html#def-bqp">definition of $\mathsf{BQP}$</a>, $\mathsf{BQP}\subseteq\mathsf{PSPACE}$, and the Main Theorem.
-The Quantum Query Algorithms chapter is the &ldquo;why should I care&rdquo; chapter. Nothing in the two upper-bound proofs depends on it.</p>
 
 <h2 id="prerequisites">Prerequisites</h2>
 <p>We assume exactly the background of a CS455 student:</p>

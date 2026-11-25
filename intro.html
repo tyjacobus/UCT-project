@@ -6,123 +6,75 @@
   <title>Why Quantum Complexity? | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
 
 <header class="chapter-banner"><h1>Why Quantum Complexity?</h1></header>
 
-<p>Before we write down a single qubit, let&rsquo;s explain why a complexity theorist should care about quantum computation at all, and how it fits into the landscape of classes we have been building in CS455. There are no theorems in this chapter, just the questions that the remaining chapters answer.</p>
-<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>Is $\mathsf{BPP}$ really the right notion of &ldquo;efficiently computable&rdquo;?</p></div><div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>Where does quantum computation sit relative to $\mathsf{P}$, $\mathsf{BPP}$ and $\mathsf{PSPACE}$?</p></div>
+<p>Before we write down a single qubit, let&rsquo;s explain why a complexity theorist should care about quantum computation, and how it fits into the landscape of classes we have been building in CS455.</p>
+<div class="box guide"><div class="box-title"><span class="label">Guiding Question</span></div><p>Is $\mathsf{BPP}$ really the right notion of &ldquo;efficiently computable&rdquo;?</p></div>
 
 <h2 id="ect">The thesis that CS455 quietly relies on</h2>
 <p>
-Every time CS455 says "$\mathsf{P}$ is the class of efficiently solvable problems," it is making a claim about the physical world, not
-just about Turing machines. The claim is called the <strong>Extended (or Strong) Church&ndash;Turing Thesis</strong>:
+Recall from the Introduction to CS455 that the standard models of computation simulate each other with at most polynomial slowdown, which is why
+$\mathsf{P}$ and $\mathsf{BPP}$ are robust. The belief that this holds for <em>every</em> physically reasonable model has a name:
 </p>
-<blockquote class="card">
-  <strong>Extended Church&ndash;Turing Thesis (ECT).</strong> Any "physically reasonable" model of computation can be simulated by a
-  (probabilistic) Turing machine with at most polynomial overhead in time.
+<blockquote>
+  <strong>Extended Church&ndash;Turing Thesis.</strong> Any physically reasonable model of computation can be simulated by a
+  probabilistic TM with at most polynomial overhead in time.
 </blockquote>
 <p>
-The ordinary Church&ndash;Turing thesis is about <em>what</em> can be computed. The extended version is about <em>how fast</em>.
-It is why we can be casual about the model in CS455: single-tape or multi-tape TMs, RAM machines, Boolean circuits, Python programs.
-They all simulate each other with polynomial slowdown, so $\mathsf{P}$ and $\mathsf{BPP}$ come out the same.
-</p>
-<p>
-Notice that the thesis says "probabilistic." Randomness was the first serious candidate for a resource that might break the
-"deterministic" version of the thesis, and CS455 handles it by defining $\mathsf{BPP}$ and asking whether $\mathsf{P} = \mathsf{BPP}$.
-(Most complexity theorists now believe they are equal, because of derandomization results.)
+Randomness was the first serious candidate for a resource that might break the deterministic version of this thesis, and we handled it by defining
+$\mathsf{BPP}$ and asking whether $\mathsf{P}=\mathsf{BPP}$. Quantum mechanics is the most serious challenge to the probabilistic version.
 </p>
 
 <h2 id="challenge">Quantum mechanics challenges the thesis</h2>
 <p>
-Physics, as far as we know, is quantum mechanical. In 1982 Richard Feynman pointed out that simulating a quantum system of $m$ particles on a
-classical computer seems to require keeping track of about $2^m$ numbers (we will see why in <a href="states.html#rem-exp">the <em>Qubits and Quantum States</em> chapter</a>), and asked the obvious question:
-if nature is "doing" that computation for free, can we harness it? This led to a sequence of results that every complexity
-theorist knows:
-</p>
-<ul>
-  <li><strong>1985, Deutsch:</strong> a formal model of a quantum Turing machine.</li>
-  <li><strong>1993, Bernstein&ndash;Vazirani:</strong> the class $\mathsf{BQP}$ ("bounded-error quantum polynomial time"), the quantum analogue of $\mathsf{BPP}$. They also proved the first simulation results, and gave an oracle problem that quantum computers solve much faster than classical ones.</li>
-  <li><strong>1994, Simon:</strong> an oracle problem with an <em>exponential</em> quantum speed-up over randomized algorithms.</li>
-  <li><strong>1994, Shor:</strong> polynomial-time quantum algorithms for <strong>factoring integers</strong> and computing discrete logarithms.</li>
-</ul>
-<p>
-Shor's algorithm is the reason this matters outside theory. Factoring is not known to be in $\mathsf{BPP}$; the best known classical
-algorithms take time roughly $2^{\tilde O(n^{1/3})}$ on $n$-bit numbers. The security of RSA rests on factoring being hard.
-So if large quantum computers can be built and factoring is not in $\mathsf{BPP}$, then <strong>the Extended Church&ndash;Turing
-Thesis is false</strong>, and "efficiently computable" means $\mathsf{BQP}$, not $\mathsf{BPP}$.
+In 1982 Feynman observed that simulating a quantum system of $m$ particles on a classical computer seems to require keeping track of about $2^m$ numbers
+(we will see why in <a href="states.html#rem-exp">the <em>Qubits and Quantum States</em> chapter</a>), and asked whether we could harness this. In 1993 Bernstein and Vazirani
+defined the class $\mathsf{BQP}$ (bounded-error quantum polynomial time), the quantum analog of $\mathsf{BPP}$. The evidence that it is genuinely more powerful is strong:
 </p>
 
-<div class="box intu" id="intu-not-parallel">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(A common misconception)</span></div>
-  <p>Quantum computers do <strong>not</strong> work by "trying all answers in parallel." If they did, they would solve $\mathsf{NP}$-complete
-  problems easily, and there is good evidence that they can't (see <a href="algorithms.html#fact-separations">the known separations</a>). A quantum state
-  can indeed involve exponentially many classical strings at once, but a measurement shows you just <em>one</em> of them, at random. The real
-  resource is subtler: quantum algorithms arrange for the "wrong" computation paths to <strong>cancel each other out</strong>. These notes
-  is largely about making that one sentence precise.</p>
+<div class="box fact" id="fact-separations">
+  <div class="box-title"><span class="label">Fact</span> <span class="name">(Evidence for and against quantum power)</span></div>
+  <ol>
+    <li><strong>Shor (1994).</strong> Factoring integers and computing discrete logarithms can be done in quantum polynomial time. Factoring is not known to be in $\mathsf{BPP}$ (the best known classical algorithms take time roughly $2^{\tilde O(n^{1/3})}$), and the security of RSA rests on it being hard.</li>
+    <li><strong>Simon (1994).</strong> There is an oracle $A$ with $\mathsf{BPP}^A\ne\mathsf{BQP}^A$: a quantum algorithm makes $O(n)$ queries where every randomized algorithm needs $\Omega(2^{n/2})$. Raz and Tal (2018) even give an oracle with $\mathsf{BQP}^A\not\subseteq\mathsf{PH}^A$.</li>
+    <li><strong>Grover (1996) and Bennett&ndash;Bernstein&ndash;Brassard&ndash;Vazirani (1997).</strong> Unstructured search over $N$ items takes $\Theta(\sqrt N)$ quantum queries, only a quadratic speed-up. Relative to a random oracle, $\mathsf{NP}\not\subseteq\mathsf{BQP}$. This is evidence that quantum computers do <em>not</em> solve $\mathsf{NP}$-complete problems efficiently.</li>
+  </ol>
+</div>
+<div class="box omit" id="omit-separations">
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(Omitted details)</span></div>
+  <p>We do not prove these results. As with the oracle results in the Relativization chapter, the oracle separations are evidence, not proofs. For Shor&rsquo;s and Simon&rsquo;s algorithms see Arora&ndash;Barak, Chapter 10, and Nielsen&ndash;Chuang, Chapter 5; for Grover and the matching lower bound see Nielsen&ndash;Chuang, Chapter 6. The original papers are listed under <a href="conclusion.html#references">References</a>.</p>
 </div>
 
-<h2 id="course">Where this fits in CS455</h2>
 <p>
-In CS455 you built up the map of classes
-$\mathsf{L} \subseteq \mathsf{NL} \subseteq \mathsf{P} \subseteq \mathsf{NP} \subseteq \mathsf{PSPACE} \subseteq \mathsf{EXP}$,
-and added randomness to get $\mathsf{P} \subseteq \mathsf{BPP} \subseteq \mathsf{PSPACE}$. Quantum computation is the next step in
-the same story, and each new idea has a CS455 ancestor:
-</p>
-<div class="table-wrap"><table>
-  <tr><th>CS455 idea</th><th>Quantum version in these notes</th></tr>
-  <tr><td>A probabilistic TM flips coins; we analyze a distribution over computation paths</td><td>A quantum circuit assigns signed <em>amplitudes</em> to paths (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>)</td></tr>
-  <tr><td>$\mathsf{BPP}$: bounded error, probability $\ge 2/3$ of being right</td><td>$\mathsf{BQP}$: the same definition, with a quantum circuit (see <a href="bqp.html#def-bqp">definition</a>)</td></tr>
-  <tr><td>Boolean circuits; Cook&ndash;Levin's "TM to circuit" construction</td><td>Quantum circuits; classical circuits made reversible (<a href="bqp.html">the <em>BQP and Reversible Computation</em> chapter</a>)</td></tr>
-  <tr><td>Savitch's theorem: reuse space by recomputing</td><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$: add up paths one at a time (<a href="pspace.html">the <em>BQP &sube; PSPACE</em> chapter</a>)</td></tr>
-  <tr><td>Counting accepting paths ($\mathsf{PP}$, $\#\mathsf{P}$)</td><td>$\mathsf{BQP}\subseteq\mathsf{PP}$: count pairs of paths with signs (<a href="pp.html">the <em>Main Theorem</em> chapter</a>)</td></tr>
-  <tr><td>Oracles and relativization (Baker&ndash;Gill&ndash;Solovay)</td><td>Quantum query algorithms and oracle separations (<a href="algorithms.html">the <em>Quantum Query Algorithms</em> chapter</a>)</td></tr>
-</table></div>
-
-<h2 id="questions">The two questions we answer</h2>
-<p>Complexity theory pins down a new class by proving inclusions from both sides. For $\mathsf{BQP}$:</p>
-<div class="two-col">
-  <div class="card">
-    <h4>How powerful <em>at least</em>?</h4>
-    <p>Lower bounds on power: $\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$ (<a href="bqp.html">the <em>BQP and Reversible Computation</em> chapter</a>). So quantum computers are
-    no weaker than classical ones. That isn't obvious, because quantum operations must be reversible! Then evidence that they are strictly
-    stronger: query separations (<a href="algorithms.html">the <em>Quantum Query Algorithms</em> chapter</a>).</p>
-  </div>
-  <div class="card">
-    <h4>How powerful <em>at most</em>?</h4>
-    <p>Upper bounds: $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ (<a href="pspace.html">the <em>BQP &sube; PSPACE</em> chapter</a>) and the sharper
-    $\mathsf{BQP}\subseteq\mathsf{PP}$ (<a href="pp.html">the <em>Main Theorem</em> chapter</a>). So quantum computers do <em>not</em> violate the ordinary Church&ndash;Turing
-    thesis, and they can be simulated by a classical machine that can <em>count</em>.</p>
-  </div>
-</div>
-<p>
-The upper bounds matter just as much as the algorithms. They tell us that quantum computers cannot be <em>too</em> powerful, and they
-explain why nobody has proved that quantum computers beat classical ones: by
-the Main Theorem, such a proof would also show $\mathsf{P} \neq \mathsf{PP}$, and that would be a major breakthrough in classical complexity
-theory (see <a href="pp.html#cor-consequences">the Consequences Corollary</a>).
+So if large quantum computers can be built and factoring is not in $\mathsf{BPP}$, the Extended Church&ndash;Turing Thesis is false. Note the third item, though: quantum computers do <strong>not</strong> work by &ldquo;trying all answers in parallel&rdquo;. A quantum state involves exponentially many classical strings at once, but a measurement shows you just one of them, at random. The real resource is subtler: quantum algorithms arrange for the &ldquo;wrong&rdquo; computation paths to <strong>cancel each other out</strong>. These notes are largely about making that sentence precise.
 </p>
 
-<h2 id="scope">What these notes do <em>not</em> do</h2>
-<p>To keep the focus on complexity theory, we leave out three things, and say so whenever they come up:</p>
+<h2 id="questions">What we will prove</h2>
+<p>As with every new class in CS455, we pin $\mathsf{BQP}$ down by proving inclusions from both sides:</p>
 <ul>
-  <li><strong>Physics.</strong> We take the mathematical rules (states are unit vectors, operations are unitary, measurement follows the Born rule) as axioms.</li>
-  <li><strong>Shor's algorithm.</strong> It needs the quantum Fourier transform and some number theory, more than two lectures on its own. We state it (see <a href="algorithms.html#fact-separations">fact</a>) and give references.</li>
-  <li><strong>Gate-set approximation (Solovay&ndash;Kitaev).</strong> We fix one convenient finite gate set and cite the theorem that says this choice doesn't matter (see <a href="gates.html#fact-universal">theorem</a>).</li>
+  <li><strong>From below:</strong> $\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$ (<a href="bqp.html">the <em>BQP and Reversible Computation</em> chapter</a>). This is not obvious, because quantum operations must be reversible.</li>
+  <li><strong>From above:</strong> $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ (<a href="pspace.html">the <em>BQP &sube; PSPACE</em> chapter</a>), and the sharper $\mathsf{BQP}\subseteq\mathsf{PP}$ (<a href="pp.html">the <em>Main Theorem</em> chapter</a>): a quantum computer can be simulated by a classical machine that can <em>count</em>.</li>
 </ul>
+<p>
+The upper bound also explains why nobody has proved that quantum computers beat classical ones: by the Main Theorem, such a proof would show $\mathsf{P}\neq\mathsf{PP}$,
+and hence $\mathsf{P}\ne\mathsf{PSPACE}$ (see <a href="pp.html#cor-consequences">the Consequences Corollary</a>).
+To keep the focus on complexity theory, we treat the rules of quantum mechanics as axioms (no physics is needed), and we omit quantum algorithms such as Shor&rsquo;s.
+</p>
 
 <h2 id="summary">Summary</h2>
 <ul>
-    <li>"$\mathsf{P}$ (or $\mathsf{BPP}$) = efficient" depends on the Extended Church&ndash;Turing Thesis, and quantum computing is the most serious known challenge to it.</li>
-    <li>$\mathsf{BQP}$ is to quantum circuits what $\mathsf{BPP}$ is to coin-flipping machines.</li>
-    <li>The goal is to sandwich $\mathsf{BQP}$: $\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$.</li>
-    <li>The power of quantum computing comes from cancellation (interference), not from "parallel search."</li>
-  </ul>
+  <li>&ldquo;$\mathsf{BPP}$ = efficient&rdquo; depends on the Extended Church&ndash;Turing Thesis, and quantum computing is the most serious known challenge to it.</li>
+  <li>$\mathsf{BQP}$ is to quantum circuits what $\mathsf{BPP}$ is to PTMs. Our goal is the sandwich $\mathsf{BPP}\subseteq\mathsf{BQP}\subseteq\mathsf{PP}\subseteq\mathsf{PSPACE}$.</li>
+  <li>The power of quantum computing comes from cancellation (interference), not from &ldquo;parallel search&rdquo;.</li>
+</ul>
 
 </div></main>
 </body>

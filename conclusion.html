@@ -6,10 +6,10 @@
   <title>Conclusion and References | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -35,8 +35,7 @@
   <tr><th>Result</th><th>Where</th><th>Key idea</th></tr>
   <tr><td>$\mathsf{P}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-p-bqp">Theorem</a> in <em>BQP and Reversible Computation</em></td><td>Toffoli makes circuits reversible; compute, copy, uncompute</td></tr>
   <tr><td>$\mathsf{BPP}\subseteq\mathsf{BQP}$</td><td><a href="bqp.html#thm-bpp-bqp">Theorem</a> in <em>BQP and Reversible Computation</em></td><td>A Hadamard on a fresh qubit is a coin, if its branches never interfere</td></tr>
-  <tr><td>Deutsch&ndash;Jozsa, Bernstein&ndash;Vazirani</td><td><a href="algorithms.html#thm-dj">Theorems</a> in <em>Quantum Query Algorithms</em></td><td>Phase kickback + Hadamard transform: one query reveals a global property</td></tr>
-  <tr><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td><td><a href="pspace.html#prop-exp">Proposition</a> in <em>BQP &sube; PSPACE</em></td><td>Store the state (Schr&ouml;dinger)</td></tr>
+  <tr><td>$\mathsf{BQP}\subseteq\mathsf{EXP}$</td><td><a href="pspace.html#prop-exp">Remark</a> in <em>BQP &sube; PSPACE</em></td><td>Store the state (Schr&ouml;dinger)</td></tr>
   <tr><td>Path-sum lemma</td><td><a href="pspace.html#lem-pathsum">Lemma</a> in <em>BQP &sube; PSPACE</em></td><td>Amplitude = $2^{-h/2}\times$ (signed count of Hadamard paths)</td></tr>
   <tr><td>$\mathsf{BQP}\subseteq\mathsf{PSPACE}$</td><td><a href="pspace.html#thm-pspace">Theorem</a> in <em>BQP &sube; PSPACE</em></td><td>Add paths one at a time, reusing space (Feynman)</td></tr>
   <tr><td>$\mathsf{BQP}\subseteq\mathsf{PP}$ &#9733;</td><td><a href="pp.html#thm-main">Main Theorem</a></td><td>Square = pairs of paths; $\mathsf{PP}$ decides the sign of a signed count</td></tr>
@@ -54,13 +53,9 @@
 
 <h2 id="open">What is still open</h2>
 <ul>
-  <li><strong>Is $\mathsf{BPP}\ne\mathsf{BQP}$?</strong> Widely believed, because of Shor's algorithm and the <a href="algorithms.html#fact-separations">oracle separations</a>. But by <a href="pp.html#cor-consequences">the Consequences Corollary</a>, a proof would imply $\mathsf{P}\neq\mathsf{PSPACE}$.</li>
-  <li><strong>Is $\mathsf{NP}\subseteq\mathsf{BQP}$?</strong> Believed false. The BBBV lower bound shows that "black-box" search can only be sped up quadratically, so a polynomial-time quantum algorithm for SAT would have to exploit structure in a way nobody knows how to do.</li>
-  <li><strong>Is $\mathsf{BQP}\subseteq\mathsf{PH}$?</strong> Unknown. False relative to an oracle (Raz&ndash;Tal). Our best general upper bounds are counting classes like $\mathsf{PP}$ (and the smaller $\mathsf{AWPP}$, <a href="pp.html#fact-beyond">the facts on further results</a>).</li>
-  <li><strong>Sampling and "quantum advantage" experiments.</strong> For <em>sampling</em> problems (output a sample from a distribution, rather than decide a language), there is stronger complexity-theoretic evidence. If a classical machine could sample exactly from the output distributions of certain simple quantum circuits, then the polynomial hierarchy would collapse.
-    The argument uses $\mathsf{PostBQP}=\mathsf{PP}$ (see <a href="pp.html#fact-beyond">fact</a>) and Toda's theorem. See Aaronson&ndash;Arkhipov (2011) and Bremner&ndash;Jozsa&ndash;Shepherd (2011). This is the theory behind recent "quantum advantage" experiments.</li>
-  <li><strong>Can large quantum computers be built?</strong> The <em>threshold theorem</em> of quantum error correction says that a polynomial-size quantum computation can be carried out reliably on noisy hardware, provided the noise per gate is below a constant threshold.
-    So in principle the answer is yes, and the remaining challenge is engineering (Nielsen&ndash;Chuang, Ch. 10).</li>
+  <li><strong>Is $\mathsf{BPP}\ne\mathsf{BQP}$?</strong> Widely believed, because of Shor&rsquo;s algorithm and the <a href="intro.html#fact-separations">oracle separations</a>. But by <a href="pp.html#cor-consequences">the Consequences Corollary</a>, a proof would imply $\mathsf{P}\neq\mathsf{PSPACE}$.</li>
+  <li><strong>Is $\mathsf{NP}\subseteq\mathsf{BQP}$?</strong> Believed false. Black-box search can only be sped up quadratically (Grover; Bennett et al.), so a polynomial-time quantum algorithm for SAT would have to exploit structure in a way nobody knows how to do.</li>
+  <li><strong>Is $\mathsf{BQP}\subseteq\mathsf{PH}$?</strong> Unknown, and false relative to an oracle (Raz&ndash;Tal). Our best general upper bounds are counting classes like $\mathsf{PP}$ (see <a href="pp.html#fact-beyond">the further results</a>).</li>
 </ul>
 
 <h2 id="omitted">Everything we omitted, and where to find it</h2>
@@ -72,8 +67,8 @@
   <tr><td>Deferred measurement</td><td>Measuring only at the end (gates and $\mathsf{BQP}$ chapters)</td><td>[NC10, &sect;4.4]</td></tr>
   <tr><td>Error reduction for $\mathsf{BQP}$ (see <a href="bqp.html#rem-robust">remark</a>)</td><td>Robustness of the definition (not used in any proof)</td><td>[BV97; AB09, Ch. 10]</td></tr>
   <tr><td>Holevo's theorem (see <a href="states.html#rem-exp">remark</a>)</td><td>Intuition only</td><td>[NC10, &sect;12.1]</td></tr>
-  <tr><td>Simon, Shor, Grover, BBBV, Raz&ndash;Tal (see <a href="algorithms.html#fact-separations">fact</a>)</td><td>Context and evidence</td><td>[Sim97, Sho97, Gro96, BBBV97, RT22]</td></tr>
-  <tr><td>Fortnow&ndash;Rogers, Aaronson (see <a href="pp.html#fact-beyond">fact</a>)</td><td>Context beyond <a href="pp.html#thm-main">the Main Theorem</a></td><td>[FR99, Aar05, Wat08]</td></tr>
+  <tr><td>Simon, Shor, Grover, BBBV, Raz&ndash;Tal (see <a href="intro.html#fact-separations">fact</a>)</td><td>Context and evidence</td><td>[Sim97, Sho97, Gro96, BBBV97, RT22]</td></tr>
+  <tr><td>Fortnow&ndash;Rogers, Aaronson (see <a href="pp.html#fact-beyond">remark</a>)</td><td>Context beyond <a href="pp.html#thm-main">the Main Theorem</a></td><td>[FR99, Aar05, Wat08]</td></tr>
 </table></div>
 
 <h2 id="references">References</h2>
@@ -92,13 +87,10 @@
   <li>[ADH97] L. M. Adleman, J. DeMarrais and M.-D. A. Huang. Quantum computability. <em>SIAM Journal on Computing</em> 26(5):1524&ndash;1540, 1997. <span class="muted">The Main Theorem, BQP &sube; PP.</span></li>
   <li>[Aar05] S. Aaronson. Quantum computing, postselection, and probabilistic polynomial-time. <em>Proceedings of the Royal Society A</em> 461:3473&ndash;3482, 2005. <span class="muted">PostBQP = PP.</span></li>
   <li>[Aha03] D. Aharonov. A simple proof that Toffoli and Hadamard are quantum universal. arXiv:quant-ph/0301040, 2003.</li>
-  <li>[AA11] S. Aaronson and A. Arkhipov. The computational complexity of linear optics. <em>STOC</em> 2011; <em>Theory of Computing</em> 9:143&ndash;252, 2013.</li>
   <li>[BBBV97] C. H. Bennett, E. Bernstein, G. Brassard and U. Vazirani. Strengths and weaknesses of quantum computing. <em>SIAM Journal on Computing</em> 26(5):1510&ndash;1523, 1997.</li>
   <li>[Ben73] C. H. Bennett. Logical reversibility of computation. <em>IBM Journal of Research and Development</em> 17(6):525&ndash;532, 1973. <span class="muted">Uncomputation, <a href="bqp.html#lem-bennett">Bennett's Uncomputation Lemma</a>.</span></li>
-  <li>[BJS11] M. J. Bremner, R. Jozsa and D. J. Shepherd. Classical simulation of commuting quantum computations implies collapse of the polynomial hierarchy. <em>Proceedings of the Royal Society A</em> 467:459&ndash;472, 2011.</li>
-  <li>[BV97] E. Bernstein and U. Vazirani. Quantum complexity theory. <em>SIAM Journal on Computing</em> 26(5):1411&ndash;1473, 1997 (preliminary version STOC 1993). <span class="muted">Definition of BQP; BQP &sube; PSPACE; <a href="algorithms.html#thm-bv">the Bernstein&ndash;Vazirani theorem</a>.</span></li>
+  <li>[BV97] E. Bernstein and U. Vazirani. Quantum complexity theory. <em>SIAM Journal on Computing</em> 26(5):1411&ndash;1473, 1997 (preliminary version STOC 1993). <span class="muted">Definition of BQP; BQP &sube; PSPACE.</span></li>
   <li>[DHHMNO05] C. M. Dawson, H. L. Haselgrove, A. P. Hines, D. Mortimer, M. A. Nielsen and T. J. Osborne. Quantum computing and polynomial equations over the finite field $\mathbb Z_2$. <em>Quantum Information and Computation</em> 5(2):102&ndash;112, 2005. <span class="muted">Path sums for Hadamard + Toffoli circuits (see <a href="pspace.html#lem-pathsum">lemma</a>).</span></li>
-  <li>[DJ92] D. Deutsch and R. Jozsa. Rapid solution of problems by quantum computation. <em>Proceedings of the Royal Society of London A</em> 439:553&ndash;558, 1992.</li>
   <li>[DN06] C. M. Dawson and M. A. Nielsen. The Solovay&ndash;Kitaev algorithm. <em>Quantum Information and Computation</em> 6(1):81&ndash;95, 2006.</li>
   <li>[FFK94] S. Fenner, L. Fortnow and S. Kurtz. Gap-definable counting classes. <em>Journal of Computer and System Sciences</em> 48(1):116&ndash;148, 1994. <span class="muted">GapP (see <a href="pp.html#lem-gap">lemma</a>).</span></li>
   <li>[Fey82] R. P. Feynman. Simulating physics with computers. <em>International Journal of Theoretical Physics</em> 21:467&ndash;488, 1982.</li>

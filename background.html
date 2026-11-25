@@ -6,10 +6,10 @@
   <title>Background Review | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -183,7 +183,6 @@ The circuit families we get from Turing machines are uniform:
     <li>$\langle u,v\rangle = \sum_i \overline{u_i}v_i$ and $\|v\|^2 = \sum_i |v_i|^2$. Quantum states will be unit vectors in this norm.</li>
     <li>$u\otimes v$ has one coordinate $u_iv_j$ for every pair $(i,j)$. Tensoring basis vectors gives basis vectors, and $(A\otimes B)(u\otimes v) = Au\otimes Bv$.</li>
     <li>$\mathsf{PP}$ = "accept with probability $>1/2$ exactly on yes-instances," with no gap required. It is really a class about comparing exponentially large counts, and it sits inside $\mathsf{PSPACE}$.</li>
-    <li>Polynomial-time TMs can be converted efficiently into polynomial-size circuits (<a href="#fact-tm-circuits">the Efficient TM to Efficient Circuit theorem</a>). We'll make these circuits reversible in <a href="bqp.html">the <em>BQP and Reversible Computation</em> chapter</a>.</li>
   </ul>
 
 </div></main>

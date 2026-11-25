@@ -6,10 +6,10 @@
   <title>BQP and Reversible Computation | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -45,20 +45,8 @@ We use the <strong>last</strong> qubit as the answer qubit, so that it never cla
 <p>Put this next to the <a href="background.html#def-bpp">definition of $\mathsf{BPP}$</a>. The definition is word for word the same, including the error $\tfrac13$. The only change is that the PTM is replaced by a uniform family of quantum circuits.</p>
 
 <div class="box rem" id="rem-robust">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(The definition is robust)</span></div>
-  <ol>
-    <li><strong>Gate set.</strong> By <a href="gates.html#fact-universal">the universality theorem for Hadamard + Toffoli</a>, replacing $\mathcal G$ by any standard universal gate set gives the same class. (Simulate with error $\varepsilon=0.01$; then $\tfrac23$ and $\tfrac13$ become $0.656$ and $0.343$, and part 2 restores them.)</li>
-    <li><strong>Error.</strong> The constants $\tfrac23,\tfrac13$ can be replaced by $1-2^{-q(n)}$ and $2^{-q(n)}$ for any polynomial $q$, exactly as for $\mathsf{BPP}$. Run $k = O(q(n))$ copies of $C_n$ on disjoint sets of qubits.
-      Their answer qubits, if measured, would give $k$ independent outcomes, because the joint state is a tensor product. So compute the majority of the answer qubits into a fresh qubit with a reversible circuit (<a href="#lem-bennett">Bennett's Uncomputation Lemma</a> below) and measure that.
-      Hoeffding&rsquo;s inequality finishes the argument exactly as in the Two-sided Error Reduction theorem of Probabilistic Time Complexity 2.</li>
-    <li><strong>Measurement.</strong> Measuring a single qubit, once, at the end, is no loss of generality, by the principle of deferred measurement (<a href="gates.html">the <em>Unitary Gates and Circuits</em> chapter</a>).</li>
-    <li><strong>Uniformity matters.</strong> Without it, the family $\{C_n\}$ could encode an undecidable language in <em>which</em> circuit is chosen for each $n$, just as with $\mathsf{P/poly}$.</li>
-  </ol>
-</div>
-<div class="box omit" id="omit-robust">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Omitted details)</span></div>
-  <p>Item 1 depends on <a href="gates.html#fact-universal">the universality theorem for Hadamard + Toffoli</a>, whose proof we omit (sources there). Item 2 is only sketched; for a full treatment see Bernstein&ndash;Vazirani, "Quantum complexity theory," <em>SIAM J. Comput.</em> 26(5), 1997, or Arora&ndash;Barak, Chapter 10.
-  Item 3 is Nielsen&ndash;Chuang, &sect;4.4. None of these are used in the proofs of $\mathsf{P}\subseteq\mathsf{BQP}$, $\mathsf{BPP}\subseteq\mathsf{BQP}$, $\mathsf{BQP}\subseteq\mathsf{PSPACE}$ or <a href="pp.html#thm-main">the Main Theorem</a>, which work directly with <a href="#def-bqp">the definition of $\mathsf{BQP}$</a> as stated.</p>
+  <div class="box-title"><span class="label">Remark</span> <span class="name">(The definition is robust; omitted details)</span></div>
+  <p>As with $\mathsf{BPP}$, the error $\tfrac13$ can be replaced by $2^{-\mathrm{poly}(n)}$: run independent copies of $C_n$ on disjoint qubits, compute the majority of their answers reversibly, and apply Hoeffding&rsquo;s inequality exactly as in the Two-sided Error Reduction theorem of Probabilistic Time Complexity 2. By the <a href="gates.html#fact-universal">universality theorem</a>, replacing $\mathcal G$ by any standard universal gate set gives the same class. We only sketch these facts; see Bernstein&ndash;Vazirani (1997) or Arora&ndash;Barak, Chapter 10. None of our proofs depend on them.</p>
 </div>
 
 <h2 id="reversible">Making classical circuits reversible</h2>
@@ -152,7 +140,7 @@ Charles Bennett's 1973 trick removes it: compute, copy the answer, then run the 
   </ol>
   <figure class="circuit" data-wires="|x⟩;|0^{r}⟩;|0^{s}⟩;|0⟩" data-out="|x⟩;|ρ⟩;|0^{s}⟩;|V(x,ρ)⟩"
     data-gates="BOX H^{⊗r} 1 1, BOX B_D 0 3, M 3" data-alt="Hadamards on the r coin qubits, then the clean reversible circuit for V, then measure the answer qubit"></figure>
-  <p>Track the state. Initially it is $\ket x\ket{0^r}\ket{0^s}\ket0$. By <a href="gates.html#lem-hn">the Hadamard Transform Lemma</a> with $x=0^r$, step 1 gives
+  <p>Track the state. Initially it is $\ket x\ket{0^r}\ket{0^s}\ket0$. By <a href="gates.html#lem-hn">the Uniform Superposition Lemma</a>, step 1 gives
   $$\frac{1}{2^{r/2}}\sum_{\rho\in\{0,1\}^r}\ket x\ket\rho\ket{0^s}\ket0 .$$
   By <a href="#lem-bennett">Bennett's Uncomputation Lemma</a> and linearity, step 2 gives
   $$\frac{1}{2^{r/2}}\sum_{\rho\in\{0,1\}^r}\ket x\ket\rho\ket{0^s}\ket{V(x,\rho)} .$$
@@ -163,33 +151,19 @@ Charles Bennett's 1973 trick removes it: compute, copy the answer, then run the 
   <span class="qed">&#8718;</span>
 </div>
 
-<div class="box rem" id="rem-coins-classical">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Why the coins stay classical)</span></div>
-  <p>In this proof the coin register itself is a permanent which-path record: nothing ever applies $H$ to it again, so the $2^r$ branches never interfere, and the quantum circuit behaves exactly like the
-  randomized machine. (For the same reason, using the "garbage" circuit $R_{D_n}$ instead of $B_{D_n}$ would give the same acceptance probability; see <a href="#exer-6b">the garbage exercise</a>.) Getting <em>more</em> than $\mathsf{BPP}$
-  out of a quantum computer requires letting branches interfere. That is what the algorithms on the next chapter do, and there, clean computation is essential.</p>
-</div>
+<p id="rem-coins-classical">Notice why the coins behave classically: nothing ever applies $H$ to the coin register again, so it is a permanent which-path record and the $2^r$ branches never interfere. Getting <em>more</em> than $\mathsf{BPP}$ out of a quantum computer requires letting branches interfere, and then clean computation is essential.</p>
 
 <h2 id="exercises">Exercises</h2>
-<div class="box exercise" id="exer-6a">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Give a circuit of two CNOTs that maps $\ket{a}\ket{b}\ket{0}\mapsto\ket a\ket b\ket{a\oplus b}$. Why doesn't it need any uncomputation?</p>
-  <div class="proof" data-label="Solution"><p>$\CNOT$ from qubit 1 to qubit 3, then $\CNOT$ from qubit 2 to qubit 3. No scratch qubits are used, so there is no garbage to remove. (XOR is "already reversible" given its inputs.)</p></div>
-</div><div class="box exercise" id="exer-6b">
+<div class="box exercise" id="exer-6b">
   <div class="box-title"><span class="label">Exercise</span></div>
   <p>In the proof of <a href="#thm-bpp-bqp">the theorem $\mathsf{BPP}\subseteq\mathsf{BQP}$</a>, suppose we used $R_{D_n}$ (with garbage) instead of $B_{D_n}$, and measured the qubit holding $g_s$. Show the acceptance probability is unchanged.</p>
   <div class="proof" data-label="Solution"><p>The final state is $2^{-r/2}\sum_\rho\ket x\ket\rho\ket{g(x,\rho)}$. Distinct $\rho$ still give distinct basis states, so the probability of reading $g_s=1$ is the fraction of $\rho$ with $V(x,\rho)=1$, as before.
   Garbage is harmless when no interference is needed afterwards.</p></div>
-</div><div class="box exercise" id="exer-6c">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Prove that $\mathsf{BQP}$ is closed under complement.</p>
-  <div class="proof" data-label="Solution"><p>Given $\mathcal C$ for $L$, append an $X$ gate on the answer qubit. This flips the outcome, so the new acceptance probability is $1-p_{C_n}(x)$, which is $\ge\tfrac23$ exactly when $p_{C_n}(x)\le\tfrac13$, and vice versa.</p></div>
 </div><h2 id="summary">Summary</h2>
 <ul>
     <li>$\mathsf{BQP}$ is the $\mathsf{BPP}$ definition with "uniform family of quantum circuits over $\mathcal G$" in place of "probabilistic TM." Its acceptance probability is $p_C(x) = \sum_{y_m=1}|\amp{y}{C}{x0^{m-n}}|^2$.</li>
     <li>Toffoli gates make any classical circuit reversible, at the cost of garbage.</li>
     <li>Compute, copy, uncompute: Bennett's trick removes garbage, so that the classical computation $\ket x\ket b\mapsto\ket x\ket{b\oplus f(x)}$ can be used inside an interference pattern.</li>
-    <li>$\mathsf{P}\subseteq\mathsf{BPP}\subseteq\mathsf{BQP}$. Coins are Hadamards whose branches are never allowed to interfere.</li>
   </ul>
 
 </div></main>

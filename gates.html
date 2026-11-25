@@ -6,10 +6,10 @@
   <title>Unitary Gates and Circuits | Quantum Computation</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/katex/katex.min.css">
-  <link rel="stylesheet" href="assets/site.css?v=3">
+  <link rel="stylesheet" href="assets/site.css?v=4">
   <script defer src="assets/katex/katex.min.js"></script>
   <script defer src="assets/katex/contrib/auto-render.min.js"></script>
-  <script defer src="assets/site.js?v=3"></script>
+  <script defer src="assets/site.js?v=4"></script>
 </head>
 <body>
 <main><div class="content">
@@ -35,9 +35,7 @@ so it must preserve the norm of every vector. Linear algebra tells us exactly wh
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
   ($\Leftarrow$) $\|Uv\|^2 = (Uv)^\dagger(Uv) = v^\dagger U^\dagger U v = v^\dagger v = \|v\|^2$.
-  ($\Rightarrow$) Write $u_i = Ue_i$ for the columns. Taking $v=e_i$ gives $\|u_i\| = 1$. For $i\ne j$, expanding gives
-  $\|u_i+u_j\|^2 = 2 + 2\,\mathrm{Re}\langle u_i,u_j\rangle$, and this must equal $\|e_i+e_j\|^2 = 2$, so $\mathrm{Re}\langle u_i,u_j\rangle=0$.
-  Similarly $\|u_i + \mathrm{i}\,u_j\|^2 = 2 - 2\,\mathrm{Im}\langle u_i,u_j\rangle$ must equal $2$, so $\mathrm{Im}\langle u_i,u_j\rangle = 0$. So the columns are orthonormal.
+  ($\Rightarrow$) This is a standard linear-algebra exercise: taking $v = e_i$, $v=e_i+e_j$ and $v = e_i+\mathrm{i}\,e_j$ shows that the columns of $U$ are orthonormal.
   <span class="qed">&#8718;</span>
 </div>
 <div class="box intu" id="intu-reversible">
@@ -48,9 +46,9 @@ so it must preserve the norm of every vector. Linear algebra tells us exactly wh
 
 <h2 id="single">Single-qubit gates</h2>
 <div class="box def" id="def-1q">
-  <div class="box-title"><span class="label">Definition</span> <span class="name">(Pauli $X$, Pauli $Z$, phase $S$, Hadamard $H$)</span></div>
-  <p>$$X = \begin{pmatrix}0&1\\1&0\end{pmatrix},\quad Z = \begin{pmatrix}1&0\\0&-1\end{pmatrix},\quad S = \begin{pmatrix}1&0\\0&\mathrm{i}\end{pmatrix},\quad H = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.$$
-  On basis states, for $a\in\{0,1\}$: $X\ket a = \ket{1-a}$ (the NOT gate), $Z\ket a = (-1)^a\ket a$, and $S\ket a = \mathrm{i}^a\ket a$.</p>
+  <div class="box-title"><span class="label">Definition</span> <span class="name">(Pauli $X$, Pauli $Z$, Hadamard $H$)</span></div>
+  <p>$$X = \begin{pmatrix}0&1\\1&0\end{pmatrix},\quad Z = \begin{pmatrix}1&0\\0&-1\end{pmatrix},\quad H = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.$$
+  On basis states, for $a\in\{0,1\}$: $X\ket a = \ket{1-a}$ (the NOT gate), and $Z\ket a = (-1)^a\ket a$.</p>
 </div>
 <p>Each of these is unitary. For $H$, for instance, the columns $\tfrac1{\sqrt2}(1,1)^T$ and $\tfrac1{\sqrt2}(1,-1)^T$ are orthonormal. The most important one by far is $H$, so let's record its action in a form we'll quote again and again.</p>
 
@@ -126,7 +124,7 @@ This observation is what makes the simulations in the last two technical chapter
   $$\ket{\psi_1} = \tfrac1{\sqrt2}\big(\ket{00} + \ket{10}\big).$$
   Apply CNOT with control qubit 1 and target qubit 2, which flips the second bit of each basis state whose first bit is $1$:
   $$\ket{\psi_2} = \tfrac1{\sqrt2}\big(\ket{00} + \ket{11}\big) = \ket{\Phi^+}.$$
-  Two gates turned a product state into the entangled Bell state of <a href="states.html#prop-bell">the proposition that the Bell state is entangled</a>. The $H$ created a superposition, and the CNOT <em>copied</em> the first qubit's basis value into the second.
+  Two gates turned a product state into the <a href="states.html#prop-bell">entangled Bell state</a>. The $H$ created a superposition, and the CNOT <em>copied</em> the first qubit's basis value into the second.
   (Copying basis values is fine. In <a href="interference.html#ex-whichpath">the <em>Quantum vs. Randomized Computation</em> chapter</a> we'll see that it has a price.)</p>
 </div>
 
@@ -161,32 +159,23 @@ Why this choice? It is about as simple as possible and makes the proofs of $\mat
 </div>
 <div class="box omit" id="omit-universal">
   <div class="box-title"><span class="label">Remark</span> <span class="name">(Omitted details)</span></div>
-  <p>We use <a href="#fact-universal">the universality theorem for Hadamard + Toffoli</a> only to argue that our definition of $\mathsf{BQP}$ (see <a href="bqp.html#def-bqp">definition</a>) is the standard one. Its proof has two ingredients:
-  (i) complex amplitudes can be simulated by real ones using one extra qubit that holds "real part vs. imaginary part" (Bernstein&ndash;Vazirani 1997); and
-  (ii) $\{H,\TOF\}$ generates a dense set of real orthogonal transformations (on an encoded subspace), and the <em>Solovay&ndash;Kitaev theorem</em> turns density into efficient approximation.
-  See Y. Shi, "Both Toffoli and controlled-NOT need little help to do universal quantum computation" (2003); D. Aharonov, "A simple proof that Toffoli and Hadamard are quantum universal" (2003);
-  and Dawson&ndash;Nielsen, "The Solovay&ndash;Kitaev algorithm" (2006).</p>
-</div>
-<div class="box intu" id="intu-signs">
-  <div class="box-title"><span class="label">Remark</span> <span class="name">(Negative numbers are the whole story)</span></div>
-  <p><a href="#fact-universal">The universality theorem for Hadamard + Toffoli</a> has a striking interpretation: for complexity purposes, <strong>complex numbers are not needed</strong>. Real amplitudes, and in fact just the signs $\pm$ together with the scaling $1/\sqrt2$, already
-  give the full power of quantum computation. Compare this with randomized computation, which is the same picture with all signs $+$ (<a href="interference.html">the <em>Quantum vs. Randomized Computation</em> chapter</a>).</p>
+  <p>We use this theorem only to argue that our definition of $\mathsf{BQP}$ is the standard one. Its proof combines a trick for simulating complex amplitudes with real ones (Bernstein&ndash;Vazirani 1997) with the Solovay&ndash;Kitaev theorem on efficient approximation; see Shi (2003), Aharonov (2003) and Dawson&ndash;Nielsen (2006).</p>
 </div>
 
-<h2 id="hadamard-transform">The Hadamard transform</h2>
-<p>Applying $H$ to each of $n$ qubits is so common that it gets its own notation, $H^{\otimes n}$ (it equals $H\otimes\cdots\otimes H$). Its action on basis states follows from <a href="#lem-hadamard">the Hadamard Formula</a>:</p>
+<p id="signs">This has a striking interpretation: for complexity purposes, <strong>complex numbers are not needed</strong>. Real amplitudes, and in fact just the signs $\pm$ together with the scaling $1/\sqrt2$, already give the full power of quantum computation. Randomized computation is the same picture with all signs $+$, as we will see in the next chapter.</p>
+
+<h2 id="hadamard-transform">Many coins at once</h2>
+<p>Applying $H$ to each of $n$ qubits is written $H^{\otimes n}$ (it equals $H\otimes\cdots\otimes H$). We will need its action on $\ket{0^n}$:</p>
 <div class="box lem" id="lem-hn">
-  <div class="box-title"><span class="label">Lemma</span> <span class="name">(Hadamard Transform Lemma)</span></div>
-  <p>For every $x\in\{0,1\}^n$,
-  $$H^{\otimes n}\ket x = \frac{1}{2^{n/2}}\sum_{y\in\{0,1\}^n}(-1)^{x\cdot y}\ket y, \qquad\text{where } x\cdot y = x_1y_1+\cdots+x_ny_n \bmod 2.$$
-  In particular, $H^{\otimes n}\ket{0^n} = 2^{-n/2}\sum_y\ket y$ is the uniform superposition over all $n$-bit strings ("$n$ quantum coins").</p>
+  <div class="box-title"><span class="label">Lemma</span> <span class="name">(Uniform Superposition Lemma)</span></div>
+  <p>$$H^{\otimes n}\ket{0^n} = \frac{1}{2^{n/2}}\sum_{y\in\{0,1\}^n}\ket y .$$</p>
 </div>
 <div class="proof"><span class="proof-label">Proof.</span>
-  By <a href="states.html#fact-product">the "side by side = tensor product" fact</a>, $\ket x = \ket{x_1}\otimes\cdots\otimes\ket{x_n}$, and by <a href="background.html#fact-tensor">the property (3) of the tensor product</a>, $H^{\otimes n}$ acts on each factor separately. Using <a href="#lem-hadamard">the Hadamard Formula</a> on each factor,
-  $$H^{\otimes n}\ket x = \bigotimes_{i=1}^n\Big(\frac{1}{\sqrt2}\sum_{y_i\in\{0,1\}}(-1)^{x_iy_i}\ket{y_i}\Big) = \frac{1}{2^{n/2}}\sum_{y_1,\dots,y_n}(-1)^{x_1y_1+\cdots+x_ny_n}\ket{y_1\cdots y_n},$$
-  where the last step expands the tensor product by bilinearity (<a href="background.html#fact-tensor">the property (1) of the tensor product</a>) and uses <a href="states.html#fact-product">the "side by side = tensor product" fact</a> again.
+  By the side-by-side fact and <a href="background.html#fact-tensor">property (3) of the tensor product</a>, $H^{\otimes n}\ket{0^n} = H\ket0\otimes\cdots\otimes H\ket0 = \ket+^{\otimes n}$.
+  Expanding $\big(\tfrac1{\sqrt2}(\ket0+\ket1)\big)^{\otimes n}$ by bilinearity gives one term $2^{-n/2}\ket{y_1\cdots y_n}$ for each $y\in\{0,1\}^n$.
   <span class="qed">&#8718;</span>
 </div>
+<p>So $n$ Hadamards turn $\ket{0^n}$ into $n$ &ldquo;quantum coins&rdquo;: measuring would give a uniformly random $n$-bit string.</p>
 
 <h2 id="exercises">Exercises</h2>
 <div class="box exercise" id="exer-4a">
@@ -194,19 +183,11 @@ Why this choice? It is about as simple as possible and makes the proofs of $\mat
   <p>Verify that $HXH = Z$ and $HZH = X$. (So $Z$ is available in our gate set even though it isn't listed.)</p>
   <div class="proof" data-label="Solution"><p>On basis states: $HXH\ket a$. Let's do $a=0$: $H\ket0 = \ket+$, $X\ket+ = \ket+$, and $H\ket+ = \ket0 = Z\ket0$. For $a=1$: $H\ket1 = \ket-$, $X\ket- = \tfrac1{\sqrt2}(\ket1-\ket0) = -\ket-$, and $H(-\ket-) = -\ket1 = Z\ket1$.
   Then $HZH = H(HXH)H = X$, since $HH=I$.</p></div>
-</div><div class="box exercise" id="exer-4b">
-  <div class="box-title"><span class="label">Exercise</span></div>
-  <p>Let $C$ be the 2-qubit circuit "$H$ on both qubits, then CNOT with control 1 and target 2, then $H$ on both qubits." Show that $C$ is CNOT with control <em>2</em> and target <em>1</em>.</p>
-  <div class="proof" data-label="Solution"><p>By <a href="#lem-hn">the Hadamard Transform Lemma</a>, $H^{\otimes2}\ket{ab} = \tfrac12\sum_{y_1,y_2}(-1)^{ay_1+by_2}\ket{y_1y_2}$. CNOT maps $\ket{y_1y_2}\mapsto\ket{y_1,y_1\oplus y_2}$. Substituting $y_2' = y_1\oplus y_2$ (so $y_2 = y_1\oplus y_2'$),
-    and using $(-1)^{b(y_1\oplus y_2')} = (-1)^{by_1 + by_2'}$, the state becomes $\tfrac12\sum_{y_1,y_2'}(-1)^{(a\oplus b)y_1 + by_2'}\ket{y_1y_2'} = H^{\otimes2}\ket{a\oplus b,\;b}$.
-    Applying $H^{\otimes 2}$ again (it is its own inverse) gives $\ket{a\oplus b,\,b}$, which is CNOT with control 2 and target 1. Interesting: in the "Hadamard basis," the roles of control and target swap.</p></div>
 </div><h2 id="summary">Summary</h2>
 <ul>
     <li>Quantum operations are unitary, which means norm-preserving and therefore reversible.</li>
     <li>$H\ket a = \tfrac1{\sqrt2}\sum_c(-1)^{ac}\ket c$. Hadamard gates <em>branch</em>, with a minus sign exactly on the $1\to1$ branch.</li>
     <li>Classical gates ($X$, CNOT, Toffoli) permute basis states, so they never branch.</li>
-    <li>A circuit is a product of gate unitaries, $C = U_T\cdots U_1$. We use $\mathcal G = \{H,X,\CNOT,\TOF\}$, which has real amplitudes and loses nothing (<a href="#fact-universal">the universality theorem for Hadamard + Toffoli</a>).</li>
-    <li>$H^{\otimes n}\ket x = 2^{-n/2}\sum_y(-1)^{x\cdot y}\ket y$.</li>
   </ul>
 
 </div></main>

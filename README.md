@@ -15,10 +15,9 @@ The layout, statement blocks, collapsible proofs and notation follow the CS455 P
 | `gates.html` | 4. Unitary gates and circuits |
 | `interference.html` | 5. Quantum vs. randomized computation |
 | `bqp.html` | 6. BQP and reversible computation (P ⊆ BPP ⊆ BQP) |
-| `algorithms.html` | 7. Quantum query algorithms (Deutsch–Jozsa, Bernstein–Vazirani) |
-| `pspace.html` | 8. Path-sum lemma and BQP ⊆ PSPACE |
-| `pp.html` | 9. The Main Theorem: BQP ⊆ PP |
-| `conclusion.html` | 10. Conclusion, omitted details, references |
+| `pspace.html` | 7. Path-sum lemma and BQP ⊆ PSPACE |
+| `pp.html` | 8. The Main Theorem: BQP ⊆ PP |
+| `conclusion.html` | 9. Conclusion, omitted details, references |
 | `glossary.html` | Index of definitions and notation |
 
 Shared code lives in `assets/`:
